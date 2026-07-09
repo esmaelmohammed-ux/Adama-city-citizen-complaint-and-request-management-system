@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { STATUS_LABELS } from '../constants';
 import './StatusBadge.css';
-
+// comment
 export default function StatusBadge({ status }) {
   return (
     <span className={`status-badge status-${status}`}>
