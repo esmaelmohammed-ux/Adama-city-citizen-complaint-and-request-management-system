@@ -1,7 +1,7 @@
 import StatusBadge from './UI';
 import { formatDate } from '../utils/storage';
 import './SubmissionTable.css';
-
+// comment
 export default function SubmissionTable({ items, type, showCitizen = false, users = [], departments = [], onView }) {
   if (!items.length) {
     return (
