@@ -14,3 +14,4 @@ export default function BrandLogo({ className = '', showText = true, to = '/' })
     </Link>
   );
 }
+
