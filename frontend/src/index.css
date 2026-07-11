@@ -1,0 +1,336 @@
+:root {
+  /* Adama City Administration logo palette */
+  --primary: #003399;
+  --primary-dark: #002868;
+  --primary-light: #e8eef6;
+  --accent: #6b8ab1;
+  --accent-light: #c5d4e8;
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --border: #d4deea;
+  --text: #002868;
+  --text-muted: #5a7194;
+  --shadow-sm: 0 1px 2px rgba(0, 40, 104, 0.06);
+  --shadow-md: 0 10px 30px rgba(0, 40, 104, 0.1);
+  --radius: 12px;
+  --danger: #dc2626;
+  --success: #047857;
+  /* Ethiopian heritage accents */
+  --ethiopia-green: #078930;
+  --ethiopia-yellow: #fcd116;
+  --ethiopia-red: #da121a;
+  /* Strong CTA (warm gold — stands out on blue hero) */
+  --cta: #e5a010;
+  --cta-hover: #c8870a;
+  --cta-text: #1a1204;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.5;
+}
+
+html[data-lang='am'] body {
+  font-family: 'Noto Sans Ethiopic', 'DM Sans', system-ui, sans-serif;
+}
+
+a {
+  color: var(--primary-dark);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  background: white;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgba(0, 51, 153, 0.25);
+  border-color: var(--primary);
+}
+
+input:disabled {
+  background: var(--primary-light);
+  color: var(--text-muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-outline {
+  background: white;
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover {
+  background: var(--primary-light);
+  color: var(--text);
+}
+
+.btn-lg {
+  padding: 0.75rem 1.25rem;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.82rem;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.alert {
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.92rem;
+}
+
+.alert-error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.alert-success {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border: 1px solid var(--accent-light);
+}
+
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  max-width: 640px;
+  display: grid;
+  gap: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-card label {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+}
+
+.field-hint {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.filters-bar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  max-width: 320px;
+}
+
+.inline-input {
+  flex: 1;
+  min-width: 180px;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 1.5rem;
+}
+
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.quick-link-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.quick-link-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
+
+.quick-link-card strong {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.quick-link-card span {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.notification-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.notification-item {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.notification-item.unread {
+  border-left: 4px solid var(--primary);
+  background: var(--primary-light);
+}
+
+.notification-item p {
+  margin: 0.25rem 0;
+  color: var(--text-muted);
+}
+
+.notification-item small {
+  color: var(--text-muted);
+}
+
+.dept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.dept-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.dept-card h3 {
+  margin: 0 0 0.5rem;
+}
+
+.dept-card p {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-success {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.badge-muted {
+  background: var(--accent-light);
+  color: var(--primary-dark);
+}
