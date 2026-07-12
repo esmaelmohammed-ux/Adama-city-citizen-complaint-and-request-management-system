@@ -2,7 +2,7 @@ import StatusBadge from './UI';
 import { formatDate } from '../utils/storage';
 import './SubmissionTable.css';
 import './ImageUpload.css';
-// commen
+// comment
 export default function SubmissionDetail({ item, type, history = [], departmentName, onClose, actions }) {
   if (!item) return null;
 
