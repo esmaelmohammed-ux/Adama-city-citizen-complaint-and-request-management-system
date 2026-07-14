@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import './ImageUpload.css';
 
 const MAX_SIZE_BYTES = 2 * 1024 * 1024;
-// Commen
+// Comment
 export default function ImageUpload({
   value,
   onChange,
