@@ -3,6 +3,7 @@ import { ROLES } from './constants';
 import { ProtectedRoute, PublicOnlyRoute } from './components/ProtectedRoute';
 import { AppProvider } from './context/AppContext';
 import { LanguageProvider } from './context/LanguageContext';
+import { ToastProvider } from './context/ToastContext';
 import GuestDashboard from './pages/GuestDashboard';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -25,6 +26,7 @@ export default function App() {
   return (
     <LanguageProvider>
       <AppProvider>
+        <ToastProvider>
         <BrowserRouter>
         <Routes>
           <Route path="/" element={<GuestDashboard />} />
@@ -63,6 +65,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+        </ToastProvider>
     </AppProvider>
     </LanguageProvider>
   );

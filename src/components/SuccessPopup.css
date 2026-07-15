@@ -1,0 +1,95 @@
+.success-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0, 40, 104, 0.45);
+  animation: success-fade-in 0.2s ease-out;
+}
+
+.success-popup {
+  width: min(420px, 100%);
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  padding: 2rem 1.5rem 1.5rem;
+  text-align: center;
+  display: grid;
+  gap: 0.85rem;
+  justify-items: center;
+  animation: success-pop-in 0.28s ease-out;
+}
+
+.success-popup-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--success);
+  color: #fff;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.success-popup h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--primary-dark);
+}
+
+.success-popup-message {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.success-popup-ref {
+  width: 100%;
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  background: var(--primary-light);
+  border: 1px solid var(--accent-light);
+}
+
+.success-popup-ref-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.success-popup-ref-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  font-family: ui-monospace, 'Cascadia Code', 'Segoe UI Mono', monospace;
+  word-break: break-all;
+}
+
+.success-popup .btn {
+  margin-top: 0.35rem;
+  min-width: 160px;
+}
+
+@keyframes success-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes success-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

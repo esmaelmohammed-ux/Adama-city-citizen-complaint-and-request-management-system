@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SERVICE_TYPES } from '../../constants';
+import SuccessPopup from '../../components/SuccessPopup';
 import { PageHeader } from '../../components/UI';
 import { useApp } from '../../context/AppContext';
 
@@ -12,18 +13,21 @@ export default function NewServiceRequestPage() {
     description: '',
     location: '',
   });
-  const [success, setSuccess] = useState('');
+  const [referenceId, setReferenceId] = useState('');
   const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
     try {
       const ref = await submitServiceRequest(form);
       setError('');
-      setSuccess(`Service request submitted! Reference: ${ref}`);
-      setTimeout(() => navigate('/citizen/submissions'), 1500);
+      setReferenceId(ref);
     } catch (err) {
       setError(err.message || 'Failed to submit request.');
+      setSubmitting(false);
     }
   };
 
@@ -31,7 +35,6 @@ export default function NewServiceRequestPage() {
     <div>
       <PageHeader title="Submit Service Request" subtitle="Request a municipal service from the city administration" />
 
-      {success && <div className="alert alert-success">{success}</div>}
       {error && <div className="alert alert-error">{error}</div>}
 
       <form className="form-card" onSubmit={handleSubmit}>
@@ -66,9 +69,20 @@ export default function NewServiceRequestPage() {
         </label>
         <div className="form-actions">
           <button type="button" className="btn btn-ghost" onClick={() => navigate(-1)}>Cancel</button>
-          <button type="submit" className="btn btn-primary">Submit request</button>
+          <button type="submit" className="btn btn-primary" disabled={submitting}>
+            {submitting ? 'Submitting...' : 'Submit request'}
+          </button>
         </div>
       </form>
+
+      <SuccessPopup
+        open={Boolean(referenceId)}
+        title="Service request submitted"
+        message="Save your reference ID to track this request."
+        referenceId={referenceId}
+        confirmLabel="View my submissions"
+        onConfirm={() => navigate('/citizen/submissions')}
+      />
     </div>
   );
 }

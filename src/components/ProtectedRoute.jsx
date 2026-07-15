@@ -3,12 +3,12 @@ import { ROLES } from '../constants';
 import { useApp } from '../context/AppContext';
 import Layout from './Layout';
 
-// commen
+// comment
 export function ProtectedRoute({ allowedRoles }) {
   const { currentUser, initializing } = useApp();
 
   if (initializing) {
-    return null;
+    return <div className="auth-loading">Loading...</div>;
   }
 
   if (!currentUser) {
@@ -34,7 +34,7 @@ export function ProtectedRoute({ allowedRoles }) {
 export function PublicOnlyRoute() {
   const { currentUser, initializing } = useApp();
   if (initializing) {
-    return null;
+    return <div className="auth-loading">Loading...</div>;
   }
   if (currentUser) {
     const redirect = {
