@@ -1,7 +1,7 @@
 import StatusBadge from './UI';
 import { formatDate } from '../utils/storage';
 import './SubmissionTable.css';
-// commen
+// comment
 export default function SubmissionTable({
   items,
   type,
