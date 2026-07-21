@@ -1,5 +1,5 @@
 import './Toast.css';
-// comment
+// commen
 export default function ToastStack({ toasts, onDismiss }) {
   if (!toasts.length) return null;
 
