@@ -3,7 +3,7 @@ import { ROLES } from '../constants';
 import { useApp } from '../context/AppContext';
 import Layout from './Layout';
 
-// comment
+// commen
 export function ProtectedRoute({ allowedRoles }) {
   const { currentUser, initializing } = useApp();
 
