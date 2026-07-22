@@ -12,6 +12,7 @@ import { COMPLAINT_CATEGORIES } from '../constants';
 import { useLanguage } from '../context/LanguageContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { formatLocalizedDate } from '../utils/dateFormat';
+import { handleHashLinkClick } from '../utils/smoothScroll';
 import {
   complaintCategories,
   faqItems,
@@ -43,7 +44,13 @@ export default function GuestDashboard() {
 
   return (
     <div className="guest-page">
-      <a href="#main-content" className="skip-link">{t('common.skipToContent')}</a>
+      <a
+        href="#main-content"
+        className="skip-link"
+        onClick={handleHashLinkClick}
+      >
+        {t('common.skipToContent')}
+      </a>
       <GuestHeader />
 
       <main id="main-content">
@@ -62,7 +69,13 @@ export default function GuestDashboard() {
             <p>{t('hero.description')}</p>
             <div className="guest-hero-actions">
               <Link to="/register" className="guest-btn-cta">{t('hero.getStarted')}</Link>
-              <a href="#services" className="guest-btn-ghost-white">{t('hero.viewServices')}</a>
+              <a
+                href="#services"
+                className="guest-btn-ghost-white"
+                onClick={handleHashLinkClick}
+              >
+                {t('hero.viewServices')}
+              </a>
             </div>
             <div className="guest-hero-stats">
               {heroStats.map((s) => (
@@ -270,7 +283,7 @@ export default function GuestDashboard() {
           </div>
           <p className="guest-faq-more">
             {t('faq.stillHaveQuestions')}{' '}
-            <a href="#contact">{t('footer.contactUs')}</a>
+            <a href="#contact" onClick={handleHashLinkClick}>{t('footer.contactUs')}</a>
           </p>
         </div>
       </section>
