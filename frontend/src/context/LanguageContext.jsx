@@ -28,7 +28,15 @@ export function LanguageProvider({ children }) {
   };
 
   const t = useMemo(
-    () => (key) => translate(language, key),
+    () => (key, vars) => {
+      let value = translate(language, key);
+      if (vars && typeof value === 'string') {
+        Object.entries(vars).forEach(([name, replacement]) => {
+          value = value.replaceAll(`{${name}}`, String(replacement));
+        });
+      }
+      return value;
+    },
     [language]
   );
 

@@ -16,10 +16,14 @@ import {
 import { FAQ_ENTRIES, heuristicChat } from './faq.js';
 
 async function callGemini(prompt) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${config.geminiModel}:generateContent?key=${config.geminiApiKey}`;
+  // Auth keys (AQ.*) need x-goog-api-key header; query ?key= is for older AIza keys.
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${config.geminiModel}:generateContent`;
   const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-goog-api-key': config.geminiApiKey,
+    },
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: { temperature: 0.2, responseMimeType: 'application/json' },
@@ -154,6 +158,10 @@ export async function improveSubmission(input) {
 
   const prompt = `Improve this Adama City ${type} submission for clarity.
 Keep the original meaning. Do not invent facts. Prefer simple English.
+Fix capitalization carefully:
+- Title: use Title Case (e.g. "Broken Streetlight Near Adama Stadium")
+- Description: use proper sentence case (capitalize start of each sentence; fix ALL CAPS)
+- Capitalize place names like Adama, Bole, Kebele when appropriate
 Return JSON with keys: title, description, changes (array of short strings).
 
 Original title: ${input.title || ''}

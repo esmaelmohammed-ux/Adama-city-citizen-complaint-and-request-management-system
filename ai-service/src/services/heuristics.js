@@ -79,30 +79,101 @@ export function heuristicCategorize({ title = '', description = '', location = '
   };
 }
 
+const PROPER_NOUNS = new Set([
+  'adama',
+  'ethiopia',
+  'bole',
+  'kebele',
+  'addis',
+  'ababa',
+  'oromia',
+]);
+
+const TITLE_SMALL = new Set(['a', 'an', 'and', 'as', 'at', 'by', 'for', 'in', 'of', 'on', 'or', 'the', 'to', 'with']);
+
+function normalizeSpaces(text) {
+  return String(text || '').trim().replace(/\s+/g, ' ');
+}
+
+/** Capitalize first letter of each sentence; keep known place names capitalized. */
+function toSentenceCase(text) {
+  let s = normalizeSpaces(text);
+  if (!s) return s;
+
+  // If mostly ALL CAPS, lowercase first so we can rebuild casing
+  const letters = s.replace(/[^A-Za-z]/g, '');
+  if (letters.length >= 3) {
+    const upperRatio = letters.replace(/[^A-Z]/g, '').length / letters.length;
+    if (upperRatio > 0.7) s = s.toLowerCase();
+  }
+
+  s = s.replace(/(^\s*[a-z])|([.!?]\s+[a-z])/g, (m) => m.toUpperCase());
+
+  // Capitalize known proper nouns when they appear as whole words
+  s = s.replace(/\b([A-Za-z]+)\b/g, (word) => {
+    const lower = word.toLowerCase();
+    if (PROPER_NOUNS.has(lower)) {
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    }
+    return word;
+  });
+
+  return s;
+}
+
+/** Title Case for complaint titles (small words stay lowercase unless first/last). */
+function toTitleCase(text) {
+  const s = normalizeSpaces(text);
+  if (!s) return s;
+
+  let base = s;
+  const letters = base.replace(/[^A-Za-z]/g, '');
+  if (letters.length >= 3) {
+    const upperRatio = letters.replace(/[^A-Z]/g, '').length / letters.length;
+    if (upperRatio > 0.7) base = base.toLowerCase();
+  }
+
+  const words = base.split(' ');
+  return words
+    .map((word, i) => {
+      if (!word) return word;
+      const lower = word.toLowerCase();
+      const isEdge = i === 0 || i === words.length - 1;
+      if (!isEdge && TITLE_SMALL.has(lower)) return lower;
+      if (PROPER_NOUNS.has(lower)) return lower.charAt(0).toUpperCase() + lower.slice(1);
+      // Keep existing internal capitals lightly: first letter upper, rest as-is if mixed
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    })
+    .join(' ');
+}
+
 export function heuristicImprove({ title = '', description = '', type = 'complaint' }) {
-  const cleanTitle = title.trim().replace(/\s+/g, ' ');
-  let cleanDesc = description.trim().replace(/\s+/g, ' ');
+  const cleanTitle = normalizeSpaces(title);
+  let cleanDesc = normalizeSpaces(description);
   if (cleanDesc && !/[.!?]$/.test(cleanDesc)) cleanDesc += '.';
 
   const improvedTitle =
     cleanTitle.length > 0
-      ? cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1)
+      ? toTitleCase(cleanTitle)
       : type === 'complaint'
-        ? 'Municipal issue report'
-        : 'Service request';
+        ? 'Municipal Issue Report'
+        : 'Service Request';
 
   const improvedDescription =
-    cleanDesc ||
-    'Please describe the issue, exact location in Adama, and when it started so officers can respond quickly.';
+    cleanDesc.length > 0
+      ? toSentenceCase(cleanDesc)
+      : 'Please describe the issue, exact location in Adama, and when it started so officers can respond quickly.';
+
+  const changes = ['Normalized spacing', 'Fixed capitalization (title case + sentence case)'];
+  if (description.trim() && !/[.!?]$/.test(description.trim())) {
+    changes.push('Ensured description ends with punctuation');
+  }
+  changes.push(cleanDesc ? 'Kept original meaning' : 'Added a clearer placeholder description');
 
   return {
     title: improvedTitle,
     description: improvedDescription,
-    changes: [
-      'Normalized spacing and capitalization',
-      'Ensured description ends with punctuation',
-      cleanDesc ? 'Kept original meaning' : 'Added a clearer placeholder description',
-    ],
+    changes,
     provider: 'heuristic',
   };
 }
