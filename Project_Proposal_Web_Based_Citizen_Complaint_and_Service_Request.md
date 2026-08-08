@@ -8,43 +8,185 @@
 |-------|--------|
 | **Project Title** | Web-Based Citizen Complaint and Service Request Management System |
 | **Organization** | Adama City Administration |
-| **Document Version** | 2.0 (Updated) |
-| **Date** | June 26, 2025 |
-| **Prepared By** | [Student / Team Name] |
-| **Institution** | [University / Department Name] |
-| **Supervisor** | [Supervisor Name] |
+| **Document Version** | 2.12 |
+| **Date** | ____________________ |
+| **Prepared By** | ____________________ (ID: __________) |
+| **Institution** | Haramaya University — College of Computing and Informatics, Department of Information Science |
+| **Supervisor / Advisor** | ____________________ |
+| **Host Organization** | Adama City Administration Science and Technology Office |
 
 ---
 
-## Table of Contents
+## Declaration
 
-1. [Background of the Study](#1-background-of-the-study)
-2. [Problem Statement](#2-problem-statement)
-3. [Literature Review and Related Work](#3-literature-review-and-related-work)
-4. [General Objective](#4-general-objective)
-5. [Specific Objectives](#5-specific-objectives)
-6. [Scope of the Project](#6-scope-of-the-project)
-7. [Limitations](#7-limitations)
-8. [Proposed System](#8-proposed-system)
-9. [Actors of the System](#9-actors-of-the-system)
-10. [Functional Requirements](#10-functional-requirements)
-11. [Non-Functional Requirements](#11-non-functional-requirements)
-12. [System Analysis and Design](#12-system-analysis-and-design)
-13. [System Workflow](#13-system-workflow)
-14. [Technology Stack and Development Tools](#14-technology-stack-and-development-tools)
-15. [Database Design](#15-database-design)
-16. [Methodology](#16-methodology)
-17. [Project Timeline](#17-project-timeline)
-18. [Testing Strategy](#18-testing-strategy)
-19. [Deployment Plan](#19-deployment-plan)
-20. [Expected Benefits](#20-expected-benefits)
-21. [Expected Outcome](#21-expected-outcome)
-22. [Future Enhancements](#22-future-enhancements)
-23. [References](#23-references)
+I hereby declare that this project proposal, titled **"Web-Based Citizen Complaint and Service Request Management System for Adama City Administration"**, is my original work. It has been prepared as part of the academic requirements of **Haramaya University, College of Computing and Informatics, Department of Information Science** under the guidance of my advisor.
+
+I further declare that:
+
+- This work has not been submitted, in whole or in part, for any other degree, diploma, or academic award at this or any other institution.
+- All sources of information used in this document have been properly acknowledged through citations and references.
+- The system design, documentation, and implementation described herein represent work carried out by me, except where otherwise stated.
+
+| | |
+|--|--|
+| **Name** | ____________________ |
+| **ID** | __________ |
+| **Signature** | ______________________________ |
+| **Date** | ____________________ |
 
 ---
 
-## 1. Background of the Study
+## Acknowledgement
+
+First and foremost, I would like to thank **Almighty God** for the strength, guidance, and opportunity to complete this project proposal.
+
+I express sincere gratitude to my advisor for continuous guidance, constructive feedback, and encouragement throughout the preparation of this document and the development of the system.
+
+I also thank the instructors and staff of the **Department of Information Science, College of Computing and Informatics, Haramaya University** for the knowledge and support provided during the course of study.
+
+Special appreciation is extended to **Adama City Administration Science and Technology Office** as the host organization for this work, and to colleagues, classmates, and family members who offered advice, motivation, and moral support.
+
+Finally, I acknowledge all authors, developers, and organizations whose published works, documentation, and open-source tools contributed to the completion of this proposal.
+
+---
+
+## Abstract (Executive Summary)
+
+Municipal complaint and service request handling in Adama City Administration has traditionally relied on paper-based processes and office visits. This approach causes delays, weak record keeping, limited status tracking, and reduced transparency between citizens and responsible departments.
+
+This project proposes and implements a **Web-Based Citizen Complaint and Service Request Management System** to digitize submission, assignment, tracking, and reporting of citizen cases. The system supports three roles: **Citizen**, **Administrator**, and **Department Officer**. Citizens can register, submit categorized complaints and service requests (with optional photo evidence), and track progress using unique reference numbers. Administrators manage users and departments, assign work, update status, and generate reports. Officers process assigned tasks within their department scope and add resolution notes.
+
+The solution is built with the **MERN** stack (MongoDB, Express.js, React, Node.js), using JWT authentication and role-based access control. Status history and in-app notifications improve accountability and communication. The expected outcome is a centralized, transparent, and more efficient channel for municipal service delivery for Adama City Administration.
+
+**Keywords:** citizen complaint, service request, e-governance, Adama City Administration, MERN, role-based access control
+
+---
+
+## Table of contents
+
+Declaration ................................................................ i
+Acknowledgement ............................................................. ii
+Abstract (Executive Summary) ................................................ iii
+List of Acronyms ............................................................ iv
+CHAPTER ONE: INTRODUCTION ................................................... 1
+    1.1 Background of the Study ............................................. 1
+    1.2 Problem Statement ................................................... 2
+    1.3 Objectives .......................................................... 2
+        1.3.1 General Objective ............................................. 2
+        1.3.2 Specific Objectives ........................................... 2
+    1.4 Scope of the Project ................................................ 3
+        1.4.1 In Scope ...................................................... 3
+        1.4.2 Out of Scope .................................................. 3
+        1.4.3 Distinction: Complaint vs Service Request ..................... 3
+    1.5 Limitations ......................................................... 4
+    1.6 Literature Review and Related Work .................................. 4
+CHAPTER TWO: SYSTEM REQUIREMENTS AND DESIGN ................................. 5
+    2.1 Proposed System ..................................................... 5
+        2.1.1 Citizens Can .................................................. 5
+        2.1.2 Administrators Can ............................................ 5
+        2.1.3 Department Officers Can ....................................... 6
+    2.2 Actors of the System ................................................ 6
+        2.2.1 Citizen ....................................................... 6
+        2.2.2 Administrator ................................................. 6
+        2.2.3 Department Officer ............................................ 6
+    2.3 Functional Requirements ............................................. 7
+        2.3.1 Complaint Categories (Predefined) ............................. 7
+        2.3.2 Service Types (Predefined) .................................... 7
+        2.3.3 Status Values ................................................. 7
+        2.3.4 Status Transition Rules (Implemented) ......................... 8
+    2.4 Non-Functional Requirements ......................................... 8
+        2.4.1 Security ...................................................... 8
+        2.4.2 Performance ................................................... 8
+        2.4.3 Reliability ................................................... 9
+        2.4.4 Usability ..................................................... 9
+        2.4.5 Scalability ................................................... 9
+        2.4.6 Maintainability ............................................... 9
+    2.5 System Architecture ................................................. 10
+    2.6 Use Case Diagram .................................................... 10
+    2.7 Entity-Relationship Diagram ......................................... 11
+    2.8 Data Flow Diagram (Level 0) ......................................... 12
+    2.9 System Workflow ..................................................... 12
+    2.10 Technology Stack and Development Tools ............................. 13
+    2.11 Database Design .................................................... 13
+        2.11.1 Collections Overview ......................................... 13
+        2.11.2 Users Collection ............................................. 14
+        2.11.3 Departments Collection ....................................... 14
+        2.11.4 Complaints Collection ........................................ 14
+        2.11.5 Service Requests Collection .................................. 15
+        2.11.6 Status Histories Collection .................................. 15
+        2.11.7 Notifications Collection .................................... 15
+CHAPTER THREE: METHODOLOGY AND PROJECT PLAN ................................. 16
+    3.1 Methodology ......................................................... 16
+    3.2 Project Timeline .................................................... 17
+        3.2.1 Gantt Chart ................................................... 17
+    3.3 Testing Strategy .................................................... 18
+        3.3.1 Sample Test Cases ............................................. 18
+    3.4 Deployment Plan ..................................................... 19
+        3.4.1 Environment Setup ............................................. 19
+        3.4.2 Deployment Architecture ....................................... 19
+        3.4.3 Deployment Steps .............................................. 20
+        3.4.4 Minimum Server Requirements ................................... 20
+CHAPTER FOUR: RESULTS AND DISCUSSION ........................................ 21
+    4.1 Results ............................................................. 21
+        4.1.1 Public Portal and Authentication .............................. 21
+        4.1.2 Citizen Modules ............................................... 22
+        4.1.3 Officer Modules ............................................... 23
+        4.1.4 Administrator Modules ......................................... 24
+    4.2 Discussion .......................................................... 25
+    4.3 Expected Benefits ................................................... 26
+        4.3.1 For Citizens .................................................. 26
+        4.3.2 For Adama City Administration ................................. 26
+    4.4 Expected Outcome .................................................... 27
+    4.5 Future Enhancements ................................................. 27
+CHAPTER FIVE: CONCLUSION .................................................... 28
+References .................................................................. 29
+Document Revision History ................................................... 30
+
+---
+
+## List of Acronyms
+
+| Acronym | Full Form |
+|---------|-----------|
+| **AM** | Amharic |
+| **API** | Application Programming Interface |
+| **CORS** | Cross-Origin Resource Sharing |
+| **CRUD** | Create, Read, Update, Delete |
+| **CSS** | Cascading Style Sheets |
+| **DFD** | Data Flow Diagram |
+| **EN** | English |
+| **ER** | Entity-Relationship |
+| **FK** | Foreign Key |
+| **FR** | Functional Requirement |
+| **GIS** | Geographic Information System |
+| **HTML** | HyperText Markup Language |
+| **HTTP** | HyperText Transfer Protocol |
+| **HTTPS** | HyperText Transfer Protocol Secure |
+| **ID** | Identifier |
+| **JSON** | JavaScript Object Notation |
+| **JWT** | JSON Web Token |
+| **MERN** | MongoDB, Express.js, React, Node.js |
+| **ODM** | Object Document Mapper |
+| **OM** | Afaan Oromo |
+| **PK** | Primary Key |
+| **RBAC** | Role-Based Access Control |
+| **REST** | Representational State Transfer |
+| **SLA** | Service Level Agreement |
+| **SMS** | Short Message Service |
+| **SPA** | Single-Page Application |
+| **SSL** | Secure Sockets Layer |
+| **UAT** | User Acceptance Testing |
+| **UI** | User Interface |
+| **UK** | Unique Key |
+| **URL** | Uniform Resource Locator |
+| **VPS** | Virtual Private Server |
+| **XSS** | Cross-Site Scripting |
+
+---
+
+## CHAPTER ONE: INTRODUCTION
+
+### 1.1 Background of the Study
 
 Adama City Administration provides various municipal services to citizens. Citizens often need to submit complaints regarding public services such as road maintenance, waste management, water supply, street lighting, and other community-related issues. In addition, citizens may request different municipal services from the city administration.
 
@@ -59,7 +201,7 @@ To address these challenges, a **web-based system** is proposed to allow citizen
 
 ---
 
-## 2. Problem Statement
+### 1.2 Problem Statement
 
 The existing complaint and service request management process faces several challenges:
 
@@ -75,7 +217,81 @@ The existing complaint and service request management process faces several chal
 
 ---
 
-## 3. Literature Review and Related Work
+### 1.3 Objectives
+
+#### 1.3.1 General Objective
+
+To develop a web-based citizen complaint and service request management system for Adama City Administration that improves transparency, efficiency, and accountability in municipal service delivery.
+
+---
+
+#### 1.3.2 Specific Objectives
+
+- To provide online citizen registration and secure authentication
+- To enable citizens to submit complaints electronically with categories and optional attachments
+- To enable citizens to submit service requests electronically with predefined service types
+- To provide complaint and request tracking functionality with status history
+- To provide role-based administrative and department dashboards
+- To improve communication through in-app notifications
+- To generate reports and statistics for decision-making
+- To maintain centralized, searchable records of complaints and requests
+- To support department-based assignment and processing workflows
+
+---
+
+### 1.4 Scope of the Project
+
+#### 1.4.1 In Scope
+
+- User registration and login (JWT authentication)
+- Complaint submission with category, location, and optional photo upload
+- Service request submission with service type and description
+- Status tracking with history (Pending, In Progress, Resolved, Rejected, Closed)
+- Role-based access: Citizen, Administrator, Department Officer
+- User management (Administrator: view users, activate/deactivate)
+- Department management (Administrator: list and add departments)
+- Complaint/request assignment to departments and optional officers
+- Search and filter submissions (admin lists; citizens view their own)
+- In-app notifications on assignment and status changes
+- Role-specific dashboards with summary statistics
+- In-app report summaries (counts by status, category, department)
+- Activity/audit log for administrative actions
+- Multi-language guest/public UI (English, Amharic, Afaan Oromo)
+- Success feedback (submission popup; action toasts)
+
+#### 1.4.2 Out of Scope
+
+- Online payment processing
+- Advanced GIS mapping and interactive maps
+- SMS and email notifications (planned as future enhancements)
+- Email password reset / email verification (Phase 2)
+- Native mobile applications (web-responsive only in this phase)
+- Full user/department CRUD (edit/delete), submission delete, and report export
+- JWT refresh tokens, API rate limiting, and list pagination (planned hardening)
+
+#### 1.4.3 Distinction: Complaint vs Service Request
+
+| Aspect | Complaint | Service Request |
+|--------|-----------|-----------------|
+| **Purpose** | Report a problem or failure in existing service | Request a new or additional municipal service |
+| **Examples** | Broken streetlight, garbage not collected, water leak | Request waste bin, street cleaning, permit inquiry |
+| **Typical flow** | Report → Investigate → Fix | Request → Review → Fulfill |
+
+---
+
+### 1.5 Limitations
+
+- Requires internet access; citizens without connectivity must still use offline channels
+- Initial deployment assumes manual setup of departments and officer accounts by administrators
+- File uploads limited to images (including JPEG, PNG, WebP, GIF) up to **2 MB** per attachment
+- Guest/public UI is localized (EN/AM/OM); some authenticated screens remain primarily English
+- Password reset via email is not implemented in Phase 1 (demo “forgot password” message only)
+- No integration with existing legacy paper records
+- Performance targets assume moderate concurrent usage (up to 500 simultaneous users)
+
+---
+
+### 1.6 Literature Review and Related Work
 
 Several municipal and e-governance systems demonstrate the value of digital complaint management:
 
@@ -90,208 +306,156 @@ Several municipal and e-governance systems demonstrate the value of digital comp
 
 ---
 
-## 4. General Objective
+## CHAPTER TWO: SYSTEM REQUIREMENTS AND DESIGN
 
-To develop a web-based citizen complaint and service request management system for Adama City Administration that improves transparency, efficiency, and accountability in municipal service delivery.
-
----
-
-## 5. Specific Objectives
-
-- To provide online citizen registration and secure authentication
-- To enable citizens to submit complaints electronically with categories and optional attachments
-- To enable citizens to submit service requests electronically with predefined service types
-- To provide complaint and request tracking functionality with status history
-- To provide role-based administrative and department dashboards
-- To improve communication through in-app notifications
-- To generate reports and statistics for decision-making
-- To maintain centralized, searchable records of complaints and requests
-- To support department-based assignment and processing workflows
-
----
-
-## 6. Scope of the Project
-
-### 6.1 In Scope
-
-- User registration, login, and password reset
-- Complaint submission with category, location, and optional photo upload
-- Service request submission with service type and description
-- Status tracking with history (Pending, In Progress, Resolved, Rejected, Closed)
-- Role-based access: Citizen, Administrator, Department Officer
-- User and department management (Administrator)
-- Complaint/request assignment to departments
-- Search and filter (by ID, status, category, date)
-- In-app notifications on status changes
-- Dashboard with summary statistics
-- Report generation (counts by status, category, department, date range)
-- Activity/audit log for administrative actions
-
-### 6.2 Out of Scope
-
-- Online payment processing
-- Advanced GIS mapping and interactive maps
-- SMS and email notifications (planned as future enhancements)
-- Native mobile applications (web-responsive only in this phase)
-- Multi-language support (planned as future enhancement)
-
-### 6.3 Distinction: Complaint vs Service Request
-
-| Aspect | Complaint | Service Request |
-|--------|-----------|-----------------|
-| **Purpose** | Report a problem or failure in existing service | Request a new or additional municipal service |
-| **Examples** | Broken streetlight, garbage not collected, water leak | Request waste bin, street cleaning, permit inquiry |
-| **Typical flow** | Report → Investigate → Fix | Request → Review → Fulfill |
-
----
-
-## 7. Limitations
-
-- Requires internet access; citizens without connectivity must still use offline channels
-- Initial deployment assumes manual setup of departments and officer accounts by administrators
-- File uploads limited to images (JPEG, PNG) up to 5 MB per attachment
-- System language is English only in Phase 1
-- No integration with existing legacy paper records
-- Performance targets assume moderate concurrent usage (up to 500 simultaneous users)
-
----
-
-## 8. Proposed System
+### 2.1 Proposed System
 
 The proposed system is a **web-based application** accessible through modern browsers. It follows a three-tier architecture: React frontend, Node.js/Express API, and MongoDB database.
 
-### 8.1 Citizens Can
+#### 2.1.1 Citizens Can
 
-- Create accounts and manage profiles
+- Create accounts and manage profiles (name, phone)
 - Log in securely with JWT-based sessions
 - Submit complaints with category, description, location, and optional photo
 - Submit service requests with service type and description
-- View and track status of all their submissions
+- View and track status of all their submissions (with reference ID)
 - Receive in-app notifications when status changes
-- Search and filter their own submissions
+- View their own submissions from the citizen dashboard
 
-### 8.2 Administrators Can
+#### 2.1.2 Administrators Can
 
-- Manage users (create, update, deactivate)
-- Manage departments and assign officers to departments
-- View all complaints and service requests
-- Assign submissions to appropriate departments
-- Update statuses and add internal notes
-- Generate reports and view dashboard analytics
+- View users and activate/deactivate accounts
+- Add departments and view department list
+- View all complaints and service requests (search/filter)
+- Assign submissions to departments and optionally to officers
+- Reject pending submissions; resolve/close in-progress items
+- View report summaries and dashboard analytics
 - Monitor system activity via audit logs
 
-### 8.3 Department Officers Can
+#### 2.1.3 Department Officers Can
 
-- View complaints and requests assigned to their department
-- Process assigned items and update progress
+- View personally assigned items and unassigned items in their department queue
+- Start work (Pending → In Progress)
 - Add resolution notes
-- Mark tasks as resolved, rejected, or closed
-- View department-level statistics
+- Mark tasks as **Resolved** or **Closed** (officers cannot reject)
+- View officer dashboard statistics
 
 ---
 
-## 9. Actors of the System
+### 2.2 Actors of the System
 
-### 9.1 Citizen
+#### 2.2.1 Citizen
 
 **Responsibilities:** Register account, log in, submit complaints and service requests, view status, update profile, receive notifications.
 
-### 9.2 Administrator
+#### 2.2.2 Administrator
 
-**Responsibilities:** Manage users and departments, assign submissions, update statuses, generate reports, monitor system activities, configure categories and service types.
+**Responsibilities:** View and activate/deactivate users, add departments, assign submissions, update/reject statuses, view report summaries, monitor system activities.
 
-### 9.3 Department Officer
+#### 2.2.3 Department Officer
 
-**Responsibilities:** View assigned work, process complaints and requests, update progress, add notes, mark tasks completed. Each officer belongs to one department (e.g., Water, Roads, Sanitation).
+**Responsibilities:** View assigned work and department queue, process complaints and requests, update progress, add notes, mark tasks resolved or closed. Each officer belongs to one department (e.g., Water, Roads, Sanitation). Officers cannot reject submissions.
 
 ---
 
-## 10. Functional Requirements
+### 2.3 Functional Requirements
 
 | ID | Requirement | Description |
 |----|-------------|-------------|
 | FR-01 | User registration | Citizens register with full name, email, phone, and password |
 | FR-02 | User login | Authenticate with email and password; receive JWT token |
-| FR-03 | Password management | Change password; reset password via email token (Phase 1: admin-assisted reset optional) |
-| FR-04 | Profile management | Update name, phone; view submission history |
-| FR-05 | Complaint submission | Submit with title, description, category, location, optional attachment |
-| FR-06 | Service request submission | Submit with service type, description, optional location |
-| FR-07 | Status tracking | View current status and full status history timeline |
-| FR-08 | Dashboard | Role-specific dashboards with counts and recent items |
-| FR-09 | User management | Admin CRUD for users and role assignment |
-| FR-10 | Department management | Admin CRUD for departments and officer assignment |
-| FR-11 | Assignment | Admin assigns submission to department; optional officer |
-| FR-12 | Report generation | Export/view reports by status, category, department, date |
-| FR-13 | Search | Search by reference ID, keyword, status, category, date range |
-| FR-14 | Notifications | In-app notifications on assignment and status change |
-| FR-15 | Audit log | Record who changed status and when |
+| FR-03 | Profile management | Update name and phone; view account role |
+| FR-04 | Complaint submission | Submit with title, description, category, location, optional attachment |
+| FR-05 | Service request submission | Submit with service type, description, optional location |
+| FR-06 | Status tracking | View current status and full status history timeline |
+| FR-07 | Dashboard | Role-specific dashboards with counts and recent items |
+| FR-08 | User management | Admin lists users and activates/deactivates accounts |
+| FR-09 | Department management | Admin lists and adds departments |
+| FR-10 | Assignment | Admin assigns submission to department; optional officer |
+| FR-11 | Report summaries | View counts by status, category, and department |
+| FR-12 | Search | Admin search/filter by reference ID, keyword, and status |
+| FR-13 | Notifications | In-app notifications on assignment and status change |
+| FR-14 | Audit log | Record who changed status and when |
+| FR-15 | Success feedback | Confirm successful submissions and admin/officer actions |
 
-### 10.1 Complaint Categories (Predefined)
+#### 2.3.1 Complaint Categories (Predefined)
 
 Road Maintenance, Waste Management, Water Supply, Street Lighting, Drainage, Public Safety, Noise Pollution, Other.
 
-### 10.2 Service Types (Predefined)
+#### 2.3.2 Service Types (Predefined)
 
 Waste Collection Request, Street Cleaning, Water Connection Inquiry, Public Facility Access, General Information, Other.
 
-### 10.3 Status Values
+#### 2.3.3 Status Values
 
 | Status | Description |
 |--------|-------------|
-| **Pending** | Submitted; awaiting admin review |
-| **In Progress** | Assigned and being processed |
+| **Pending** | Submitted; awaiting review or sitting in a department queue |
+| **In Progress** | Assigned to an officer and being processed |
 | **Resolved** | Issue addressed or service fulfilled |
-| **Rejected** | Invalid or out of scope (with reason) |
-| **Closed** | Closed without further action or citizen confirmed |
+| **Rejected** | Invalid or out of scope (admin only) |
+| **Closed** | Closed without further action |
+
+#### 2.3.4 Status Transition Rules (Implemented)
+
+| Role | From | Allowed next statuses |
+|------|------|------------------------|
+| Officer | Pending | In Progress |
+| Officer | In Progress | Resolved, Closed |
+| Admin | Pending | Rejected |
+| Admin | In Progress | Resolved, Closed, Rejected |
+| Admin | Resolved | Closed |
+
+**Assignment note:** Routing to a **department only** keeps status **Pending**. Assigning (or claiming) an **officer** moves the item to **In Progress**.
 
 ---
 
-## 11. Non-Functional Requirements
+### 2.4 Non-Functional Requirements
 
-### 11.1 Security
+#### 2.4.1 Security
 
 - Password hashing with bcrypt (never store plain text)
-- JWT authentication with expiration and refresh strategy
-- Role-based access control (RBAC) on all API routes
+- JWT authentication with configurable expiration (no refresh tokens in Phase 1)
+- Role-based access control (RBAC) on API routes and frontend routes
 - HTTPS in production
 - Input validation and sanitization (prevent XSS, injection)
-- Rate limiting on login and submission endpoints
-- Secure file upload validation (type and size)
+- Secure file upload validation (type and size; max 2 MB)
+- Rate limiting on login and submission endpoints *(planned hardening)*
 
-### 11.2 Performance
+#### 2.4.2 Performance
 
 - API response time under 2 seconds for typical requests
-- Pagination for list endpoints (default 20 items per page)
 - Indexed database queries on status, citizenId, departmentId, createdDate
+- List pagination *(planned; Phase 1 returns role-scoped full lists)*
 
-### 11.3 Reliability
+#### 2.4.3 Reliability
 
 - Consistent operation with structured error handling
 - Automated MongoDB backups (daily in production)
 - Graceful degradation when optional features (e.g., file upload) fail
 
-### 11.4 Usability
+#### 2.4.4 Usability
 
 - Responsive design for desktop and mobile browsers
 - Clear navigation and accessible forms with validation messages
-- Consistent UI patterns across citizen and admin interfaces
+- Consistent UI patterns across citizen, admin, and officer interfaces
+- Success popups/toasts after key actions
+- Multi-language support on the public guest experience (EN/AM/OM)
 
-### 11.5 Scalability
+#### 2.4.5 Scalability
 
 - Stateless API design for horizontal scaling
-- MongoDB sharding/replica sets as user base grows
+- MongoDB Atlas replica sets as user base grows
 
-### 11.6 Maintainability
+#### 2.4.6 Maintainability
 
 - Modular code structure (routes, controllers, models, middleware)
-- API documentation via Postman collection
+- API exercises via HTTP client tools (e.g., Postman / Thunder Client)
 - Version control with Git and GitHub
 
 ---
 
-## 12. System Analysis and Design
-
-### 12.1 System Architecture
+### 2.5 System Architecture
 
 ```mermaid
 flowchart TB
@@ -317,49 +481,98 @@ flowchart TB
     API --> Storage
 ```
 
-### 12.2 Use Case Diagram
+### 2.6 Use Case Diagram
 
 ```mermaid
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontSize": "15px",
+    "fontFamily": "Arial",
+    "primaryColor": "#FFFFFF",
+    "primaryTextColor": "#111111",
+    "primaryBorderColor": "#003366",
+    "secondaryColor": "#E8EEF7",
+    "tertiaryColor": "#FFFFFF",
+    "lineColor": "#222222",
+    "clusterBkg": "#F7FAFC",
+    "clusterBorder": "#003366",
+    "titleColor": "#003366",
+    "mainBkg": "#FFFFFF",
+    "nodeBorder": "#003366",
+    "edgeLabelBackground": "#FFFFFF"
+  },
+  "flowchart": {
+    "nodeSpacing": 22,
+    "rankSpacing": 55,
+    "padding": 16,
+    "htmlLabels": true,
+    "curve": "basis",
+    "useMaxWidth": true
+  }
+}}%%
 flowchart LR
     Citizen((Citizen))
+
+    subgraph System["Web-Based Citizen Complaint and Service Request Management System"]
+        direction TB
+
+        UC_Register([Register Account])
+        UC_Login([Login])
+        UC_SubmitComplaint([Submit Complaint])
+        UC_SubmitRequest([Submit Service Request])
+        UC_Track([Track Submissions Status])
+        UC_Profile([Update Profile])
+        UC_Notify([View Notifications])
+
+        UC_Users([Manage Users])
+        UC_Depts([Manage Departments])
+        UC_Assign([Assign Submissions])
+        UC_Update([Update Status])
+        UC_Reports([Generate Reports])
+        UC_Activity([Monitor System Activities])
+        UC_Search([Search and Filter Submissions])
+
+        UC_Tasks([View Assigned Tasks])
+        UC_Process([Process Assigned Work])
+        UC_Note([Add Resolution Note])
+    end
+
     Admin((Administrator))
     Officer((Department Officer))
 
-    subgraph System["Citizen Complaint System"]
-        UC1[Register / Login]
-        UC2[Submit Complaint]
-        UC3[Submit Service Request]
-        UC4[Track Status]
-        UC5[Manage Users]
-        UC6[Manage Departments]
-        UC7[Assign Submissions]
-        UC8[Generate Reports]
-        UC9[Process Assigned Work]
-        UC10[Update Status]
-        UC11[View Notifications]
-    end
+    Citizen --- UC_Register
+    Citizen --- UC_Login
+    Citizen --- UC_SubmitComplaint
+    Citizen --- UC_SubmitRequest
+    Citizen --- UC_Track
+    Citizen --- UC_Profile
+    Citizen --- UC_Notify
 
-    Citizen --> UC1
-    Citizen --> UC2
-    Citizen --> UC3
-    Citizen --> UC4
-    Citizen --> UC11
+    Admin --- UC_Login
+    Admin --- UC_Users
+    Admin --- UC_Depts
+    Admin --- UC_Assign
+    Admin --- UC_Update
+    Admin --- UC_Reports
+    Admin --- UC_Activity
+    Admin --- UC_Search
+    Admin --- UC_Notify
 
-    Admin --> UC1
-    Admin --> UC5
-    Admin --> UC6
-    Admin --> UC7
-    Admin --> UC8
-    Admin --> UC10
-    Admin --> UC11
+    Officer --- UC_Login
+    Officer --- UC_Tasks
+    Officer --- UC_Process
+    Officer --- UC_Update
+    Officer --- UC_Note
+    Officer --- UC_Notify
 
-    Officer --> UC1
-    Officer --> UC9
-    Officer --> UC10
-    Officer --> UC11
+    UC_SubmitComplaint -.->|include| UC_Login
+    UC_SubmitRequest -.->|include| UC_Login
+    UC_Process -.->|include| UC_Update
+    UC_Assign -.->|include| UC_Update
 ```
 
-### 12.3 Entity-Relationship Diagram
+### 2.7 Entity-Relationship Diagram
 
 ```mermaid
 erDiagram
@@ -459,7 +672,7 @@ erDiagram
     }
 ```
 
-### 12.4 Data Flow Diagram (Level 0)
+### 2.8 Data Flow Diagram (Level 0)
 
 ```mermaid
 flowchart LR
@@ -482,7 +695,7 @@ flowchart LR
 
 ---
 
-## 13. System Workflow
+### 2.9 System Workflow
 
 ```mermaid
 flowchart TD
@@ -493,53 +706,55 @@ flowchart TD
     D --> E
     E --> F[Administrator reviews submission]
     F --> G{Valid?}
-    G -->|No| H[Status: Rejected with reason]
-    G -->|Yes| I[Assign to department / officer]
-    I --> J[Status: In Progress]
-    J --> K[Department officer processes]
-    K --> L{Outcome?}
-    L -->|Fixed| M[Status: Resolved]
-    L -->|Cannot fulfill| N[Status: Closed or Rejected]
-    M --> O[Citizen notified and views update]
-    N --> O
-    H --> O
+    G -->|No| H[Status: Rejected]
+    G -->|Yes| I{Assign how?}
+    I -->|Department only| J[Status stays Pending - department queue]
+    I -->|Department + officer| K[Status: In Progress]
+    J --> L[Officer starts work]
+    L --> K
+    K --> M[Department officer processes]
+    M --> N{Outcome?}
+    N -->|Fixed| O[Status: Resolved]
+    N -->|Close| P[Status: Closed]
+    O --> Q[Citizen notified and views update]
+    P --> Q
+    H --> Q
 ```
 
 **Step-by-step:**
 
-1. Citizen registers an account and verifies email (optional in Phase 1).
-2. Citizen logs into the system.
-3. Citizen submits a complaint or service request.
-4. System generates a unique reference ID and stores the record as **Pending**.
-5. Administrator reviews the submission.
-6. Administrator assigns the request to the appropriate department (and optionally an officer).
-7. Status changes to **In Progress**; citizen receives notification.
-8. Department officer processes the request and updates progress notes.
-9. Officer or admin sets final status: **Resolved**, **Rejected**, or **Closed**.
-10. Status history and audit log are recorded; citizen views progress in dashboard.
+1. Citizen registers an account and logs into the system.
+2. Citizen submits a complaint or service request.
+3. System generates a unique reference ID (e.g., `CMP-2026-0001`) and stores the record as **Pending**.
+4. Administrator reviews the submission.
+5. Administrator either rejects it, routes it to a department queue (**Pending**), or assigns an officer (**In Progress**).
+6. Department officer processes the request (start work if still pending) and may add resolution notes.
+7. Officer sets **Resolved** or **Closed**; admin may also reject in-progress items.
+8. Status history and audit log are recorded; citizen views progress and notifications.
 
 ---
 
-## 14. Technology Stack and Development Tools
+### 2.10 Technology Stack and Development Tools
 
 | Layer | Technology | Purpose |
 |-------|------------|---------|
-| **Frontend** | React.js, HTML5, CSS3, JavaScript | Single-page user interface |
-| **UI** | React Router, Axios | Routing and API communication |
-| **Backend** | Node.js, Express.js | REST API server |
-| **Database** | MongoDB, Mongoose | Document storage and ODM |
+| **Frontend** | React.js (Vite), HTML5, CSS3, JavaScript | Single-page user interface |
+| **UI / Client** | React Router, native `fetch` | Routing and API communication |
+| **Backend** | Node.js, Express.js, Helmet | REST API server |
+| **Database** | MongoDB Atlas (or local), Mongoose | Document storage and ODM |
 | **Authentication** | JWT, bcrypt | Secure sessions and password hashing |
 | **Validation** | express-validator | Request validation |
 | **File Upload** | multer | Complaint image attachments |
-| **Development** | Visual Studio Code, Postman, Git, GitHub | Coding, API testing, version control |
+| **i18n** | Custom language context | English, Amharic, Afaan Oromo (guest UI) |
+| **Development** | Visual Studio Code, Git, GitHub | Coding and version control |
 
 **Note on database choice:** MongoDB supports flexible schemas for complaints and requests. Relational integrity is enforced at the application layer via Mongoose references. PostgreSQL is a viable alternative if strict relational reporting is required later.
 
 ---
 
-## 15. Database Design
+### 2.11 Database Design
 
-### 15.1 Collections Overview
+#### 2.11.1 Collections Overview
 
 | Collection | Purpose |
 |------------|---------|
@@ -551,7 +766,7 @@ flowchart TD
 | `notifications` | In-app user notifications |
 | `activityLogs` | Administrative action logs |
 
-### 15.2 Users Collection
+#### 2.11.2 Users Collection
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -568,7 +783,7 @@ flowchart TD
 
 **Indexes:** `email` (unique), `role`, `departmentId`
 
-### 15.3 Departments Collection
+#### 2.11.3 Departments Collection
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -580,12 +795,12 @@ flowchart TD
 
 **Indexes:** `name` (unique)
 
-### 15.4 Complaints Collection
+#### 2.11.4 Complaints Collection
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `_id` | ObjectId | Primary key |
-| `referenceId` | String | Human-readable ID (e.g., CMP-2025-0001) |
+| `referenceId` | String | Human-readable ID (e.g., CMP-2026-0001) |
 | `title` | String | Short title |
 | `description` | String | Full description |
 | `category` | Enum | Predefined category |
@@ -602,7 +817,7 @@ flowchart TD
 
 **Indexes:** `referenceId` (unique), `citizenId`, `departmentId`, `status`, `createdAt`
 
-### 15.5 Service Requests Collection
+#### 2.11.5 Service Requests Collection
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -622,7 +837,7 @@ flowchart TD
 
 **Indexes:** `referenceId` (unique), `citizenId`, `departmentId`, `status`, `createdAt`
 
-### 15.6 Status Histories Collection
+#### 2.11.6 Status Histories Collection
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -635,7 +850,7 @@ flowchart TD
 | `changedBy` | ObjectId | FK to users |
 | `changedAt` | Date | Timestamp |
 
-### 15.7 Notifications Collection
+#### 2.11.7 Notifications Collection
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -652,7 +867,9 @@ flowchart TD
 
 ---
 
-## 16. Methodology
+## CHAPTER THREE: METHODOLOGY AND PROJECT PLAN
+
+### 3.1 Methodology
 
 This project follows an **Agile-inspired iterative development** approach suited for a academic/software engineering project:
 
@@ -669,7 +886,7 @@ This project follows an **Agile-inspired iterative development** approach suited
 
 1. Project setup and database models
 2. Authentication and user management
-3. Complaint and service request CRUD
+3. Complaint and service request create/list APIs
 4. Assignment and status workflow
 5. Notifications and audit log
 6. Dashboard and reports
@@ -677,9 +894,10 @@ This project follows an **Agile-inspired iterative development** approach suited
 
 ---
 
-## 17. Project Timeline
+### 3.2 Project Timeline
 
-**Estimated duration:** 12 weeks
+**Estimated duration:** 12 weeks  
+**Implementation status (as of July 2026):** Core MERN features delivered (API, role UIs, Atlas DB, photo upload, guest i18n). Remaining work focuses on hardening, email features, and production deployment.
 
 | Week | Phase | Tasks | Deliverables |
 |------|-------|-------|--------------|
@@ -687,20 +905,20 @@ This project follows an **Agile-inspired iterative development** approach suited
 | 2 | Design | UI wireframes, API specification, DB schema | Design documents |
 | 3 | Setup | Init React + Node + MongoDB, Git repo, folder structure | Project scaffold |
 | 4 | Backend Core | Auth (JWT), user model, department model | Working login/register API |
-| 5 | Backend Features | Complaint and service request APIs | CRUD endpoints |
+| 5 | Backend Features | Complaint and service request APIs | Create/list endpoints |
 | 6 | Backend Workflow | Assignment, status history, notifications | Workflow APIs |
 | 7 | Frontend Core | Login, register, citizen dashboard | Citizen UI shell |
 | 8 | Frontend Citizen | Submit complaint/request, track status | Citizen features complete |
 | 9 | Frontend Admin | Admin dashboard, user/dept management, assignment | Admin UI complete |
 | 10 | Frontend Officer | Officer dashboard, process assigned items | Officer UI complete |
-| 11 | Testing | Unit tests, integration tests, UAT, bug fixes | Test report |
+| 11 | Testing | Manual/API testing, UAT, bug fixes | Test report |
 | 12 | Deployment | Deploy backend and frontend, documentation, final report | Live system + report |
 
-### Gantt Chart
+#### 3.2.1 Gantt Chart
 
 ```mermaid
 gantt
-    title Project Timeline (12 Weeks)
+    title Project Timeline (12 Weeks) — planned schedule
     dateFormat YYYY-MM-DD
     axisFormat %b %d
 
@@ -726,32 +944,34 @@ gantt
 
 ---
 
-## 18. Testing Strategy
+### 3.3 Testing Strategy
 
 | Test Type | Scope | Tools / Method |
 |-----------|-------|----------------|
-| **Unit Testing** | Models, utilities, validation logic | Jest |
-| **API Integration Testing** | REST endpoints, auth, RBAC | Postman / Supertest |
-| **Frontend Testing** | Component rendering, form validation | React Testing Library (optional) |
-| **Security Testing** | Auth bypass, role escalation, input injection | Manual + Postman |
+| **Unit Testing** | Models, utilities, validation logic | Manual / planned Jest |
+| **API Integration Testing** | REST endpoints, auth, RBAC | HTTP client (Postman / Thunder Client) |
+| **Frontend Testing** | Component rendering, form validation | Manual browser testing |
+| **Security Testing** | Auth bypass, role escalation, input injection | Manual + API client |
 | **User Acceptance Testing (UAT)** | End-to-end citizen, admin, officer flows | Test cases with stakeholders |
 
-### Sample Test Cases
+#### 3.3.1 Sample Test Cases
 
 | ID | Scenario | Expected Result |
 |----|----------|-----------------|
 | TC-01 | Citizen registers with valid data | Account created; can log in |
-| TC-02 | Citizen submits complaint | Record saved as Pending with reference ID |
-| TC-03 | Admin assigns complaint to department | Status In Progress; officer sees item |
-| TC-04 | Officer marks complaint resolved | Status Resolved; citizen notified |
-| TC-05 | Officer tries to access admin routes | 403 Forbidden |
-| TC-06 | Search complaint by reference ID | Correct record returned |
+| TC-02 | Citizen submits complaint | Record saved as Pending with reference ID; success popup shown |
+| TC-03 | Admin routes complaint to department only | Status stays Pending; appears in department queue |
+| TC-04 | Admin assigns complaint to an officer | Status In Progress; officer sees item |
+| TC-05 | Officer marks complaint resolved | Status Resolved; citizen notified |
+| TC-06 | Officer tries to reject a complaint | Not allowed (admin-only) |
+| TC-07 | Officer tries to access admin routes | Redirected / forbidden |
+| TC-08 | Admin searches complaint by reference ID | Correct record returned |
 
 ---
 
-## 19. Deployment Plan
+### 3.4 Deployment Plan
 
-### 19.1 Environment Setup
+#### 3.4.1 Environment Setup
 
 | Environment | Purpose |
 |-------------|---------|
@@ -759,7 +979,7 @@ gantt
 | **Staging** | Pre-production testing on cloud VPS |
 | **Production** | Live system for Adama City Administration |
 
-### 19.2 Deployment Architecture
+#### 3.4.2 Deployment Architecture
 
 ```mermaid
 flowchart LR
@@ -770,17 +990,18 @@ flowchart LR
     API --> Uploads[File Upload Storage]
 ```
 
-### 19.3 Deployment Steps
+#### 3.4.3 Deployment Steps
 
-1. Configure environment variables (`.env`): `MONGODB_URI`, `JWT_SECRET`, `PORT`
+1. Configure environment variables (`.env`): Atlas credentials (`MONGODB_USER`, `MONGODB_PASSWORD`, `MONGODB_CLUSTER`, `MONGODB_DB`) or `MONGODB_URI`, plus `JWT_SECRET`, `PORT`, `CLIENT_ORIGIN`
 2. Build React frontend: `npm run build`
 3. Deploy API with PM2 or similar process manager
 4. Serve frontend static files via Nginx
 5. Enable HTTPS with SSL certificate (Let's Encrypt)
 6. Configure daily MongoDB backups
 7. Seed initial admin account and default departments
+8. Whitelist production server IP in MongoDB Atlas Network Access
 
-### 19.4 Minimum Server Requirements
+#### 3.4.4 Minimum Server Requirements
 
 - 2 GB RAM, 2 vCPU VPS (or MongoDB Atlas free tier for development)
 - Ubuntu 22.04 LTS or similar
@@ -788,16 +1009,123 @@ flowchart LR
 
 ---
 
-## 20. Expected Benefits
 
-### For Citizens
+## CHAPTER FOUR: RESULTS AND DISCUSSION
+
+This chapter presents the implemented **Adama City Citizen Portal** and discusses how the results address the problem statement and objectives defined earlier. Screenshots were captured from the working MERN application (React frontend, Express API, MongoDB).
+
+### 4.1 Results
+
+The system was developed and tested successfully for the three primary roles: **Citizen**, **Department Officer**, and **Administrator**. Core features—registration/login, complaint and service-request submission, tracking, assignment, notifications, reporting, and activity logging—are operational in the development environment.
+
+#### 4.1.1 Public Portal and Authentication
+
+The public landing page introduces the portal, supports multi-language selection (English / Amharic / Afaan Oromo), and guides citizens toward registration or login. Authentication screens provide secure sign-in and account creation with role-aware access.
+
+![Landing page of Adama City Citizen Portal](scripts/assets/results/landing.png)
+
+*Figure 4.1: Public landing page (guest portal)*
+
+![Citizen registration page](scripts/assets/results/register.png)
+
+*Figure 4.2: Citizen registration (Create Account)*
+
+![Login page with demo role shortcuts](scripts/assets/results/login.png)
+
+*Figure 4.3: Sign-in page with JWT-based authentication*
+
+#### 4.1.2 Citizen Modules
+
+After login, citizens access a personalized dashboard showing submission counts by status, then can file complaints or service requests and track them under **My Submissions**.
+
+![Citizen dashboard](scripts/assets/results/citizen-dashboard.png)
+
+*Figure 4.4: Citizen dashboard with submission summary cards*
+
+![Submit complaint form](scripts/assets/results/submit-complaint.png)
+
+*Figure 4.5: Submit Complaint form (category, location, description, optional photo)*
+
+![Submit service request form](scripts/assets/results/submit-request.png)
+
+*Figure 4.6: Submit Service Request form*
+
+![My Submissions list](scripts/assets/results/my-submissions.png)
+
+*Figure 4.7: My Submissions — complaints and service requests with reference IDs and status badges*
+
+#### 4.1.3 Officer Modules
+
+Department officers receive a focused workspace for assigned work and in-app notifications when administrators assign complaints or requests.
+
+![Officer dashboard](scripts/assets/results/officer-dashboard.png)
+
+*Figure 4.8: Officer dashboard (open / pending / in progress / resolved counters)*
+
+![Officer notifications](scripts/assets/results/officer-notifications.png)
+
+*Figure 4.9: Officer notifications for new assignments (e.g., CMP-2026-0010)*
+
+#### 4.1.4 Administrator Modules
+
+Administrators oversee city-wide activity: dashboard metrics, complaint and service-request management, user activation, department routing, summary reports, and an audit activity log.
+
+![Admin dashboard](scripts/assets/results/admin-dashboard.png)
+
+*Figure 4.10: Admin dashboard overview (complaints, requests, citizens, departments)*
+
+![Manage complaints](scripts/assets/results/admin-complaints.png)
+
+*Figure 4.11: Manage Complaints — search, filter, assign, and update status*
+
+![Service requests management](scripts/assets/results/admin-requests.png)
+
+*Figure 4.12: Service Requests management list*
+
+![User management](scripts/assets/results/admin-users.png)
+
+*Figure 4.13: User Management — activate / deactivate citizen accounts*
+
+![Departments management](scripts/assets/results/admin-departments.png)
+
+*Figure 4.14: Departments used for routing submissions*
+
+![Reports page](scripts/assets/results/admin-reports.png)
+
+*Figure 4.15: Reports — status totals and complaints by category*
+
+![Activity log](scripts/assets/results/admin-activity.png)
+
+*Figure 4.16: Activity Log — audit trail of assignments and status updates*
+
+### 4.2 Discussion
+
+The implemented results demonstrate that a centralized web portal can replace fragmented, paper-based complaint and service-request handling for Adama City Administration.
+
+**Alignment with objectives.** Citizens can register, submit categorized complaints and service requests, and track progress using unique reference IDs (e.g., CMP-2026-0001, SRV-2026-0007). Administrators can assign work to departments/officers, update statuses, and monitor performance through reports. Officers receive assignment notifications and process department-scoped work. These outcomes match the functional requirements defined in Chapter Two.
+
+**Transparency and accountability.** Color-coded status badges (Pending, In Progress, Resolved, Rejected) and the activity log provide a visible audit trail. This directly addresses the earlier problems of weak tracking and limited accountability.
+
+**Role-based design.** Separate dashboards for Citizen, Officer, and Admin enforce RBAC with JWT authentication. Citizens see only their submissions; officers see assigned tasks; admins see city-wide data and user/department controls.
+
+**Reporting for decision-making.** The Reports module aggregates totals by status and category (e.g., Road Maintenance as a frequent complaint type in the sample data). This supports planning and departmental prioritization.
+
+**Remaining gaps.** Some pending items remain unassigned until an administrator routes them (empty Department fields). Advanced features such as SMS/email alerts, GIS maps, and production-scale deployment were intentionally out of scope for this phase, as noted in Chapters One and Four. Sample/test titles in development data also indicate the need for continued validation and user training before full rollout.
+
+Overall, the prototype confirms technical feasibility of the MERN-based solution and shows measurable progress toward transparent, trackable municipal service delivery.
+
+---
+
+### 4.3 Expected Benefits
+
+#### 4.3.1 For Citizens
 
 - Easy online complaint and request submission
 - Faster access to municipal services
 - Transparency in service delivery
 - Real-time status tracking and notifications
 
-### For Adama City Administration
+#### 4.3.2 For Adama City Administration
 
 - Improved centralized record management
 - Better monitoring and departmental accountability
@@ -807,7 +1135,7 @@ flowchart LR
 
 ---
 
-## 21. Expected Outcome
+### 4.4 Expected Outcome
 
 The project will deliver a **fully functional web-based system** for managing citizen complaints and service requests. The system will:
 
@@ -818,21 +1146,35 @@ The project will deliver a **fully functional web-based system** for managing ci
 
 ---
 
-## 22. Future Enhancements
+### 4.5 Future Enhancements
 
 - SMS notifications for status updates
 - Email notifications and password reset via email
 - Native mobile application (Android / iOS)
 - GIS integration for map-based complaint location
-- Advanced analytics dashboard with charts and trends
-- Multi-language support (Amharic, Afan Oromo, English)
+- Advanced analytics dashboard with charts, date filters, and export
+- Full CRUD for users and departments; submission edit/delete where appropriate
+- API pagination, rate limiting, and JWT refresh tokens
+- Broader i18n coverage for authenticated dashboards
 - Citizen feedback and satisfaction rating after resolution
 - SLA tracking and escalation rules
 - Integration with existing government systems
 
 ---
 
-## 23. References
+## CHAPTER FIVE: CONCLUSION
+
+This project designed and implemented a **Web-Based Citizen Complaint and Service Request Management System** for Adama City Administration to replace fragmented, paper-based processes with a centralized digital portal.
+
+The system meets the stated objectives by enabling citizens to register, submit categorized complaints and service requests, and track status through unique reference numbers; enabling administrators to manage users and departments, assign work, update status, and generate reports; and enabling department officers to process assigned tasks and record resolution notes. JWT authentication and role-based access control protect resources according to user roles, while status history and in-app notifications improve transparency and accountability.
+
+Implementation with the MERN stack demonstrated technical feasibility and practical value for municipal service delivery. Remaining limitations—such as SMS/email alerts, GIS mapping, and advanced analytics—are documented as future enhancements and do not prevent the current system from delivering core complaint and service-request workflows.
+
+In conclusion, the project provides a working foundation for transparent, trackable, and more efficient citizen–administration interaction in Adama City, and it supports further improvement as the host organization adopts and expands the platform.
+
+---
+
+## References
 
 1. FixMyStreet. *Report, view, or discuss local problems*. mySociety. https://www.fixmystreet.com/
 2. IBM. *Entity-Relationship Modeling*. Software Engineering best practices.
@@ -853,6 +1195,18 @@ The project will deliver a **fully functional web-based system** for managing ci
 |---------|------|---------|
 | 1.0 | Initial | Original PDF proposal |
 | 2.0 | June 26, 2025 | Added ER diagram, timeline, literature review, methodology, testing, deployment, expanded DB schema, use cases, architecture, limitations, references; merged duplicate sections; clarified complaint vs service request |
+| 2.1 | July 28, 2026 | Aligned docs with implemented system: status transition rules, Atlas env, Vite/`fetch`, photo upload (2 MB), guest i18n, corrected FR/scope/limitations/test cases; removed unimplemented password-reset/Axios claims; updated use case diagram |
+| 2.2 | July 28, 2026 | Added Declaration and Acknowledgement sections |
+| 2.3 | July 28, 2026 | Expanded Table of Contents to include all subtopics |
+| 2.4 | July 28, 2026 | Added List of Acronyms |
+| 2.5 | July 28, 2026 | Added page numbers: Roman numerals for preface, Arabic for main body |
+| 2.6 | July 28, 2026 | Added Haramaya University cover page; personal details left blank for completion |
+| 2.7 | July 28, 2026 | Reorganized body into CHAPTER ONE–SIX with hierarchical section numbering |
+| 2.8 | July 28, 2026 | Added CHAPTER SIX: Results and Discussion with implementation screenshots; renumbered benefits to CHAPTER SEVEN |
+| 2.9 | July 28, 2026 | Condensed document into four chapters (Introduction; Requirements and Design; Methodology; Results and Discussion) |
+| 2.10 | July 28, 2026 | Aligned Table of Contents to academic style (dot leaders, hierarchy indent, Roman/Arabic page markers) |
+| 2.11 | July 29, 2026 | Added Abstract (Executive Summary); updated cover host-company / Practical Attachment wording; department name to Information Science |
+| 2.12 | July 29, 2026 | Added CHAPTER FIVE: Conclusion; updated Table of Contents |
 
 ---
 

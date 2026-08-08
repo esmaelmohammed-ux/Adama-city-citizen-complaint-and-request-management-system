@@ -8,7 +8,7 @@ import {
 } from '../controllers/complaintController.js';
 import { upload } from '../controllers/uploadController.js';
 import { authenticate, attachUser, authorize } from '../middleware/auth.js';
-import { ROLES, STATUS_LIST } from '../constants/index.js';
+import { COMPLAINT_CATEGORIES, ROLES, STATUS_LIST } from '../constants/index.js';
 import { validate } from '../middleware/validate.js';
 
 const router = Router();
@@ -24,7 +24,7 @@ router.post(
   [
     body('title').trim().notEmpty().withMessage('Title is required.'),
     body('description').trim().notEmpty().withMessage('Description is required.'),
-    body('category').trim().notEmpty().withMessage('Category is required.'),
+    body('category').isIn(COMPLAINT_CATEGORIES).withMessage('Invalid category.'),
     body('location').trim().notEmpty().withMessage('Location is required.'),
     body('photoUrl').optional(),
   ],

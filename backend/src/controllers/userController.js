@@ -31,6 +31,13 @@ export async function updateProfile(req, res, next) {
 
 export async function toggleUserActive(req, res, next) {
   try {
+    if (req.params.id === req.userId.toString()) {
+      return res.status(400).json({
+        success: false,
+        message: 'You cannot deactivate your own account.',
+      });
+    }
+
     const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found.' });

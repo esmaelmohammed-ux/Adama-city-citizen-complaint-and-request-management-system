@@ -4,6 +4,7 @@ import { ROLES } from '../../constants';
 import { useApp } from '../../context/AppContext';
 import { navLinks } from '../../data/guestContent';
 import { useLanguage } from '../../context/LanguageContext';
+import { handleHashLinkClick, scrollToSection } from '../../utils/smoothScroll';
 import BrandLogo from '../BrandLogo';
 import GuestIcon from './GuestIcon';
 import LanguageSwitcher from '../LanguageSwitcher';
@@ -51,6 +52,18 @@ export default function GuestHeader() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!window.location.hash) return undefined;
+    const timer = window.setTimeout(() => {
+      scrollToSection(window.location.hash);
+    }, 50);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  const onNavClick = (event) => {
+    handleHashLinkClick(event);
+    setMenuOpen(false);
+  };
   return (
     <header className="guest-header">
       <div className="guest-topbar">
@@ -99,14 +112,13 @@ export default function GuestHeader() {
                   key={link.href}
                   href={link.href}
                   className={sectionId === activeSection ? 'active' : ''}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={onNavClick}
                   aria-current={sectionId === activeSection ? 'true' : undefined}
                 >
                   {t(link.labelKey)}
                 </a>
               );
-            })}
-          </div>
+            })}          </div>
 
           <div className="guest-nav-actions">
             <LanguageSwitcher className="language-switcher--guest-nav guest-nav-lang-mobile" />

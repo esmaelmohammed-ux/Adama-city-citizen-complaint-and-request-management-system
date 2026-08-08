@@ -46,6 +46,12 @@ async function request(path, { method = 'GET', body } = {}) {
   }
 
   if (!res.ok) {
+    if (res.status === 401 && !path.startsWith('/auth/')) {
+      setToken(null);
+      if (!window.location.pathname.startsWith('/login')) {
+        window.location.assign('/login');
+      }
+    }
     throw new ApiError(data?.message || `Request failed (${res.status})`, res.status);
   }
 

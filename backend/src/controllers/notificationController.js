@@ -1,6 +1,10 @@
 import Notification from '../models/Notification.js';
 import ActivityLog from '../models/ActivityLog.js';
 import StatusHistory from '../models/StatusHistory.js';
+import Complaint from '../models/Complaint.js';
+import ServiceRequest from '../models/ServiceRequest.js';
+import { ROLES } from '../constants/index.js';
+import { buildOfficerEntityFilter } from '../utils/officerScope.js';
 import { toClient, toClientList } from '../utils/toClient.js';
 
 export async function listNotifications(req, res, next) {
@@ -52,12 +56,65 @@ export async function listActivityLogs(req, res, next) {
   }
 }
 
+async function accessibleEntityIds(user) {
+  if (user.role === ROLES.ADMIN) return null;
+
+  let complaintFilter;
+  let requestFilter;
+
+  if (user.role === ROLES.CITIZEN) {
+    complaintFilter = { citizenId: user._id };
+    requestFilter = { citizenId: user._id };
+  } else if (user.role === ROLES.OFFICER) {
+    const scope = buildOfficerEntityFilter(user);
+    complaintFilter = scope;
+    requestFilter = scope;
+  } else {
+    return { complaintIds: [], requestIds: [] };
+  }
+
+  const [complaints, requests] = await Promise.all([
+    Complaint.find(complaintFilter).select('_id'),
+    ServiceRequest.find(requestFilter).select('_id'),
+  ]);
+
+  return {
+    complaintIds: complaints.map((c) => c._id),
+    requestIds: requests.map((r) => r._id),
+  };
+}
+
 export async function listStatusHistories(req, res, next) {
   try {
     const { entityType, entityId } = req.query;
     const filter = {};
-    if (entityType) filter.entityType = entityType;
-    if (entityId) filter.entityId = entityId;
+
+    if (req.user.role === ROLES.ADMIN) {
+      if (entityType) filter.entityType = entityType;
+      if (entityId) filter.entityId = entityId;
+    } else {
+      const ids = await accessibleEntityIds(req.user);
+      const complaintIds = ids.complaintIds;
+      const requestIds = ids.requestIds;
+
+      if (entityType && entityId) {
+        const allowed =
+          (entityType === 'complaint' &&
+            complaintIds.some((id) => id.toString() === entityId.toString())) ||
+          (entityType === 'serviceRequest' &&
+            requestIds.some((id) => id.toString() === entityId.toString()));
+        if (!allowed) {
+          return res.json({ success: true, statusHistories: [] });
+        }
+        filter.entityType = entityType;
+        filter.entityId = entityId;
+      } else {
+        filter.$or = [
+          { entityType: 'complaint', entityId: { $in: complaintIds } },
+          { entityType: 'serviceRequest', entityId: { $in: requestIds } },
+        ];
+      }
+    }
 
     const statusHistories = await StatusHistory.find(filter).sort({ changedAt: -1 });
     res.json({ success: true, statusHistories: toClientList(statusHistories) });

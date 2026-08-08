@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { footerQuickLinks, footerServices, footerSocialLinks } from '../../data/guestContent';
 import { useLanguage } from '../../context/LanguageContext';
+import { handleHashLinkClick } from '../../utils/smoothScroll';
 import BrandLogo from '../BrandLogo';
 import SocialIcon from './SocialIcons';
 import '../BrandLogo.css';
@@ -16,7 +17,13 @@ export default function GuestFooter() {
           <p>{t('footer.ctaDesc')}</p>
           <div className="guest-cta-buttons">
             <Link to="/register" className="guest-btn-cta">{t('footer.registerNow')}</Link>
-            <a href="#contact" className="guest-btn-outline-white">{t('footer.contactUs')}</a>
+            <a
+              href="#contact"
+              className="guest-btn-outline-white"
+              onClick={handleHashLinkClick}
+            >
+              {t('footer.contactUs')}
+            </a>
           </div>
         </div>
       </section>
@@ -50,7 +57,9 @@ export default function GuestFooter() {
                   {link.href.startsWith('/') ? (
                     <Link to={link.href}>› {t(link.labelKey)}</Link>
                   ) : (
-                    <a href={link.href}>› {t(link.labelKey)}</a>
+                    <a href={link.href} onClick={handleHashLinkClick}>
+                      › {t(link.labelKey)}
+                    </a>
                   )}
                 </li>
               ))}
@@ -61,7 +70,9 @@ export default function GuestFooter() {
             <h4>{t('footer.services')}</h4>
             <ul>
               {footerServices.map((key) => (
-                <li key={key}><a href="#services">› {t(key)}</a></li>
+                <li key={key}>
+                  <a href="#services" onClick={handleHashLinkClick}>› {t(key)}</a>
+                </li>
               ))}
             </ul>
           </div>

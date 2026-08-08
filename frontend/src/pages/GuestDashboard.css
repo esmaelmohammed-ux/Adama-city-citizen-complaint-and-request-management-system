@@ -10,6 +10,17 @@
   position: relative;
 }
 
+html:has(.guest-page) {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(.guest-page) {
+    scroll-behavior: auto;
+  }
+}
+
 .skip-link {
   position: absolute;
   top: -100px;

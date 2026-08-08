@@ -1,0 +1,40 @@
+import { useState } from 'react';
+import { aiResolution } from '../../services/aiApi';
+import './Ai.css';
+
+/** Draft resolution note from case + optional action text. */
+export default function AiResolutionAssist({ item, type = 'complaint', actionTaken = '', onApply }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  if (!item) return null;
+
+  const run = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const data = await aiResolution({
+        title: item.title || item.serviceType || '',
+        description: item.description || '',
+        location: item.location || '',
+        category: item.category || item.serviceType || '',
+        actionTaken: actionTaken || 'Field work completed per department procedure',
+        outcome: 'resolved',
+      });
+      onApply?.(data.resolutionNote || '');
+    } catch (err) {
+      setError(err.message || 'Could not draft note');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="ai-inline">
+      <button type="button" className="btn btn-outline btn-sm" onClick={run} disabled={loading}>
+        {loading ? 'Drafting…' : 'Draft note with AI'}
+      </button>
+      {error && <span className="ai-inline-error">{error}</span>}
+    </div>
+  );
+}

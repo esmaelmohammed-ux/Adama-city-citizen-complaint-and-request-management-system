@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PageHeader, StatCard } from '../../components/UI';
 import SubmissionTable from '../../components/SubmissionTable';
 import { useApp } from '../../context/AppContext';
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const { complaints, serviceRequests, users, departments } = useApp();
   const pending = [...complaints, ...serviceRequests].filter((x) => x.status === 'pending').length;
   const inProgress = [...complaints, ...serviceRequests].filter((x) => x.status === 'in_progress').length;
@@ -32,7 +33,7 @@ export default function AdminDashboard() {
         showCitizen
         users={users}
         departments={departments}
-        onView={undefined}
+        onView={() => navigate('/admin/complaints')}
       />
       <p className="mt-1">
         <Link to="/admin/complaints">View all complaints →</Link>

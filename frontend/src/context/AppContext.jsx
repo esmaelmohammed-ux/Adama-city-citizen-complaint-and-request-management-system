@@ -124,8 +124,10 @@ export function AppProvider({ children }) {
     try {
       await api.patch(`${base}/${id}/assign`, { departmentId, officerId });
       await refreshData(currentUser);
+      return { success: true };
     } catch (err) {
       console.error('Assign failed:', err);
+      return { success: false, message: err.message || 'Assign failed.' };
     }
   };
 
@@ -134,8 +136,10 @@ export function AppProvider({ children }) {
     try {
       await api.patch(`${base}/${id}/status`, { status, note });
       await refreshData(currentUser);
+      return { success: true };
     } catch (err) {
       console.error('Status update failed:', err);
+      return { success: false, message: err.message || 'Status update failed.' };
     }
   };
 
@@ -169,8 +173,10 @@ export function AppProvider({ children }) {
     try {
       await api.post('/departments', formData);
       await refreshData(currentUser);
+      return { success: true };
     } catch (err) {
       console.error('Add department failed:', err);
+      return { success: false, message: err.message || 'Failed to add department.' };
     }
   };
 
@@ -181,8 +187,10 @@ export function AppProvider({ children }) {
         ...prev,
         users: prev.users.map((u) => (u.id === userId ? res.user : u)),
       }));
+      return { success: true };
     } catch (err) {
       console.error('Toggle user failed:', err);
+      return { success: false, message: err.message || 'Failed to update user.' };
     }
   };
 

@@ -55,14 +55,14 @@ export default function LoginPage() {
     (a, b) => DEMO_ACCOUNT_ORDER.indexOf(a.label) - DEMO_ACCOUNT_ORDER.indexOf(b.label)
   );
 
-  const completeLogin = async (email, password, shouldRemember = rememberMe) => {
+  const completeLogin = async (email, password) => {
     const result = await login(email, password);
     if (!result.success) {
       setError(result.message || t('common.invalidCredentials'));
       setInfo('');
       return false;
     }
-    saveRememberMe({ email, rememberMe: shouldRemember });
+    saveRememberMe({ email, rememberMe });
     setError('');
     setInfo('');
     navigate(dashboardPathForRole(result.role));
@@ -74,9 +74,17 @@ export default function LoginPage() {
     completeLogin(form.email, form.password);
   };
 
-  const loginDemo = (account) => {
+  const fillDemoAccount = (account) => {
     setForm({ email: account.email, password: account.password });
-    completeLogin(account.email, account.password);
+    setError('');
+    setInfo('');
+  };
+
+  const handleRememberMeChange = (checked) => {
+    setRememberMe(checked);
+    if (!checked) {
+      saveRememberMe({ email: '', rememberMe: false });
+    }
   };
 
   const handleForgotPassword = () => {
@@ -115,13 +123,14 @@ export default function LoginPage() {
             <p>{t('auth.signInCardSubtitle')}</p>
           </div>
 
+          <p className="auth-demo-label">{t('auth.demoAccounts')}</p>
           <div className="auth-demo-row">
             {sortedDemoAccounts.map((acc) => (
               <button
                 key={acc.email}
                 type="button"
                 className="auth-demo-btn"
-                onClick={() => loginDemo(acc)}
+                onClick={() => fillDemoAccount(acc)}
               >
                 {t(DEMO_BTN_KEYS[acc.label] || acc.label)}
               </button>
@@ -183,7 +192,7 @@ export default function LoginPage() {
               <input
                 type="checkbox"
                 checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
+                onChange={(e) => handleRememberMeChange(e.target.checked)}
               />
               <span>{t('auth.rememberMe')}</span>
             </label>

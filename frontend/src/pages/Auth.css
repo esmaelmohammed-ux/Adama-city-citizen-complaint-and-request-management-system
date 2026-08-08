@@ -123,6 +123,12 @@
   font-size: 0.92rem;
 }
 
+.auth-demo-label {
+  margin: 0 0 0.55rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
 .auth-demo-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

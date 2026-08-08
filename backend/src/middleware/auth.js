@@ -22,7 +22,9 @@ export function authenticate(req, res, next) {
 
 export function authorize(...roles) {
   return (req, res, next) => {
-    if (!roles.includes(req.userRole)) {
+    // Prefer DB role from attachUser so demotions take effect immediately
+    const role = req.user?.role || req.userRole;
+    if (!roles.includes(role)) {
       return res.status(403).json({ success: false, message: 'Access denied.' });
     }
     next();

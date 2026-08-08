@@ -4,7 +4,7 @@ import { SERVICE_TYPES, STATUS_LIST } from '../constants/index.js';
 const serviceRequestSchema = new mongoose.Schema(
   {
     referenceId: { type: String, required: true, unique: true },
-    serviceType: { type: String, required: true },
+    serviceType: { type: String, required: true, enum: SERVICE_TYPES },
     description: { type: String, required: true },
     location: { type: String, default: '' },
     status: { type: String, enum: STATUS_LIST, default: 'pending' },

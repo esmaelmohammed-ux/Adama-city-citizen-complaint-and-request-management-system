@@ -151,6 +151,14 @@ input:disabled {
   border: 1px solid #fecaca;
 }
 
+.auth-loading {
+  min-height: 40vh;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted, #64748b);
+  font-size: 0.95rem;
+}
+
 .alert-success {
   background: var(--primary-light);
   color: var(--primary-dark);

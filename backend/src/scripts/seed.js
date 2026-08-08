@@ -33,7 +33,7 @@ async function seed() {
     { name: 'Public Utilities', description: 'Street lighting and utilities', isActive: true },
   ]);
 
-  const [roads, water, sanitation, utilities] = departments;
+  const [, water, sanitation, utilities] = departments;
 
   const citizen = await User.create({
     fullName: 'Abebe Kebede',
@@ -66,25 +66,58 @@ async function seed() {
   const yesterday = new Date(Date.now() - 86400000);
   const now = new Date();
 
+  // Utilities — department queue (pending, no officer yet)
   const complaint1 = await Complaint.create({
     referenceId: 'CMP-2026-0001',
     title: 'Broken streetlight on Main Road',
     description: 'The streetlight near Adama Stadium has been out for two weeks.',
     category: 'streetLighting',
     location: 'Main Road, near Adama Stadium',
-    status: STATUSES.IN_PROGRESS,
+    status: STATUSES.PENDING,
     citizenId: citizen._id,
     departmentId: utilities._id,
+    assignedOfficerId: null,
     createdAt: yesterday,
     updatedAt: now,
   });
 
-  await Complaint.create({
+  // Water Supply — assigned to Dawit, in progress (shows on officer tasks)
+  const complaintWater = await Complaint.create({
     referenceId: 'CMP-2026-0002',
     title: 'Water leak on Bole Road',
     description: 'Continuous water leak causing road damage.',
     category: 'waterSupply',
     location: 'Bole Road, Kebele 05',
+    status: STATUSES.IN_PROGRESS,
+    citizenId: citizen._id,
+    departmentId: water._id,
+    assignedOfficerId: officer._id,
+    createdAt: yesterday,
+    updatedAt: now,
+  });
+
+  // Water Supply — department queue, pending (officer can Start)
+  const complaintWaterQueue = await Complaint.create({
+    referenceId: 'CMP-2026-0003',
+    title: 'Low water pressure in Kebele 08',
+    description: 'Residents report low pressure since Monday morning.',
+    category: 'waterSupply',
+    location: 'Kebele 08, Adama',
+    status: STATUSES.PENDING,
+    citizenId: citizen._id,
+    departmentId: water._id,
+    assignedOfficerId: null,
+    createdAt: now,
+    updatedAt: now,
+  });
+
+  // Unassigned pending — admin triage only
+  await Complaint.create({
+    referenceId: 'CMP-2026-0004',
+    title: 'Pothole near bus station',
+    description: 'Large pothole causing traffic hazard.',
+    category: 'roadMaintenance',
+    location: 'Central Bus Station',
     status: STATUSES.PENDING,
     citizenId: citizen._id,
     createdAt: now,
@@ -105,32 +138,95 @@ async function seed() {
     resolvedAt: now,
   });
 
-  await Notification.create({
-    userId: citizen._id,
-    title: 'Complaint In Progress',
-    message: 'Your complaint CMP-2026-0001 has been assigned to Public Utilities.',
-    relatedEntityType: 'complaint',
-    relatedEntityId: complaint1._id,
-    isRead: false,
-    createdAt: now,
+  // Water Supply — service request in progress for Dawit
+  const waterRequest = await ServiceRequest.create({
+    referenceId: 'SRV-2026-0002',
+    serviceType: 'Water Connection Inquiry',
+    description: 'Request for new household water connection assessment.',
+    location: 'Kebele 12, Adama',
+    status: STATUSES.IN_PROGRESS,
+    citizenId: citizen._id,
+    departmentId: water._id,
+    assignedOfficerId: officer._id,
+    createdAt: yesterday,
+    updatedAt: now,
   });
 
-  await StatusHistory.create({
-    entityType: 'complaint',
-    entityId: complaint1._id,
-    fromStatus: STATUSES.PENDING,
-    toStatus: STATUSES.IN_PROGRESS,
-    note: 'Assigned to Public Utilities department',
-    changedBy: admin._id,
-    changedAt: now,
-  });
+  await Notification.insertMany([
+    {
+      userId: citizen._id,
+      title: 'Complaint Routed',
+      message: 'Your complaint CMP-2026-0001 has been routed to Public Utilities.',
+      relatedEntityType: 'complaint',
+      relatedEntityId: complaint1._id,
+      isRead: false,
+      createdAt: now,
+    },
+    {
+      userId: officer._id,
+      title: 'New assignment',
+      message: 'CMP-2026-0002 has been assigned to you.',
+      relatedEntityType: 'complaint',
+      relatedEntityId: complaintWater._id,
+      isRead: false,
+      createdAt: now,
+    },
+    {
+      userId: officer._id,
+      title: 'New assignment',
+      message: 'CMP-2026-0003 has been assigned to your department (complaint).',
+      relatedEntityType: 'complaint',
+      relatedEntityId: complaintWaterQueue._id,
+      isRead: false,
+      createdAt: now,
+    },
+    {
+      userId: officer._id,
+      title: 'New assignment',
+      message: 'SRV-2026-0002 has been assigned to you.',
+      relatedEntityType: 'serviceRequest',
+      relatedEntityId: waterRequest._id,
+      isRead: false,
+      createdAt: now,
+    },
+  ]);
+
+  await StatusHistory.insertMany([
+    {
+      entityType: 'complaint',
+      entityId: complaint1._id,
+      fromStatus: null,
+      toStatus: STATUSES.PENDING,
+      note: 'Routed to Public Utilities department queue',
+      changedBy: admin._id,
+      changedAt: now,
+    },
+    {
+      entityType: 'complaint',
+      entityId: complaintWater._id,
+      fromStatus: STATUSES.PENDING,
+      toStatus: STATUSES.IN_PROGRESS,
+      note: 'Assigned to department officer',
+      changedBy: admin._id,
+      changedAt: now,
+    },
+    {
+      entityType: 'complaint',
+      entityId: complaintWaterQueue._id,
+      fromStatus: null,
+      toStatus: STATUSES.PENDING,
+      note: 'Routed to Water Supply department queue',
+      changedBy: admin._id,
+      changedAt: now,
+    },
+  ]);
 
   await ActivityLog.create({
     userId: admin._id,
     action: 'assign_complaint',
     entityType: 'complaint',
-    entityId: complaint1._id,
-    details: 'Assigned CMP-2026-0001 to Public Utilities',
+    entityId: complaintWater._id,
+    details: 'Assigned CMP-2026-0002 to Water Supply officer Dawit Hailu',
     createdAt: now,
   });
 
@@ -138,7 +234,7 @@ async function seed() {
   console.log('Demo accounts:');
   console.log('  citizen@test.com / citizen123');
   console.log('  admin@test.com / admin123');
-  console.log('  officer@test.com / officer123');
+  console.log('  officer@test.com / officer123 (Water Supply)');
 
   await mongoose.disconnect();
 }

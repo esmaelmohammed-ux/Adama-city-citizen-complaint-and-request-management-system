@@ -6,7 +6,7 @@ const complaintSchema = new mongoose.Schema(
     referenceId: { type: String, required: true, unique: true },
     title: { type: String, required: true, trim: true },
     description: { type: String, required: true },
-    category: { type: String, required: true },
+    category: { type: String, required: true, enum: COMPLAINT_CATEGORIES },
     location: { type: String, required: true },
     status: { type: String, enum: STATUS_LIST, default: 'pending' },
     citizenId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },

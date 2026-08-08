@@ -1,15 +1,27 @@
 import { useState } from 'react';
 import { PageHeader } from '../../components/UI';
 import { useApp } from '../../context/AppContext';
+import { useToast } from '../../context/ToastContext';
 
 export default function AdminDepartmentsPage() {
   const { departments, addDepartment } = useApp();
+  const { showToast } = useToast();
   const [form, setForm] = useState({ name: '', description: '' });
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    addDepartment(form);
+    setBusy(true);
+    setError('');
+    const result = await addDepartment(form);
+    setBusy(false);
+    if (!result.success) {
+      setError(result.message || 'Failed to add department.');
+      return;
+    }
+    showToast('Department added successfully.');
     setForm({ name: '', description: '' });
     setShowForm(false);
   };
@@ -25,6 +37,8 @@ export default function AdminDepartmentsPage() {
           </button>
         }
       />
+
+      {error && <div className="alert alert-error">{error}</div>}
 
       {showForm && (
         <form className="form-card mb-2" onSubmit={handleSubmit}>
@@ -44,7 +58,9 @@ export default function AdminDepartmentsPage() {
               onChange={(e) => setForm({ ...form, description: e.target.value })}
             />
           </label>
-          <button type="submit" className="btn btn-primary">Save department</button>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
+            {busy ? 'Saving...' : 'Save department'}
+          </button>
         </form>
       )}
 

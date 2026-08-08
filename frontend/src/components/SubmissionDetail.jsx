@@ -2,8 +2,16 @@ import StatusBadge from './UI';
 import { formatDate } from '../utils/storage';
 import './SubmissionTable.css';
 import './ImageUpload.css';
-// comment
-export default function SubmissionDetail({ item, type, history = [], departmentName, onClose, actions }) {
+// commen
+export default function SubmissionDetail({
+  item,
+  type,
+  history = [],
+  departmentName,
+  officerName,
+  onClose,
+  actions,
+}) {
   if (!item) return null;
 
   return (
@@ -43,6 +51,10 @@ export default function SubmissionDetail({ item, type, history = [], departmentN
           <div>
             <span className="detail-label">Department</span>
             <p>{departmentName || 'Not assigned'}</p>
+          </div>
+          <div>
+            <span className="detail-label">Assigned officer</span>
+            <p>{officerName || (item.assignedOfficerId ? 'Assigned' : 'Department queue')}</p>
           </div>
           {item.resolutionNote && (
             <div>

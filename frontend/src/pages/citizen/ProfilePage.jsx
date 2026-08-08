@@ -1,21 +1,28 @@
 import { useState } from 'react';
 import { PageHeader } from '../../components/UI';
 import { useApp } from '../../context/AppContext';
+import { useToast } from '../../context/ToastContext';
 
 export default function ProfilePage() {
   const { currentUser, updateProfile } = useApp();
+  const { showToast } = useToast();
   const [form, setForm] = useState({
     fullName: currentUser.fullName,
     phoneNumber: currentUser.phoneNumber,
   });
-  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setBusy(true);
+    setError('');
     const result = await updateProfile(form);
+    setBusy(false);
     if (result.success) {
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      showToast('Profile updated successfully.');
+    } else {
+      setError(result.message || 'Failed to update profile.');
     }
   };
 
@@ -23,7 +30,7 @@ export default function ProfilePage() {
     <div>
       <PageHeader title="My Profile" subtitle="Update your account information" />
 
-      {saved && <div className="alert alert-success">Profile updated successfully.</div>}
+      {error && <div className="alert alert-error">{error}</div>}
 
       <form className="form-card" onSubmit={handleSubmit}>
         <label>
@@ -50,7 +57,9 @@ export default function ProfilePage() {
           Role
           <input value={currentUser.role} disabled className="capitalize" />
         </label>
-        <button type="submit" className="btn btn-primary">Save changes</button>
+        <button type="submit" className="btn btn-primary" disabled={busy}>
+          {busy ? 'Saving...' : 'Save changes'}
+        </button>
       </form>
     </div>
   );

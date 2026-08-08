@@ -1,0 +1,102 @@
+import { useState } from 'react';
+import { aiTriage } from '../../services/aiApi';
+import './Ai.css';
+
+/**
+ * Admin triage: suggest department (by name→id), priority, duplicates.
+ * onApplyDepartment(departmentId)
+ */
+export default function AiTriagePanel({
+  type = 'complaint',
+  item,
+  departments = [],
+  onApplyDepartment,
+}) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [pack, setPack] = useState(null);
+
+  if (!item) return null;
+
+  const run = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const data = await aiTriage({
+        type: type === 'serviceRequest' ? 'service' : 'complaint',
+        title: item.title || item.serviceType || '',
+        description: item.description || '',
+        location: item.location || '',
+      });
+      setPack(data);
+    } catch (err) {
+      setError(err.message || 'Triage failed');
+      setPack(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const applyDept = () => {
+    const name = pack?.advice?.recommendedDepartment;
+    if (!name) return;
+    const dept = departments.find((d) => d.name === name);
+    if (!dept) {
+      setError(`Department "${name}" not found in your list. Pick manually.`);
+      return;
+    }
+    onApplyDepartment?.(dept.id);
+  };
+
+  const advice = pack?.advice;
+  const similar = pack?.similar;
+
+  return (
+    <div className="ai-panel ai-panel--compact">
+      <div className="ai-panel-head">
+        <div>
+          <strong>AI triage</strong>
+          <p>Suggest routing, priority, and possible duplicates. Assignment still requires your click.</p>
+        </div>
+        <button type="button" className="btn btn-outline btn-sm" onClick={run} disabled={loading}>
+          {loading ? 'Analyzing…' : 'Run AI triage'}
+        </button>
+      </div>
+
+      {error && <div className="alert alert-error ai-alert">{error}</div>}
+
+      {advice && (
+        <div className="ai-panel-body">
+          <div className="ai-chips">
+            <span className="ai-chip">{advice.recommendedDepartment}</span>
+            <span className={`ai-chip priority-${advice.recommendedPriority}`}>
+              Priority: {advice.recommendedPriority}
+            </span>
+            <span className="ai-chip">Duplicate risk: {advice.duplicateRisk}</span>
+          </div>
+          <p className="ai-rationale">{advice.assignHint}</p>
+          <ul className="ai-list">
+            {(advice.actions || []).map((a) => (
+              <li key={a}>{a}</li>
+            ))}
+          </ul>
+          {similar?.enabled && similar.items?.length > 0 && (
+            <ul className="ai-list">
+              {similar.items.slice(0, 3).map((s) => (
+                <li key={s.referenceId}>
+                  <strong>{s.referenceId}</strong> — {s.title} ({Math.round((s.score || 0) * 100)}%)
+                </li>
+              ))}
+            </ul>
+          )}
+          {!similar?.enabled && (
+            <p className="ai-similar-note">{similar?.message || 'Similar-case DB not connected on AI service.'}</p>
+          )}
+          <button type="button" className="btn btn-primary btn-sm" onClick={applyDept}>
+            Apply suggested department
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}

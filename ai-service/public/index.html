@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adama AI Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <p class="eyebrow">Adama City Administration · AI Sidecar</p>
+        <h1>AI Hub</h1>
+        <p class="lede">
+          Citizen writing assist, admin triage, officer resolution drafts, FAQ chatbot, and voice input —
+          without changing the main Citizen app. Copy results into <code>localhost:5173</code>.
+        </p>
+        <p class="provider-chip">Provider: <strong id="providerLabel">…</strong></p>
+      </header>
+
+      <nav class="tabs" role="tablist" aria-label="AI modes">
+        <button type="button" class="tab active" data-tab="citizen">Citizen</button>
+        <button type="button" class="tab" data-tab="admin">Admin triage</button>
+        <button type="button" class="tab" data-tab="officer">Officer</button>
+        <button type="button" class="tab" data-tab="chat">Chatbot</button>
+      </nav>
+
+      <!-- CITIZEN -->
+      <section class="mode active" id="mode-citizen">
+        <div class="layout">
+          <div class="panel">
+            <h2>Writing assist + category</h2>
+            <form id="citizenForm">
+              <label>
+                Type
+                <select name="type" id="cType">
+                  <option value="complaint">Complaint</option>
+                  <option value="service">Service request</option>
+                </select>
+              </label>
+              <label>
+                Title
+                <div class="row">
+                  <input name="title" id="cTitle" type="text" placeholder="Short title" />
+                  <button type="button" class="btn mic" data-voice="cTitle" title="Voice input">🎤</button>
+                </div>
+              </label>
+              <label>
+                Description
+                <div class="row grow">
+                  <textarea name="description" id="cDesc" rows="5" required placeholder="Describe the issue…"></textarea>
+                  <button type="button" class="btn mic" data-voice="cDesc" title="Voice input">🎤</button>
+                </div>
+              </label>
+              <label>
+                Location
+                <div class="row">
+                  <input name="location" id="cLoc" type="text" placeholder="Kebele / street" />
+                  <button type="button" class="btn mic" data-voice="cLoc" title="Voice input">🎤</button>
+                </div>
+              </label>
+              <div class="actions">
+                <button type="submit" class="btn primary">Run citizen assist</button>
+                <button type="button" class="btn ghost" data-clear="citizen">Clear</button>
+              </div>
+            </form>
+            <p class="hint" id="voiceHint">Voice uses your browser speech recognition (Chrome/Edge recommended).</p>
+          </div>
+          <div class="panel results" id="citizenResults" hidden>
+            <div class="results-head">
+              <h2>Suggestions</h2>
+              <span class="status" id="citizenStatus"></span>
+            </div>
+            <article class="block">
+              <div class="block-head">
+                <h3>Improved text</h3>
+                <button type="button" class="btn small" data-copy="citizen-improved">Copy</button>
+              </div>
+              <input id="cOutTitle" readonly />
+              <textarea id="cOutDesc" rows="4" readonly class="mt"></textarea>
+            </article>
+            <article class="block">
+              <div class="block-head">
+                <h3>Classification</h3>
+                <button type="button" class="btn small" data-copy="citizen-class">Copy</button>
+              </div>
+              <dl class="kv" id="citizenKv"></dl>
+            </article>
+            <article class="block">
+              <h3>Similar cases</h3>
+              <p class="meta" id="citizenSimilarMeta"></p>
+              <ul class="similar" id="citizenSimilar"></ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN -->
+      <section class="mode" id="mode-admin">
+        <div class="layout">
+          <div class="panel">
+            <h2>Routing · duplicates · priority</h2>
+            <form id="adminForm">
+              <label>
+                Type
+                <select id="aType">
+                  <option value="complaint">Complaint</option>
+                  <option value="service">Service request</option>
+                </select>
+              </label>
+              <label>
+                Title
+                <div class="row">
+                  <input id="aTitle" type="text" />
+                  <button type="button" class="btn mic" data-voice="aTitle">🎤</button>
+                </div>
+              </label>
+              <label>
+                Description
+                <div class="row grow">
+                  <textarea id="aDesc" rows="5" required></textarea>
+                  <button type="button" class="btn mic" data-voice="aDesc">🎤</button>
+                </div>
+              </label>
+              <label>
+                Location
+                <input id="aLoc" type="text" />
+              </label>
+              <div class="actions">
+                <button type="submit" class="btn primary">Run triage</button>
+                <button type="button" class="btn ghost" data-clear="admin">Clear</button>
+              </div>
+            </form>
+            <p class="hint">AI suggests only — assign/reject in the main admin app.</p>
+          </div>
+          <div class="panel results" id="adminResults" hidden>
+            <div class="results-head">
+              <h2>Triage pack</h2>
+              <span class="status" id="adminStatus"></span>
+            </div>
+            <article class="block">
+              <div class="block-head">
+                <h3>Advice</h3>
+                <button type="button" class="btn small" data-copy="admin-advice">Copy</button>
+              </div>
+              <dl class="kv" id="adminAdviceKv"></dl>
+              <ul class="bullets" id="adminActions"></ul>
+            </article>
+            <article class="block">
+              <h3>Classification</h3>
+              <dl class="kv" id="adminClassKv"></dl>
+            </article>
+            <article class="block">
+              <h3>Possible duplicates</h3>
+              <p class="meta" id="adminSimilarMeta"></p>
+              <ul class="similar" id="adminSimilar"></ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- OFFICER -->
+      <section class="mode" id="mode-officer">
+        <div class="layout">
+          <div class="panel">
+            <h2>Resolution note assist</h2>
+            <form id="officerForm">
+              <label>Case title <input id="oTitle" type="text" /></label>
+              <label>Case description <textarea id="oDesc" rows="3"></textarea></label>
+              <label>Location <input id="oLoc" type="text" /></label>
+              <label>Category / type <input id="oCat" type="text" placeholder="e.g. waterSupply" /></label>
+              <label>
+                Action you took
+                <div class="row grow">
+                  <textarea id="oAction" rows="3" required placeholder="What did the team do on site?"></textarea>
+                  <button type="button" class="btn mic" data-voice="oAction">🎤</button>
+                </div>
+              </label>
+              <label>
+                Outcome
+                <select id="oOutcome">
+                  <option value="resolved">Resolved</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </label>
+              <div class="actions">
+                <button type="submit" class="btn primary">Draft notes</button>
+                <button type="button" class="btn ghost" data-clear="officer">Clear</button>
+              </div>
+            </form>
+          </div>
+          <div class="panel results" id="officerResults" hidden>
+            <div class="results-head">
+              <h2>Drafts</h2>
+              <span class="status" id="officerStatus"></span>
+            </div>
+            <article class="block">
+              <div class="block-head">
+                <h3>Resolution note</h3>
+                <button type="button" class="btn small" data-copy="officer-note">Copy</button>
+              </div>
+              <textarea id="oOutNote" rows="5" readonly></textarea>
+            </article>
+            <article class="block">
+              <h3>Citizen update line</h3>
+              <p id="oOutCitizen" class="quote"></p>
+            </article>
+            <article class="block">
+              <h3>Checklist</h3>
+              <ul class="bullets" id="oChecklist"></ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHAT -->
+      <section class="mode" id="mode-chat">
+        <div class="layout single">
+          <div class="panel chat-panel">
+            <h2>FAQ chatbot</h2>
+            <p class="hint">Ask about tracking, categories, departments, login, photos, roles, or this AI helper.</p>
+            <div class="chat-log" id="chatLog" aria-live="polite"></div>
+            <form id="chatForm" class="chat-form">
+              <button type="button" class="btn mic" data-voice="chatInput" title="Voice">🎤</button>
+              <input id="chatInput" type="text" placeholder="How do I track my complaint?" autocomplete="off" />
+              <button type="submit" class="btn primary">Send</button>
+            </form>
+            <div class="chips">
+              <button type="button" class="chip" data-ask="How do I track my complaint status?">Track status</button>
+              <button type="button" class="chip" data-ask="Difference between complaint and service request?">Complaint vs request</button>
+              <button type="button" class="chip" data-ask="Which department handles water leaks?">Departments</button>
+              <button type="button" class="chip" data-ask="Can officers reject a case?">Roles</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <p>
+          APIs: <code>/assist</code> · <code>/triage</code> · <code>/resolution</code> · <code>/chat</code> ·
+          Voice is browser-side (no audio uploaded)
+        </p>
+      </footer>
+    </div>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
