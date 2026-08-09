@@ -6,6 +6,7 @@ import SubmissionDetail from '../../components/SubmissionDetail';
 import SubmissionTable from '../../components/SubmissionTable';
 import { ROLES, STATUSES } from '../../constants';
 import { useApp } from '../../context/AppContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../context/ToastContext';
 
 export default function AdminComplaintsPage() {
@@ -17,6 +18,7 @@ export default function AdminComplaintsPage() {
     assignSubmission,
     updateSubmissionStatus,
   } = useApp();
+  const { t } = useLanguage();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selected, setSelected] = useState(null);
@@ -67,13 +69,13 @@ export default function AdminComplaintsPage() {
     );
     setBusy(false);
     if (!result.success) {
-      setActionError(result.message || 'Assign failed.');
+      setActionError(result.message || t('admin.assignFailed'));
       return;
     }
     showToast(
       assignOfficer
-        ? 'Complaint assigned to officer successfully.'
-        : 'Complaint routed to department successfully.'
+        ? t('admin.complaintAssignedOfficer')
+        : t('admin.complaintRouted')
     );
     setSelected(null);
     setAssignDept('');
@@ -87,34 +89,37 @@ export default function AdminComplaintsPage() {
     const result = await updateSubmissionStatus('complaint', selected.id, status, note);
     setBusy(false);
     if (!result.success) {
-      setActionError(result.message || 'Update failed.');
+      setActionError(result.message || t('admin.updateFailed'));
       return;
     }
     const labels = {
-      [STATUSES.REJECTED]: 'Complaint rejected.',
-      [STATUSES.RESOLVED]: 'Complaint marked as resolved.',
-      [STATUSES.CLOSED]: 'Complaint closed successfully.',
+      [STATUSES.REJECTED]: t('admin.complaintRejected'),
+      [STATUSES.RESOLVED]: t('admin.complaintResolved'),
+      [STATUSES.CLOSED]: t('admin.complaintClosed'),
     };
-    showToast(labels[status] || 'Complaint status updated.');
+    showToast(labels[status] || t('admin.complaintUpdated'));
     setSelected(null);
     setNote('');
   };
 
   return (
     <div>
-      <PageHeader title="Manage Complaints" subtitle="Review, assign, and update complaint status" />
+      <PageHeader
+        title={t('admin.manageComplaintsTitle')}
+        subtitle={t('admin.manageComplaintsSubtitle')}
+      />
 
       <div className="filters-bar">
         <input
           className="search-input"
-          placeholder="Search complaints..."
+          placeholder={t('form.searchComplaints')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-          <option value="all">All statuses</option>
+          <option value="all">{t('status.all')}</option>
           {Object.values(STATUSES).map((s) => (
-            <option key={s} value={s}>{s.replace('_', ' ')}</option>
+            <option key={s} value={s}>{t(`status.${s}`)}</option>
           ))}
         </select>
       </div>
@@ -154,7 +159,7 @@ export default function AdminComplaintsPage() {
                     onApplyDepartment={(deptId) => handleDeptChange(deptId)}
                   />
                   <select value={assignDept} onChange={(e) => handleDeptChange(e.target.value)}>
-                    <option value="">Assign to department...</option>
+                    <option value="">{t('form.assignDepartment')}</option>
                     {departments.map((d) => (
                       <option key={d.id} value={d.id}>{d.name}</option>
                     ))}
@@ -164,7 +169,7 @@ export default function AdminComplaintsPage() {
                     onChange={(e) => setAssignOfficer(e.target.value)}
                     disabled={!assignDept}
                   >
-                    <option value="">Any officer (department queue)</option>
+                    <option value="">{t('form.anyOfficer')}</option>
                     {officersInDept.map((o) => (
                       <option key={o.id} value={o.id}>{o.fullName}</option>
                     ))}
@@ -175,7 +180,7 @@ export default function AdminComplaintsPage() {
                     onClick={handleAssign}
                     disabled={!assignDept || busy}
                   >
-                    {assignOfficer ? 'Assign to officer' : 'Route to department'}
+                    {assignOfficer ? t('form.assignOfficer') : t('form.routeDepartment')}
                   </button>
                   {selected.status === STATUSES.PENDING && (
                     <button
@@ -184,7 +189,7 @@ export default function AdminComplaintsPage() {
                       disabled={busy}
                       onClick={() => handleStatus(STATUSES.REJECTED)}
                     >
-                      Reject
+                      {t('form.reject')}
                     </button>
                   )}
                 </>
@@ -198,7 +203,7 @@ export default function AdminComplaintsPage() {
                     onApply={setNote}
                   />
                   <input
-                    placeholder="Resolution note..."
+                    placeholder={t('form.resolutionNote')}
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     className="inline-input"
@@ -209,7 +214,7 @@ export default function AdminComplaintsPage() {
                     disabled={busy}
                     onClick={() => handleStatus(STATUSES.RESOLVED)}
                   >
-                    Mark resolved
+                    {t('form.markResolved')}
                   </button>
                   <button
                     type="button"
@@ -217,7 +222,7 @@ export default function AdminComplaintsPage() {
                     disabled={busy}
                     onClick={() => handleStatus(STATUSES.CLOSED)}
                   >
-                    Close
+                    {t('form.close')}
                   </button>
                 </>
               )}

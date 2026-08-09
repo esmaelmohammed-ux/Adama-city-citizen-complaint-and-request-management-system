@@ -1,23 +1,25 @@
 import { PageHeader } from '../../components/UI';
 import { formatDate } from '../../utils/storage';
 import { useApp } from '../../context/AppContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function AdminActivityPage() {
   const { activityLogs, users } = useApp();
-  const getUser = (id) => users.find((u) => u.id === id)?.fullName || 'Unknown';
+  const { t } = useLanguage();
+  const getUser = (id) => users.find((u) => u.id === id)?.fullName || t('commonApp.unknown');
 
   return (
     <div>
-      <PageHeader title="Activity Log" subtitle="Audit trail of administrative actions" />
+      <PageHeader title={t('admin.activityTitle')} subtitle={t('admin.activitySubtitle')} />
 
       <div className="table-wrap">
         <table className="data-table">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>User</th>
-              <th>Action</th>
-              <th>Details</th>
+              <th>{t('table.date')}</th>
+              <th>{t('table.user')}</th>
+              <th>{t('table.action')}</th>
+              <th>{t('table.details')}</th>
             </tr>
           </thead>
           <tbody>

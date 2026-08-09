@@ -1,7 +1,14 @@
 import StatusBadge from './UI';
+import { SERVICE_TYPE_I18N_KEYS } from '../constants';
+import { useLanguage } from '../context/LanguageContext';
 import { formatDate } from '../utils/storage';
 import './SubmissionTable.css';
-// comment
+
+function serviceTypeLabel(value, t) {
+  const key = SERVICE_TYPE_I18N_KEYS[value];
+  return key ? t(`serviceTypes.${key}`) : value;
+}
+
 export default function SubmissionTable({
   items,
   type,
@@ -10,8 +17,10 @@ export default function SubmissionTable({
   departments = [],
   onView,
 }) {
+  const { t } = useLanguage();
+
   if (!items.length) {
-    return <div className="table-empty">No records found.</div>;
+    return <div className="table-empty">{t('table.noRecords')}</div>;
   }
 
   const getUserName = (id) => users.find((u) => u.id === id)?.fullName || '—';
@@ -24,22 +33,32 @@ export default function SubmissionTable({
       <table className="data-table">
         <thead>
           <tr>
-            <th>Reference</th>
-            <th>{mixed ? 'Title / Service' : type === 'complaint' ? 'Title' : 'Service Type'}</th>
-            <th>Status</th>
-            {showCitizen && <th>Citizen</th>}
-            <th>Department</th>
-            <th>Date</th>
+            <th>{t('table.reference')}</th>
+            <th>
+              {mixed
+                ? t('table.titleOrService')
+                : type === 'complaint'
+                  ? t('table.title')
+                  : t('table.serviceType')}
+            </th>
+            <th>{t('table.status')}</th>
+            {showCitizen && <th>{t('table.citizen')}</th>}
+            <th>{t('table.department')}</th>
+            <th>{t('table.date')}</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           {items.map((item) => {
-            const t = rowType(item);
+            const itemType = rowType(item);
             return (
-              <tr key={`${t}-${item.id}`}>
+              <tr key={`${itemType}-${item.id}`}>
                 <td><code>{item.referenceId}</code></td>
-                <td>{t === 'complaint' ? item.title : item.serviceType}</td>
+                <td>
+                  {itemType === 'complaint'
+                    ? item.title
+                    : serviceTypeLabel(item.serviceType, t)}
+                </td>
                 <td><StatusBadge status={item.status} /></td>
                 {showCitizen && <td>{getUserName(item.citizenId)}</td>}
                 <td>{getDeptName(item.departmentId)}</td>
@@ -47,7 +66,7 @@ export default function SubmissionTable({
                 <td>
                   {onView ? (
                     <button type="button" className="btn btn-ghost btn-sm" onClick={() => onView(item)}>
-                      View
+                      {t('table.view')}
                     </button>
                   ) : null}
                 </td>

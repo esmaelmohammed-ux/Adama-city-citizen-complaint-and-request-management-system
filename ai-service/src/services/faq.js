@@ -34,7 +34,7 @@ export const FAQ_ENTRIES = [
   {
     id: 'languages',
     q: ['language', 'amharic', 'oromo', 'afaan', 'english', 'translate'],
-    a: 'The guest landing supports English, Amharic, and Afaan Oromo. After login, most workspace screens are currently English.',
+    a: 'The portal supports English, Amharic, and Afaan Oromo on the public site and after login (sidebar language switcher).',
   },
   {
     id: 'reject',
@@ -57,7 +57,8 @@ export function heuristicChat(message = '') {
   const lower = String(message).toLowerCase();
   if (!lower.trim()) {
     return {
-      reply: 'Ask me about tracking cases, complaint vs service request, categories, departments, photos, or login.',
+      reply:
+        'Ask me anything — general questions, or Adama City portal help (tracking cases, complaint vs service request, categories, departments, photos, login).',
       matchedFaqId: null,
       provider: 'heuristic',
     };
@@ -76,7 +77,7 @@ export function heuristicChat(message = '') {
   if (!best || bestScore === 0) {
     return {
       reply:
-        'I can help with Adama City complaints and service requests: how to track status, pick a category, which department handles an issue, photos, login, and how this AI helper works. Try asking one of those.',
+        'I could not match that to the offline FAQ. With Gemini connected I can answer general questions too — try again in a moment, or ask about tracking cases, categories, departments, photos, or login.',
       matchedFaqId: null,
       suggestions: FAQ_ENTRIES.slice(0, 5).map((e) => e.id),
       provider: 'heuristic',

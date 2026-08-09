@@ -5,7 +5,7 @@ function buildMongoUri() {
   const { MONGODB_USER, MONGODB_PASSWORD, MONGODB_CLUSTER, MONGODB_DB } = process.env;
   if (MONGODB_USER && MONGODB_PASSWORD && MONGODB_CLUSTER) {
     const db = MONGODB_DB || 'adama_citizen';
-    return `mongodb+srv://${encodeURIComponent(MONGODB_USER)}:${encodeURIComponent(MONGODB_PASSWORD)}@${MONGODB_CLUSTER}/${db}?retryWrites=true&w=majority`;
+    return `mongodb+srv://${encodeURIComponent(MONGODB_USER)}:${encodeURIComponent(MONGODB_PASSWORD)}@${MONGODB_CLUSTER}/${db}?retryWrites=true&w=majority&appName=Cluster0&authSource=admin`;
   }
   return '';
 }

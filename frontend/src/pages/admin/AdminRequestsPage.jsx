@@ -6,6 +6,7 @@ import SubmissionDetail from '../../components/SubmissionDetail';
 import SubmissionTable from '../../components/SubmissionTable';
 import { ROLES, STATUSES } from '../../constants';
 import { useApp } from '../../context/AppContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../context/ToastContext';
 
 export default function AdminRequestsPage() {
@@ -17,6 +18,7 @@ export default function AdminRequestsPage() {
     assignSubmission,
     updateSubmissionStatus,
   } = useApp();
+  const { t } = useLanguage();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selected, setSelected] = useState(null);
@@ -72,13 +74,13 @@ export default function AdminRequestsPage() {
     );
     setBusy(false);
     if (!result.success) {
-      setActionError(result.message || 'Assign failed.');
+      setActionError(result.message || t('admin.assignFailed'));
       return;
     }
     showToast(
       assignOfficer
-        ? 'Request assigned to officer successfully.'
-        : 'Request routed to department successfully.'
+        ? t('admin.requestAssignedOfficer')
+        : t('admin.requestRouted')
     );
     setSelected(null);
     setAssignDept('');
@@ -92,34 +94,34 @@ export default function AdminRequestsPage() {
     const result = await updateSubmissionStatus('serviceRequest', selected.id, status, note);
     setBusy(false);
     if (!result.success) {
-      setActionError(result.message || 'Update failed.');
+      setActionError(result.message || t('admin.updateFailed'));
       return;
     }
     const labels = {
-      [STATUSES.REJECTED]: 'Request rejected.',
-      [STATUSES.RESOLVED]: 'Request marked as resolved.',
-      [STATUSES.CLOSED]: 'Request closed successfully.',
+      [STATUSES.REJECTED]: t('admin.requestRejected'),
+      [STATUSES.RESOLVED]: t('admin.requestResolved'),
+      [STATUSES.CLOSED]: t('admin.requestClosed'),
     };
-    showToast(labels[status] || 'Request status updated.');
+    showToast(labels[status] || t('admin.requestUpdated'));
     setSelected(null);
     setNote('');
   };
 
   return (
     <div>
-      <PageHeader title="Service Requests" subtitle="Manage citizen service requests" />
+      <PageHeader title={t('admin.requestsTitle')} subtitle={t('admin.requestsSubtitle')} />
 
       <div className="filters-bar">
         <input
           className="search-input"
-          placeholder="Search requests..."
+          placeholder={t('form.searchRequests')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-          <option value="all">All statuses</option>
+          <option value="all">{t('status.all')}</option>
           {Object.values(STATUSES).map((s) => (
-            <option key={s} value={s}>{s.replace('_', ' ')}</option>
+            <option key={s} value={s}>{t(`status.${s}`)}</option>
           ))}
         </select>
       </div>
@@ -159,7 +161,7 @@ export default function AdminRequestsPage() {
                     onApplyDepartment={(deptId) => handleDeptChange(deptId)}
                   />
                   <select value={assignDept} onChange={(e) => handleDeptChange(e.target.value)}>
-                    <option value="">Assign to department...</option>
+                    <option value="">{t('form.assignDepartment')}</option>
                     {departments.map((d) => (
                       <option key={d.id} value={d.id}>{d.name}</option>
                     ))}
@@ -169,7 +171,7 @@ export default function AdminRequestsPage() {
                     onChange={(e) => setAssignOfficer(e.target.value)}
                     disabled={!assignDept}
                   >
-                    <option value="">Any officer (department queue)</option>
+                    <option value="">{t('form.anyOfficer')}</option>
                     {officersInDept.map((o) => (
                       <option key={o.id} value={o.id}>{o.fullName}</option>
                     ))}
@@ -180,7 +182,7 @@ export default function AdminRequestsPage() {
                     onClick={handleAssign}
                     disabled={!assignDept || busy}
                   >
-                    {assignOfficer ? 'Assign to officer' : 'Route to department'}
+                    {assignOfficer ? t('form.assignOfficer') : t('form.routeDepartment')}
                   </button>
                   {selected.status === STATUSES.PENDING && (
                     <button
@@ -189,7 +191,7 @@ export default function AdminRequestsPage() {
                       disabled={busy}
                       onClick={() => handleStatus(STATUSES.REJECTED)}
                     >
-                      Reject
+                      {t('form.reject')}
                     </button>
                   )}
                 </>
@@ -203,7 +205,7 @@ export default function AdminRequestsPage() {
                     onApply={setNote}
                   />
                   <input
-                    placeholder="Resolution note..."
+                    placeholder={t('form.resolutionNote')}
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     className="inline-input"
@@ -214,7 +216,7 @@ export default function AdminRequestsPage() {
                     disabled={busy}
                     onClick={() => handleStatus(STATUSES.RESOLVED)}
                   >
-                    Mark resolved
+                    {t('form.markResolved')}
                   </button>
                   <button
                     type="button"
@@ -222,7 +224,7 @@ export default function AdminRequestsPage() {
                     disabled={busy}
                     onClick={() => handleStatus(STATUSES.CLOSED)}
                   >
-                    Close
+                    {t('form.close')}
                   </button>
                 </>
               )}

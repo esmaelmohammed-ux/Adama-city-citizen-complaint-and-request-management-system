@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SERVICE_TYPES } from '../../constants';
+import { SERVICE_TYPES, SERVICE_TYPE_I18N_KEYS } from '../../constants';
 import SuccessPopup from '../../components/SuccessPopup';
 import AiCitizenAssist from '../../components/ai/AiCitizenAssist';
 import VoiceButton from '../../components/ai/VoiceButton';
 import { PageHeader } from '../../components/UI';
 import { useApp } from '../../context/AppContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../context/ToastContext';
 
 export default function NewServiceRequestPage() {
   const { submitServiceRequest } = useApp();
+  const { t } = useLanguage();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -31,7 +33,7 @@ export default function NewServiceRequestPage() {
       setError('');
       setReferenceId(ref);
     } catch (err) {
-      setError(err.message || 'Failed to submit request.');
+      setError(err.message || t('citizen.submitRequestFailed'));
       setSubmitting(false);
     }
   };
@@ -52,44 +54,46 @@ export default function NewServiceRequestPage() {
         nextHighlight.description = true;
       }
       if (s.serviceType && SERVICE_TYPES.includes(s.serviceType)) {
-        if (s.serviceType !== prev.serviceType) nextHighlight.serviceType = true;
         next.serviceType = s.serviceType;
         nextHighlight.serviceType = true;
       }
       return next;
     });
     setHighlight(nextHighlight);
-    showToast('AI suggestions applied to the form.', 'success');
+    showToast(t('commonApp.aiApplied'), 'success');
     window.setTimeout(() => setHighlight({}), 2200);
   };
 
   return (
     <div>
-      <PageHeader title="Submit Service Request" subtitle="Request a municipal service from the city administration" />
+      <PageHeader
+        title={t('citizen.submitRequestTitle')}
+        subtitle={t('citizen.submitRequestSubtitle')}
+      />
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <form className="form-card" onSubmit={handleSubmit} id="ai-form-anchor">
         <label className={highlight.location ? 'ai-field-flash' : undefined}>
-          Location (optional)
+          {t('form.locationOptional')}
           <div className="ai-field-row">
             <input
               value={form.location}
               onChange={(e) => setForm({ ...form, location: e.target.value })}
-              placeholder="Where should the service be provided?"
+              placeholder={t('form.serviceLocationPlaceholder')}
             />
             <VoiceButton onTranscript={appendVoice('location')} />
           </div>
         </label>
         <label className={highlight.description ? 'ai-field-flash' : undefined}>
-          Description
+          {t('form.description')}
           <div className="ai-field-row">
             <textarea
               rows={5}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               required
-              placeholder="Describe what you need..."
+              placeholder={t('form.serviceDescriptionPlaceholder')}
             />
             <VoiceButton onTranscript={appendVoice('description')} />
           </div>
@@ -104,31 +108,35 @@ export default function NewServiceRequestPage() {
         />
 
         <label className={highlight.serviceType ? 'ai-field-flash' : undefined}>
-          Service type
+          {t('form.serviceType')}
           <select
             value={form.serviceType}
             onChange={(e) => setForm({ ...form, serviceType: e.target.value })}
           >
-            {SERVICE_TYPES.map((t) => (
-              <option key={t} value={t}>{t}</option>
+            {SERVICE_TYPES.map((value) => (
+              <option key={value} value={value}>
+                {t(`serviceTypes.${SERVICE_TYPE_I18N_KEYS[value]}`)}
+              </option>
             ))}
           </select>
         </label>
 
         <div className="form-actions">
-          <button type="button" className="btn btn-ghost" onClick={() => navigate(-1)}>Cancel</button>
+          <button type="button" className="btn btn-ghost" onClick={() => navigate(-1)}>
+            {t('form.cancel')}
+          </button>
           <button type="submit" className="btn btn-primary" disabled={submitting}>
-            {submitting ? 'Submitting...' : 'Submit request'}
+            {submitting ? t('form.submitting') : t('citizen.submitRequest')}
           </button>
         </div>
       </form>
 
       <SuccessPopup
         open={Boolean(referenceId)}
-        title="Service request submitted"
-        message="Save your reference ID to track this request."
+        title={t('citizen.requestSubmitted')}
+        message={t('citizen.requestSubmittedMsg')}
         referenceId={referenceId}
-        confirmLabel="View my submissions"
+        confirmLabel={t('citizen.viewSubmissions')}
         onConfirm={() => navigate('/citizen/submissions')}
       />
     </div>

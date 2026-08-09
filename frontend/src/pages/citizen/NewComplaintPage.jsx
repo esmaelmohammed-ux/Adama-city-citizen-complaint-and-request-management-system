@@ -37,7 +37,7 @@ export default function NewComplaintPage() {
       setError('');
       setReferenceId(ref);
     } catch (err) {
-      setError(err.message || 'Failed to submit complaint.');
+      setError(err.message || t('citizen.submitFailed'));
       setSubmitting(false);
     }
   };
@@ -61,61 +61,60 @@ export default function NewComplaintPage() {
         next.description = s.description;
         nextHighlight.description = true;
       }
-      if (s.category && COMPLAINT_CATEGORIES.includes(s.category) && s.category !== prev.category) {
-        next.category = s.category;
-        nextHighlight.category = true;
-      } else if (s.category && COMPLAINT_CATEGORIES.includes(s.category)) {
-        // Still set explicitly so controlled select stays in sync
+      if (s.category && COMPLAINT_CATEGORIES.includes(s.category)) {
         next.category = s.category;
         nextHighlight.category = true;
       }
       return next;
     });
     setHighlight(nextHighlight);
-    showToast('AI suggestions applied to the form.', 'success');
+    showToast(t('commonApp.aiApplied'), 'success');
     window.setTimeout(() => setHighlight({}), 2200);
   };
 
   return (
     <div>
-      <PageHeader title="Submit Complaint" subtitle="Report a problem with municipal services" />
+      <PageHeader
+        title={t('citizen.submitComplaintTitle')}
+        subtitle={t('citizen.submitComplaintSubtitle')}
+      />
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <form className="form-card" onSubmit={handleSubmit} id="ai-form-anchor">
         <label className={highlight.title ? 'ai-field-flash' : undefined}>
-          Title
+          {t('form.title')}
           <div className="ai-field-row">
             <input
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               required
-              placeholder="Brief summary of the issue"
+              placeholder={t('form.titlePlaceholder')}
             />
             <VoiceButton onTranscript={appendVoice('title')} />
           </div>
         </label>
         <label className={highlight.location ? 'ai-field-flash' : undefined}>
-          Location
+          {t('form.location')}
           <div className="ai-field-row">
             <input
               value={form.location}
               onChange={(e) => setForm({ ...form, location: e.target.value })}
               required
-              placeholder="Street, kebele, or landmark"
+              placeholder={t('form.locationPlaceholder')}
             />
             <VoiceButton onTranscript={appendVoice('location')} />
           </div>
         </label>
         <label className={highlight.description ? 'ai-field-flash' : undefined}>
-          Description
+          {t('form.description')}
           <div className="ai-field-row">
             <textarea
               rows={5}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               required
-              placeholder="Describe the problem in detail..."
+              placeholder={t('form.descriptionPlaceholder')}
             />
             <VoiceButton onTranscript={appendVoice('description')} />
           </div>
@@ -130,7 +129,7 @@ export default function NewComplaintPage() {
         />
 
         <label className={highlight.category ? 'ai-field-flash' : undefined}>
-          Category
+          {t('form.category')}
           <select
             value={form.category}
             onChange={(e) => setForm({ ...form, category: e.target.value })}
@@ -144,23 +143,25 @@ export default function NewComplaintPage() {
         <ImageUpload
           value={form.photoUrl}
           onChange={(photoUrl) => setForm({ ...form, photoUrl })}
-          label="Photo"
+          label={t('form.photo')}
         />
 
         <div className="form-actions">
-          <button type="button" className="btn btn-ghost" onClick={() => navigate(-1)}>Cancel</button>
+          <button type="button" className="btn btn-ghost" onClick={() => navigate(-1)}>
+            {t('form.cancel')}
+          </button>
           <button type="submit" className="btn btn-primary" disabled={submitting}>
-            {submitting ? 'Submitting...' : 'Submit complaint'}
+            {submitting ? t('form.submitting') : t('citizen.submitComplaint')}
           </button>
         </div>
       </form>
 
       <SuccessPopup
         open={Boolean(referenceId)}
-        title="Complaint submitted"
-        message="Save your reference ID to track this complaint."
+        title={t('citizen.complaintSubmitted')}
+        message={t('citizen.complaintSubmittedMsg')}
         referenceId={referenceId}
-        confirmLabel="View my submissions"
+        confirmLabel={t('citizen.viewSubmissions')}
         onConfirm={() => navigate('/citizen/submissions')}
       />
     </div>

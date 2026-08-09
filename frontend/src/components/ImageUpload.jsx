@@ -1,35 +1,39 @@
 import { useRef, useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 import './ImageUpload.css';
 
 const MAX_SIZE_BYTES = 2 * 1024 * 1024;
-// Comment
+
 export default function ImageUpload({
   value,
   onChange,
-  label = 'Photo',
-  hint = 'JPG, PNG, or WebP. Max 2 MB.',
+  label,
+  hint,
   optional = true,
 }) {
+  const { t } = useLanguage();
   const inputRef = useRef(null);
   const [error, setError] = useState('');
+  const resolvedLabel = label ?? t('form.photo');
+  const resolvedHint = hint ?? t('form.photoHint');
 
   const handleFile = (file) => {
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      setError('Please select an image file.');
+      setError(t('form.photoNotImage'));
       return;
     }
 
     if (file.size > MAX_SIZE_BYTES) {
-      setError('Image must be 2 MB or smaller.');
+      setError(t('form.photoTooLarge'));
       return;
     }
 
     setError('');
     const reader = new FileReader();
     reader.onload = () => onChange(reader.result);
-    reader.onerror = () => setError('Could not read the selected image.');
+    reader.onerror = () => setError(t('form.photoReadError'));
     reader.readAsDataURL(file);
   };
 
@@ -46,8 +50,8 @@ export default function ImageUpload({
   return (
     <div className="image-upload">
       <span className="image-upload-label">
-        {label}
-        {optional && <span className="image-upload-optional"> (optional)</span>}
+        {resolvedLabel}
+        {optional && <span className="image-upload-optional"> {t('form.optional')}</span>}
       </span>
 
       <input
@@ -60,17 +64,17 @@ export default function ImageUpload({
 
       {value ? (
         <div className="image-upload-preview">
-          <img src={value} alt="Selected upload preview" />
+          <img src={value} alt={t('detail.photoAlt')} />
           <div className="image-upload-actions">
             <button
               type="button"
               className="btn btn-ghost btn-sm"
               onClick={() => inputRef.current?.click()}
             >
-              Change photo
+              {t('form.changePhoto')}
             </button>
             <button type="button" className="btn btn-ghost btn-sm" onClick={clear}>
-              Remove
+              {t('form.remove')}
             </button>
           </div>
         </div>
@@ -80,14 +84,12 @@ export default function ImageUpload({
           className="image-upload-trigger"
           onClick={() => inputRef.current?.click()}
         >
-          Choose photo
+          {t('form.choosePhoto')}
         </button>
       )}
 
-      {hint && !error && <small className="field-hint">{hint}</small>}
+      {resolvedHint && !error && <small className="field-hint">{resolvedHint}</small>}
       {error && <small className="image-upload-error">{error}</small>}
     </div>
   );
 }
-
-

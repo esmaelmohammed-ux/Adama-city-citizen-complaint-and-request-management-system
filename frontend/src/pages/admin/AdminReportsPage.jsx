@@ -12,24 +12,24 @@ export default function AdminReportsPage() {
 
   return (
     <div>
-      <PageHeader title="Reports" subtitle="Summary statistics for decision-making" />
+      <PageHeader title={t('admin.reportsTitle')} subtitle={t('admin.reportsSubtitle')} />
 
       <div className="stats-grid">
-        <StatCard label="Total records" value={all.length} icon="📊" />
-        <StatCard label="Pending" value={byStatus('pending')} icon="⏳" tone="warning" />
-        <StatCard label="In progress" value={byStatus('in_progress')} icon="🔄" tone="info" />
-        <StatCard label="Resolved" value={byStatus('resolved')} icon="✅" tone="success" />
-        <StatCard label="Rejected" value={byStatus('rejected')} icon="❌" />
-        <StatCard label="Closed" value={byStatus('closed')} icon="📁" />
+        <StatCard label={t('admin.totalRecords')} value={all.length} icon="📊" />
+        <StatCard label={t('status.pending')} value={byStatus('pending')} icon="⏳" tone="warning" />
+        <StatCard label={t('status.in_progress')} value={byStatus('in_progress')} icon="🔄" tone="info" />
+        <StatCard label={t('status.resolved')} value={byStatus('resolved')} icon="✅" tone="success" />
+        <StatCard label={t('status.rejected')} value={byStatus('rejected')} icon="❌" />
+        <StatCard label={t('status.closed')} value={byStatus('closed')} icon="📁" />
       </div>
 
-      <h2 className="section-title">Complaints by category</h2>
+      <h2 className="section-title">{t('admin.byCategory')}</h2>
       <div className="table-wrap">
         <table className="data-table">
           <thead>
             <tr>
-              <th>Category</th>
-              <th>Count</th>
+              <th>{t('table.category')}</th>
+              <th>{t('table.count')}</th>
             </tr>
           </thead>
           <tbody>
@@ -43,14 +43,14 @@ export default function AdminReportsPage() {
         </table>
       </div>
 
-      <h2 className="section-title">Records by department</h2>
+      <h2 className="section-title">{t('admin.byDepartment')}</h2>
       <div className="table-wrap">
         <table className="data-table">
           <thead>
             <tr>
-              <th>Department</th>
-              <th>Complaints</th>
-              <th>Requests</th>
+              <th>{t('table.department')}</th>
+              <th>{t('table.complaints')}</th>
+              <th>{t('table.requests')}</th>
             </tr>
           </thead>
           <tbody>

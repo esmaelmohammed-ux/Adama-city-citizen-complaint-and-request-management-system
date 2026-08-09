@@ -1,8 +1,10 @@
 import StatusBadge from './UI';
+import { SERVICE_TYPE_I18N_KEYS } from '../constants';
+import { useLanguage } from '../context/LanguageContext';
 import { formatDate } from '../utils/storage';
 import './SubmissionTable.css';
 import './ImageUpload.css';
-// commen
+
 export default function SubmissionDetail({
   item,
   type,
@@ -12,7 +14,17 @@ export default function SubmissionDetail({
   onClose,
   actions,
 }) {
+  const { t } = useLanguage();
   if (!item) return null;
+
+  const title =
+    type === 'complaint'
+      ? item.title
+      : (SERVICE_TYPE_I18N_KEYS[item.serviceType]
+        ? t(`serviceTypes.${SERVICE_TYPE_I18N_KEYS[item.serviceType]}`)
+        : item.serviceType);
+
+  const statusLabel = (status) => (status ? t(`status.${status}`) : status);
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -20,45 +32,48 @@ export default function SubmissionDetail({
         <div className="modal-header">
           <div>
             <code>{item.referenceId}</code>
-            <h2>{type === 'complaint' ? item.title : item.serviceType}</h2>
+            <h2>{title}</h2>
           </div>
           <StatusBadge status={item.status} />
         </div>
 
         <div className="detail-grid">
           <div>
-            <span className="detail-label">Description</span>
+            <span className="detail-label">{t('detail.description')}</span>
             <p>{item.description}</p>
           </div>
           {item.location && (
             <div>
-              <span className="detail-label">Location</span>
+              <span className="detail-label">{t('detail.location')}</span>
               <p>{item.location}</p>
             </div>
           )}
           {type === 'complaint' && (
             <div>
-              <span className="detail-label">Category</span>
-              <p>{item.category}</p>
+              <span className="detail-label">{t('detail.category')}</span>
+              <p>{t(`categories.${item.category}`) || item.category}</p>
             </div>
           )}
           {item.photoUrl && (
             <div>
-              <span className="detail-label">Photo</span>
-              <img src={item.photoUrl} alt="Submission attachment" className="submission-photo" />
+              <span className="detail-label">{t('detail.photo')}</span>
+              <img src={item.photoUrl} alt={t('detail.photoAlt')} className="submission-photo" />
             </div>
           )}
           <div>
-            <span className="detail-label">Department</span>
-            <p>{departmentName || 'Not assigned'}</p>
+            <span className="detail-label">{t('detail.department')}</span>
+            <p>{departmentName || t('detail.notAssigned')}</p>
           </div>
           <div>
-            <span className="detail-label">Assigned officer</span>
-            <p>{officerName || (item.assignedOfficerId ? 'Assigned' : 'Department queue')}</p>
+            <span className="detail-label">{t('detail.assignedOfficer')}</span>
+            <p>
+              {officerName ||
+                (item.assignedOfficerId ? t('detail.assigned') : t('detail.departmentQueue'))}
+            </p>
           </div>
           {item.resolutionNote && (
             <div>
-              <span className="detail-label">Resolution note</span>
+              <span className="detail-label">{t('detail.resolutionNote')}</span>
               <p>{item.resolutionNote}</p>
             </div>
           )}
@@ -66,12 +81,16 @@ export default function SubmissionDetail({
 
         {history.length > 0 && (
           <div className="timeline">
-            <h3>Status history</h3>
+            <h3>{t('detail.statusHistory')}</h3>
             {history.map((h) => (
               <div key={h.id} className="timeline-item">
                 <div className="timeline-dot" />
                 <div>
-                  <strong>{h.fromStatus ? `${h.fromStatus} → ${h.toStatus}` : h.toStatus}</strong>
+                  <strong>
+                    {h.fromStatus
+                      ? `${statusLabel(h.fromStatus)} → ${statusLabel(h.toStatus)}`
+                      : statusLabel(h.toStatus)}
+                  </strong>
                   {h.note && <p>{h.note}</p>}
                   <small>{formatDate(h.changedAt)}</small>
                 </div>
@@ -82,7 +101,9 @@ export default function SubmissionDetail({
 
         {actions && <div className="modal-actions">{actions}</div>}
 
-        <button type="button" className="btn btn-ghost" onClick={onClose}>Close</button>
+        <button type="button" className="btn btn-ghost" onClick={onClose}>
+          {t('form.close')}
+        </button>
       </div>
     </div>
   );

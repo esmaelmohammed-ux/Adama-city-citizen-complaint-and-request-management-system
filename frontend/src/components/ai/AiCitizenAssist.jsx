@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { aiAssist } from '../../services/aiApi';
 import './Ai.css';
 
@@ -13,6 +14,7 @@ export default function AiCitizenAssist({
   location = '',
   onApply,
 }) {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState(null);
@@ -20,7 +22,7 @@ export default function AiCitizenAssist({
 
   const run = async () => {
     if (!description.trim() && !title.trim()) {
-      setError('Enter a title or description first.');
+      setError(t('ai.enterFirst'));
       return;
     }
     setLoading(true);
@@ -30,7 +32,7 @@ export default function AiCitizenAssist({
       const data = await aiAssist({ type, title, description, location });
       setResult(data);
     } catch (err) {
-      setError(err.message || 'AI assist failed');
+      setError(err.message || t('ai.assistFailed'));
       setResult(null);
     } finally {
       setLoading(false);
@@ -59,8 +61,8 @@ export default function AiCitizenAssist({
 
     setAppliedMsg(
       changed.length
-        ? `Applied to form: ${changed.join(', ')}. Scroll up to review the fields.`
-        : 'Applied. Values already matched the suggestions (try clearer wording for bigger changes).'
+        ? t('ai.appliedFields', { fields: changed.join(', ') })
+        : t('ai.appliedSame')
     );
 
     // Bring form fields into view — they sit above this panel
@@ -77,7 +79,7 @@ export default function AiCitizenAssist({
           <p>Improve wording and suggest category / department. You stay in control before submit.</p>
         </div>
         <button type="button" className="btn btn-outline btn-sm" onClick={run} disabled={loading}>
-          {loading ? 'Thinking…' : 'Suggest with AI'}
+          {loading ? t('ai.thinking') : t('ai.suggest')}
         </button>
       </div>
 
@@ -101,11 +103,11 @@ export default function AiCitizenAssist({
           <p className="ai-rationale">{c?.rationale}</p>
           <div className="ai-preview">
             <div>
-              <span className="detail-label">Suggested title</span>
+              <span className="detail-label">{t('ai.suggestedTitle')}</span>
               <p>{result.improved?.title}</p>
             </div>
             <div>
-              <span className="detail-label">Suggested description</span>
+              <span className="detail-label">{t('ai.suggestedDescription')}</span>
               <p>{result.improved?.description}</p>
             </div>
           </div>
@@ -115,7 +117,7 @@ export default function AiCitizenAssist({
             </p>
           )}
           <button type="button" className="btn btn-primary btn-sm" onClick={apply}>
-            Apply suggestions to form
+            {t('ai.applySuggestions')}
           </button>
         </div>
       )}

@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { aiResolution } from '../../services/aiApi';
 import './Ai.css';
 
 /** Draft resolution note from case + optional action text. */
 export default function AiResolutionAssist({ item, type = 'complaint', actionTaken = '', onApply }) {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -23,7 +25,7 @@ export default function AiResolutionAssist({ item, type = 'complaint', actionTak
       });
       onApply?.(data.resolutionNote || '');
     } catch (err) {
-      setError(err.message || 'Could not draft note');
+      setError(err.message || t('ai.draftFailed'));
     } finally {
       setLoading(false);
     }
@@ -32,7 +34,7 @@ export default function AiResolutionAssist({ item, type = 'complaint', actionTak
   return (
     <div className="ai-inline">
       <button type="button" className="btn btn-outline btn-sm" onClick={run} disabled={loading}>
-        {loading ? 'Drafting…' : 'Draft note with AI'}
+        {loading ? t('ai.drafting') : t('ai.draftNote')}
       </button>
       {error && <span className="ai-inline-error">{error}</span>}
     </div>

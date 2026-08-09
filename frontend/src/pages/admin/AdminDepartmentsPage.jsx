@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { PageHeader } from '../../components/UI';
 import { useApp } from '../../context/AppContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../context/ToastContext';
 
 export default function AdminDepartmentsPage() {
   const { departments, addDepartment } = useApp();
+  const { t } = useLanguage();
   const { showToast } = useToast();
   const [form, setForm] = useState({ name: '', description: '' });
   const [showForm, setShowForm] = useState(false);
@@ -18,10 +20,10 @@ export default function AdminDepartmentsPage() {
     const result = await addDepartment(form);
     setBusy(false);
     if (!result.success) {
-      setError(result.message || 'Failed to add department.');
+      setError(result.message || t('admin.departmentFailed'));
       return;
     }
-    showToast('Department added successfully.');
+    showToast(t('admin.departmentAdded'));
     setForm({ name: '', description: '' });
     setShowForm(false);
   };
@@ -29,11 +31,11 @@ export default function AdminDepartmentsPage() {
   return (
     <div>
       <PageHeader
-        title="Departments"
-        subtitle="Municipal departments for routing submissions"
+        title={t('admin.departmentsTitle')}
+        subtitle={t('admin.departmentsSubtitle')}
         action={
           <button type="button" className="btn btn-primary" onClick={() => setShowForm(!showForm)}>
-            {showForm ? 'Cancel' : 'Add department'}
+            {showForm ? t('form.cancel') : t('admin.addDepartment')}
           </button>
         }
       />
@@ -43,7 +45,7 @@ export default function AdminDepartmentsPage() {
       {showForm && (
         <form className="form-card mb-2" onSubmit={handleSubmit}>
           <label>
-            Department name
+            {t('admin.departmentName')}
             <input
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -51,7 +53,7 @@ export default function AdminDepartmentsPage() {
             />
           </label>
           <label>
-            Description
+            {t('form.description')}
             <textarea
               rows={3}
               value={form.description}
@@ -59,7 +61,7 @@ export default function AdminDepartmentsPage() {
             />
           </label>
           <button type="submit" className="btn btn-primary" disabled={busy}>
-            {busy ? 'Saving...' : 'Save department'}
+            {busy ? t('form.saving') : t('admin.saveDepartment')}
           </button>
         </form>
       )}
@@ -70,7 +72,7 @@ export default function AdminDepartmentsPage() {
             <h3>{d.name}</h3>
             <p>{d.description}</p>
             <span className={`badge ${d.isActive ? 'badge-success' : 'badge-muted'}`}>
-              {d.isActive ? 'Active' : 'Inactive'}
+              {d.isActive ? t('commonApp.active') : t('commonApp.inactive')}
             </span>
           </div>
         ))}

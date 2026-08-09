@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
-import { STATUS_LABELS } from '../constants';
+import { useLanguage } from '../context/LanguageContext';
 import './StatusBadge.css';
-// commen
+
 export default function StatusBadge({ status }) {
+  const { t } = useLanguage();
   return (
     <span className={`status-badge status-${status}`}>
-      {STATUS_LABELS[status] || status}
+      {t(`status.${status}`) || status}
     </span>
   );
 }

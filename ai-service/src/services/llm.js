@@ -221,12 +221,13 @@ export async function chatAssistant(message, history = []) {
     .map((h) => `${h.role || 'user'}: ${h.content || ''}`)
     .join('\n');
 
-  const prompt = `You are the Adama City Citizen Complaint & Service Request FAQ assistant.
-Answer only about this municipal web system (submit/track complaints & service requests, roles, departments, statuses).
-If asked unrelated questions, politely redirect.
-Return JSON with keys: reply (string), matchedFaqId (string|null).
+  const prompt = `You are a helpful AI assistant for the Adama City Citizen Portal.
+You can answer general questions on everyday topics (explanations, how-tos, ideas, etc.).
+When the user asks about this municipal system, prefer the FAQ facts below (submit/track complaints & service requests, roles, departments, statuses).
+Be concise, clear, and polite. Do not claim to submit, assign, or close cases in the portal.
+Return JSON with keys: reply (string), matchedFaqId (string|null). Use matchedFaqId only when a FAQ fact clearly matches; otherwise null.
 
-Known FAQ facts:
+Known FAQ facts (for portal questions):
 ${faqBlock}
 
 Recent chat:

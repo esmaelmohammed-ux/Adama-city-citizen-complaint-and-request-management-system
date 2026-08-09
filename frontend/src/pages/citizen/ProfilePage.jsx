@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { PageHeader } from '../../components/UI';
 import { useApp } from '../../context/AppContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../context/ToastContext';
 
 export default function ProfilePage() {
   const { currentUser, updateProfile } = useApp();
+  const { t } = useLanguage();
   const { showToast } = useToast();
   const [form, setForm] = useState({
     fullName: currentUser.fullName,
@@ -20,21 +22,21 @@ export default function ProfilePage() {
     const result = await updateProfile(form);
     setBusy(false);
     if (result.success) {
-      showToast('Profile updated successfully.');
+      showToast(t('citizen.profileUpdated'));
     } else {
-      setError(result.message || 'Failed to update profile.');
+      setError(result.message || t('citizen.profileFailed'));
     }
   };
 
   return (
     <div>
-      <PageHeader title="My Profile" subtitle="Update your account information" />
+      <PageHeader title={t('citizen.profileTitle')} subtitle={t('citizen.profileSubtitle')} />
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <form className="form-card" onSubmit={handleSubmit}>
         <label>
-          Full name
+          {t('form.fullName')}
           <input
             value={form.fullName}
             onChange={(e) => setForm({ ...form, fullName: e.target.value })}
@@ -42,11 +44,11 @@ export default function ProfilePage() {
           />
         </label>
         <label>
-          Email
+          {t('form.email')}
           <input value={currentUser.email} disabled />
         </label>
         <label>
-          Phone number
+          {t('form.phoneNumber')}
           <input
             value={form.phoneNumber}
             onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })}
@@ -54,11 +56,11 @@ export default function ProfilePage() {
           />
         </label>
         <label>
-          Role
-          <input value={currentUser.role} disabled className="capitalize" />
+          {t('form.role')}
+          <input value={t(`roles.${currentUser.role}`)} disabled className="capitalize" />
         </label>
         <button type="submit" className="btn btn-primary" disabled={busy}>
-          {busy ? 'Saving...' : 'Save changes'}
+          {busy ? t('form.saving') : t('form.saveChanges')}
         </button>
       </form>
     </div>

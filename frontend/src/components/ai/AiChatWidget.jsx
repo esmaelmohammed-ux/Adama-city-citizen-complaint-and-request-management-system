@@ -1,25 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { aiChat } from '../../services/aiApi';
 import VoiceButton from './VoiceButton';
 import './Ai.css';
 
-const STARTERS = [
-  'How do I track my complaint?',
-  'Difference between complaint and service request?',
-  'Which department handles water leaks?',
-];
-
 export default function AiChatWidget() {
+  const { t, language } = useLanguage();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      content: 'Hi — I can help with tracking cases, categories, departments, and how this system works.',
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const endRef = useRef(null);
+
+  useEffect(() => {
+    setMessages([{ role: 'assistant', content: t('ai.chatGreeting') }]);
+  }, [language, t]);
 
   useEffect(() => {
     if (open) endRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -42,7 +37,7 @@ export default function AiChatWidget() {
     } catch (err) {
       setMessages((prev) => [
         ...prev,
-        { role: 'assistant', content: err.message || 'Chat unavailable right now.' },
+        { role: 'assistant', content: err.message || t('ai.chatUnavailable') },
       ]);
     } finally {
       setBusy(false);
@@ -52,14 +47,13 @@ export default function AiChatWidget() {
   return (
     <div className="ai-chat-root">
       {open && (
-        <div className="ai-chat-panel" role="dialog" aria-label="AI FAQ chatbot">
+        <div className="ai-chat-panel" role="dialog" aria-label={t('ai.chatTitle')}>
           <div className="ai-chat-head">
             <div>
-              <strong>Adama AI FAQ</strong>
-              <span>Suggestions only · not official case actions</span>
+              <strong>{t('ai.chatTitle')}</strong>
             </div>
             <button type="button" className="btn btn-ghost btn-sm" onClick={() => setOpen(false)}>
-              Close
+              {t('ai.chatClose')}
             </button>
           </div>
           <div className="ai-chat-log">
@@ -70,13 +64,6 @@ export default function AiChatWidget() {
             ))}
             <div ref={endRef} />
           </div>
-          <div className="ai-chat-chips">
-            {STARTERS.map((s) => (
-              <button key={s} type="button" className="ai-chip-btn" onClick={() => send(s)} disabled={busy}>
-                {s}
-              </button>
-            ))}
-          </div>
           <form
             className="ai-chat-form"
             onSubmit={(e) => {
@@ -85,16 +72,16 @@ export default function AiChatWidget() {
             }}
           >
             <VoiceButton
-              onTranscript={(t) => setInput((prev) => (prev ? `${prev.trim()} ${t}` : t))}
+              onTranscript={(text) => setInput((prev) => (prev ? `${prev.trim()} ${text}` : text))}
             />
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about complaints, tracking, departments…"
+              placeholder={t('ai.chatPlaceholder')}
               disabled={busy}
             />
             <button type="submit" className="btn btn-primary btn-sm" disabled={busy || !input.trim()}>
-              Send
+              {t('ai.chatSend')}
             </button>
           </form>
         </div>
@@ -105,7 +92,7 @@ export default function AiChatWidget() {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
-        {open ? '×' : 'AI Help'}
+        {open ? '×' : t('ai.chatOpen')}
       </button>
     </div>
   );

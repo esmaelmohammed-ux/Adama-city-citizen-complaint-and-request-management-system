@@ -40,6 +40,16 @@ export const SERVICE_TYPES = [
   'Other',
 ];
 
+/** Maps stored English service-type values to i18n keys under serviceTypes.* */
+export const SERVICE_TYPE_I18N_KEYS = {
+  'Waste Collection Request': 'wasteCollection',
+  'Street Cleaning': 'streetCleaning',
+  'Water Connection Inquiry': 'waterConnection',
+  'Public Facility Access': 'publicFacility',
+  'General Information': 'generalInfo',
+  Other: 'other',
+};
+
 export const DEMO_ACCOUNTS = [
   { email: 'citizen@test.com', password: 'citizen123', label: 'Citizen' },
   { email: 'admin@test.com', password: 'admin123', label: 'Administrator' },
