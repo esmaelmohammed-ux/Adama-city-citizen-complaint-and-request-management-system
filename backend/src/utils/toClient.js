@@ -24,6 +24,8 @@ export function toClient(doc) {
   delete obj.__v;
   delete obj.passwordHash;
   delete obj.password;
+  delete obj.passwordResetTokenHash;
+  delete obj.passwordResetExpires;
 
   for (const field of REF_FIELDS) {
     if (obj[field] != null) {

@@ -87,11 +87,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleForgotPassword = () => {
-    setError('');
-    setInfo(t('auth.forgotPasswordDemo'));
-  };
-
   return (
     <div className="auth-split-page">
       <aside className="auth-sidebar" aria-label={t('auth.welcomeBack')}>
@@ -163,9 +158,9 @@ export default function LoginPage() {
             <div className="auth-field">
               <div className="auth-field-label-row">
                 <span>{t('common.password')}</span>
-                <button type="button" className="auth-link-btn" onClick={handleForgotPassword}>
+                <Link to="/forgot-password" className="auth-link-btn">
                   {t('auth.forgotPassword')}
-                </button>
+                </Link>
               </div>
               <span className="auth-input-wrap">
                 <LockIcon />

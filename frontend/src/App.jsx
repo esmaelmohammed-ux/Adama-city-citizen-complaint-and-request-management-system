@@ -8,6 +8,8 @@ import { ToastProvider } from './context/ToastContext';
 import GuestDashboard from './pages/GuestDashboard';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import CitizenDashboard from './pages/citizen/CitizenDashboard';
 import NewComplaintPage from './pages/citizen/NewComplaintPage';
 import NewServiceRequestPage from './pages/citizen/NewServiceRequestPage';
@@ -37,6 +39,8 @@ export default function App() {
           <Route element={<PublicOnlyRoute />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
           </Route>
 
           <Route element={<ProtectedRoute allowedRoles={[ROLES.CITIZEN]} />}>

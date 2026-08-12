@@ -3,6 +3,7 @@ import Notification from '../models/Notification.js';
 import StatusHistory from '../models/StatusHistory.js';
 import User from '../models/User.js';
 import { ROLES } from '../constants/index.js';
+import { sendEmail } from '../services/email.js';
 
 export async function recordStatusHistory({
   entityType,
@@ -30,7 +31,7 @@ export async function createNotification({
   relatedEntityType,
   relatedEntityId,
 }) {
-  return Notification.create({
+  const notification = await Notification.create({
     userId,
     title,
     message,
@@ -39,6 +40,24 @@ export async function createNotification({
     isRead: false,
     createdAt: new Date(),
   });
+
+  // Fire-and-forget email copy; never block or fail the request
+  void (async () => {
+    try {
+      const user = await User.findById(userId).select('email fullName isActive');
+      if (!user?.email || user.isActive === false) return;
+      await sendEmail({
+        to: user.email,
+        subject: title,
+        text: message,
+        html: `<p>Hi ${user.fullName || 'there'},</p><p>${message}</p><p>— Adama City Citizen Portal</p>`,
+      });
+    } catch (err) {
+      console.warn('[notify-email]', err.message);
+    }
+  })();
+
+  return notification;
 }
 
 export async function recordActivity({
