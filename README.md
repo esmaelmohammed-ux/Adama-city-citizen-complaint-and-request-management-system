@@ -97,6 +97,8 @@ Copy `backend/.env.example` → `backend/.env`:
 | `MONGODB_URI` | Optional full URI (local or Atlas); used if user/password not set |
 | `JWT_SECRET` | Required signing secret |
 | `CLIENT_ORIGIN` | CORS origin (`http://localhost:5173`) |
+| `EMAIL_FROM` / `RESEND_API_KEY` or `SMTP_*` | Outbound email (else console log) |
+| `SMS_ENABLED` / `AT_*` | Africa’s Talking SMS (off by default) |
 
 Also whitelist your IP in MongoDB Atlas **Network Access**.
 
@@ -107,6 +109,8 @@ Also whitelist your IP in MongoDB Atlas **Network Access**.
 | `/api/health` | GET | Health check |
 | `/api/auth/login` | POST | Login (returns JWT) |
 | `/api/auth/register` | POST | Citizen registration |
+| `/api/auth/forgot-password` | POST | Email password-reset link |
+| `/api/auth/reset-password` | POST | Set new password with token |
 | `/api/auth/me` | GET | Current user |
 | `/api/complaints` | GET/POST | List / submit complaints |
 | `/api/complaints/:id/assign` | PATCH | Assign to department/officer |
@@ -129,6 +133,6 @@ Also whitelist your IP in MongoDB Atlas **Network Access**.
 3. ~~JWT auth, password hashing, RBAC~~ ✅
 4. ~~Photo upload for complaints~~ ✅
 5. ~~Multi-language guest UI (EN/AM/OM)~~ ✅
-6. Email/SMS notifications, email password reset
+6. ~~Email notifications + email password reset~~ ✅ *(SMS scaffold ready; Africa’s Talking off by default)*
 7. Full user/department edit-delete, report export, pagination
 8. Production deployment (HTTPS, backups)
