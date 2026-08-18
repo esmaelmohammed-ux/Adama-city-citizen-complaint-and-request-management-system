@@ -3,7 +3,7 @@ import { SERVICE_TYPE_I18N_KEYS } from '../constants';
 import { useLanguage } from '../context/LanguageContext';
 import { formatDate } from '../utils/storage';
 import './SubmissionTable.css';
-
+// comment
 function serviceTypeLabel(value, t) {
   const key = SERVICE_TYPE_I18N_KEYS[value];
   return key ? t(`serviceTypes.${key}`) : value;
