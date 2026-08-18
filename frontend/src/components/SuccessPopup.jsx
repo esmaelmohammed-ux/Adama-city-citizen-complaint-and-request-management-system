@@ -1,5 +1,5 @@
 import './SuccessPopup.css';
-// commen
+// comment
 export default function SuccessPopup({
   open,
   title = 'Submitted successfully',
