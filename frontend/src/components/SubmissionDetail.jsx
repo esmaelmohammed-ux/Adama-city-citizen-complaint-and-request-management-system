@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { formatDate } from '../utils/storage';
 import './SubmissionTable.css';
 import './ImageUpload.css';
-
+//  comment added by 
 export default function SubmissionDetail({
   item,
   type,
