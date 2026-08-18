@@ -5,6 +5,7 @@ import User from '../models/User.js';
 import { ROLES } from '../constants/index.js';
 import { toClient } from '../utils/toClient.js';
 import { sendEmail } from '../services/email.js';
+import { sendSms } from '../services/sms.js';
 
 const RESET_TTL_MS = 60 * 60 * 1000; // 1 hour
 const FORGOT_MSG =
@@ -137,6 +138,13 @@ export async function forgotPassword(req, res, next) {
 <p>If you did not request this, you can ignore this email.</p>
 <p>— Adama City Citizen Portal</p>`,
       });
+
+      if (user.phoneNumber) {
+        await sendSms({
+          to: user.phoneNumber,
+          message: `Adama portal password reset (1h): ${resetUrl}`,
+        });
+      }
     }
 
     res.json({ success: true, message: FORGOT_MSG });

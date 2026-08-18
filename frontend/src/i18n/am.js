@@ -347,6 +347,10 @@ export default {
     anyOfficer: 'ማንኛውም ባለሥልጣን (የመምሪያ ወረፋ)',
     assignOfficer: 'ለባለሥልጣን መድብ',
     routeDepartment: 'ወደ መምሪያ አስተላልፍ',
+    noOfficersInDept:
+      'በዚህ መምሪያ ምንም ንቁ ባለሥልጣን የለም። ባለሥልጣን እስኪታከል ድረስ ወይም እዚህ እስኪመደብ ድረስ በባለሥልጣን ዳሽቦርድ አይታይም።',
+    deptQueueHint:
+      'የመምሪያ ወረፋ የሚታየው ለዚህ መምሪያ ባለሥልጣኖች ብቻ ነው (ለሌሎች መምሪያዎች አይደለም)።',
     reject: 'ውድቅ አድርግ',
     markResolved: 'እንደተፈታ ምልክት አድርግ',
     startWork: 'ሥራ ጀምር',

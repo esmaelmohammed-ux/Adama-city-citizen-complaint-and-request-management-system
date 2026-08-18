@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
-    "seed": "node src/scripts/seed.js"
+    "seed": "node src/scripts/seed.js",
+    "test:channels": "node src/scripts/testNotifyChannels.js"
   },
   "dependencies": {
     "africastalking": "^0.7.9",

@@ -349,6 +349,10 @@ export default {
     anyOfficer: 'Any officer (department queue)',
     assignOfficer: 'Assign to officer',
     routeDepartment: 'Route to department',
+    noOfficersInDept:
+      'No active officers in this department. Queue items will not appear on any officer dashboard until an officer is added here, or assign someone from another department after moving them.',
+    deptQueueHint:
+      'Department queue is visible only to officers in this department (not other departments).',
     reject: 'Reject',
     markResolved: 'Mark resolved',
     startWork: 'Start work',

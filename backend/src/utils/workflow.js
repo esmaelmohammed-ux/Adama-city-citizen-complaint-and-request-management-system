@@ -3,7 +3,7 @@ import Notification from '../models/Notification.js';
 import StatusHistory from '../models/StatusHistory.js';
 import User from '../models/User.js';
 import { ROLES } from '../constants/index.js';
-import { sendEmail } from '../services/email.js';
+import { deliverUserChannels } from '../services/notifyChannels.js';
 
 export async function recordStatusHistory({
   entityType,
@@ -41,19 +41,13 @@ export async function createNotification({
     createdAt: new Date(),
   });
 
-  // Fire-and-forget email copy; never block or fail the request
+  // Fire-and-forget email + SMS; never block or fail the request
   void (async () => {
     try {
-      const user = await User.findById(userId).select('email fullName isActive');
-      if (!user?.email || user.isActive === false) return;
-      await sendEmail({
-        to: user.email,
-        subject: title,
-        text: message,
-        html: `<p>Hi ${user.fullName || 'there'},</p><p>${message}</p><p>— Adama City Citizen Portal</p>`,
-      });
+      const user = await User.findById(userId).select('email fullName phoneNumber isActive');
+      await deliverUserChannels(user, { title, message });
     } catch (err) {
-      console.warn('[notify-email]', err.message);
+      console.warn('[notify-channel]', err.message);
     }
   })();
 

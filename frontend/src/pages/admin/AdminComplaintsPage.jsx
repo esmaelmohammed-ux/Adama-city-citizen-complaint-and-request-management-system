@@ -174,6 +174,14 @@ export default function AdminComplaintsPage() {
                       <option key={o.id} value={o.id}>{o.fullName}</option>
                     ))}
                   </select>
+                  {assignDept && officersInDept.length === 0 && (
+                    <div className="alert alert-warning">{t('form.noOfficersInDept')}</div>
+                  )}
+                  {assignDept && officersInDept.length > 0 && !assignOfficer && (
+                    <p className="text-muted" style={{ fontSize: '0.85rem', margin: 0 }}>
+                      {t('form.deptQueueHint')}
+                    </p>
+                  )}
                   <button
                     type="button"
                     className="btn btn-primary btn-sm"

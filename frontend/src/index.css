@@ -151,6 +151,12 @@ input:disabled {
   border: 1px solid #fecaca;
 }
 
+.alert-warning {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
 .auth-loading {
   min-height: 40vh;
   display: grid;

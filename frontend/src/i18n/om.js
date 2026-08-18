@@ -349,6 +349,10 @@ export default {
     anyOfficer: 'Hojjetaa kamiyyuu (tarree kutaa)',
     assignOfficer: 'Hojjetaatti ramadi',
     routeDepartment: 'Kutaatti ergi',
+    noOfficersInDept:
+      'Kutaa kana keessatti hojjettoonni aktiivii hin jiran. Hojjetoonni dabalamanitti ykn asitti ramadamutti daashboordii hojjetootaa irratti hin mul\'atu.',
+    deptQueueHint:
+      'Tarreen kutaa hojjettoota kutaa kanaa qofaaf ni mul\'ata (kutaa biroof miti).',
     reject: 'Dhiisi',
     markResolved: 'Akka furametti mallatteessi',
     startWork: 'Hojii jalqabi',
