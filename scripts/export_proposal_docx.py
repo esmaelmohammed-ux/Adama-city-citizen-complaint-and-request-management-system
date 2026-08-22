@@ -407,16 +407,32 @@ def convert():
 
     written = []
     errors = []
+    extra_fallbacks = [
+        ROOT / "ADAMA CITY CITIZEN COMPLAINT MANAGEMENT SYSTEM DOCUMENTATION - WITH PAGE NUMBERS.docx",
+        ROOT / "DOCUMENTATION WITH PAGE NUMBERS.docx",
+    ]
     for name in WORD_NAMES:
         dest = ROOT / name
-        try:
-            doc.save(str(dest))
-            written.append((dest, dest.stat().st_size, dest.stat().st_mtime))
-        except PermissionError as err:
-            fallback = ROOT / name.replace(".docx", " - UPDATED 22 AUG 2026.docx")
-            doc.save(str(fallback))
-            written.append((fallback, fallback.stat().st_size, fallback.stat().st_mtime))
-            errors.append(f"{name} is open in Word ({err}). Saved fallback: {fallback.name}")
+        candidates = [
+            dest,
+            ROOT / name.replace(".docx", " - UPDATED 22 AUG 2026.docx"),
+            *extra_fallbacks,
+        ]
+        saved = False
+        last_err = None
+        for candidate in candidates:
+            try:
+                doc.save(str(candidate))
+                written.append((candidate, candidate.stat().st_size, candidate.stat().st_mtime))
+                if candidate != dest:
+                    errors.append(f"{name} is open in Word. Saved: {candidate.name}")
+                saved = True
+                break
+            except PermissionError as err:
+                last_err = err
+                continue
+        if not saved:
+            errors.append(f"Could not save {name}: {last_err}")
 
     print("WROTE")
     for path, size, mtime in written:
