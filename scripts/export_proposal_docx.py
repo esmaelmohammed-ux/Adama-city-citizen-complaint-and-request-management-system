@@ -8,6 +8,7 @@ import urllib.request
 from pathlib import Path
 
 from docx import Document
+from docx.enum.section import WD_SECTION
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
 from docx.oxml import OxmlElement
@@ -201,6 +202,78 @@ def is_table_sep(line: str) -> bool:
     return bool(re.match(r"^\|?\s*:?-{3,}", line.strip()))
 
 
+def add_page_field(run):
+    """Insert a Word PAGE field so the footer number updates in Word."""
+    begin = OxmlElement("w:fldChar")
+    begin.set(qn("w:fldCharType"), "begin")
+
+    instr = OxmlElement("w:instrText")
+    instr.set(qn("xml:space"), "preserve")
+    instr.text = " PAGE "
+
+    separate = OxmlElement("w:fldChar")
+    separate.set(qn("w:fldCharType"), "separate")
+
+    placeholder = OxmlElement("w:t")
+    placeholder.text = "1"
+
+    end = OxmlElement("w:fldChar")
+    end.set(qn("w:fldCharType"), "end")
+
+    run._r.append(begin)
+    run._r.append(instr)
+    run._r.append(separate)
+    run._r.append(placeholder)
+    run._r.append(end)
+
+
+def set_page_numbering(section, fmt="decimal", start=1):
+    sectPr = section._sectPr
+    pgNumType = sectPr.find(qn("w:pgNumType"))
+    if pgNumType is None:
+        pgNumType = OxmlElement("w:pgNumType")
+        sectPr.append(pgNumType)
+    pgNumType.set(qn("w:fmt"), fmt)
+    pgNumType.set(qn("w:start"), str(start))
+
+
+def setup_centered_page_footer(section, fmt="decimal", start=1):
+    footer = section.footer
+    footer.is_linked_to_previous = False
+    paragraph = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
+    paragraph.text = ""
+    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    set_paragraph_spacing(paragraph, before=0, after=0, line=1.0)
+    run = paragraph.add_run()
+    set_run_font(run, size=11, color=NAVY)
+    add_page_field(run)
+    set_page_numbering(section, fmt=fmt, start=start)
+    section.footer_distance = Cm(1.25)
+
+
+def start_new_numbered_section(doc, fmt, start=1):
+    previous = doc.sections[-1]
+    section = doc.add_section(WD_SECTION.NEW_PAGE)
+    section.page_width = previous.page_width
+    section.page_height = previous.page_height
+    section.left_margin = previous.left_margin
+    section.right_margin = previous.right_margin
+    section.top_margin = previous.top_margin
+    section.bottom_margin = previous.bottom_margin
+    section.different_first_page_header_footer = False
+    setup_centered_page_footer(section, fmt=fmt, start=start)
+    return section
+
+
+def enable_update_fields_on_open(doc):
+    settings = doc.settings.element
+    existing = settings.find(qn("w:updateFields"))
+    if existing is None:
+        update = OxmlElement("w:updateFields")
+        update.set(qn("w:val"), "true")
+        settings.append(update)
+
+
 def convert():
     text = MD_PATH.read_text(encoding="utf-8")
     lines = text.splitlines()
@@ -213,6 +286,11 @@ def convert():
     section.right_margin = Inches(1)
     section.top_margin = Inches(0.9)
     section.bottom_margin = Inches(0.9)
+    section.footer_distance = Cm(1.25)
+    title_footer = section.footer
+    title_footer.is_linked_to_previous = False
+    if title_footer.paragraphs:
+        title_footer.paragraphs[0].text = ""
 
     style = doc.styles["Normal"]
     style.font.name = "Times New Roman"
@@ -221,6 +299,8 @@ def convert():
     i = 0
     mermaid_index = 0
     pending_caption = None
+    front_matter_started = False
+    body_started = False
 
     while i < len(lines):
         line = lines[i]
@@ -293,8 +373,15 @@ def convert():
 
         heading = re.match(r"^(#{1,4})\s+(.*)$", stripped)
         if heading:
+            title = heading.group(2).strip()
+            if title == "Declaration" and not front_matter_started:
+                start_new_numbered_section(doc, fmt="lowerRoman", start=1)
+                front_matter_started = True
+            elif title.startswith("CHAPTER ONE") and not body_started:
+                start_new_numbered_section(doc, fmt="decimal", start=1)
+                body_started = True
             level = len(heading.group(1)) - 1
-            add_heading(doc, heading.group(2).strip(), level)
+            add_heading(doc, title, level)
             i += 1
             continue
 
@@ -315,6 +402,8 @@ def convert():
 
     if pending_caption:
         add_body(doc, pending_caption, italic=True, center=True, size=10)
+
+    enable_update_fields_on_open(doc)
 
     written = []
     errors = []

@@ -163,15 +163,15 @@ VITE_AI_URL=http://localhost:5100
 
 ## Results (current UI)
 
-Screenshots captured from the running complaint portal (18 August 2026). The same figures are used in Chapter Four of the [project proposal](./Project_Proposal_Web_Based_Citizen_Complaint_and_Service_Request.md).
+Screenshots captured from the running complaint portal (18 August 2026; Guest landing refreshed 22 August 2026). The same figures are used in Chapter Four of the [project proposal](./Project_Proposal_Web_Based_Citizen_Complaint_and_Service_Request.md). Figure 4.1 is the public Guest UI (“Your City. Your Voice.” with Quick Submit).
 
-### Public and authentication
+### Guest UI (first)
 
 | Screen | Capture |
 |--------|---------|
-| Landing — Quick Submit complaint | ![Landing](scripts/assets/results/landing.png) |
-| Register | ![Register](scripts/assets/results/register.png) |
-| Sign in | ![Login](scripts/assets/results/login.png) |
+| 4.1 Guest landing | ![Landing](scripts/assets/results/landing.png) |
+| 4.2 Guest registration | ![Register](scripts/assets/results/register.png) |
+| 4.3 Guest sign-in | ![Login](scripts/assets/results/login.png) |
 
 ### Citizen
 

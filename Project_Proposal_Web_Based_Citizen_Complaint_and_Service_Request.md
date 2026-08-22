@@ -8,7 +8,7 @@
 |-------|--------|
 | **Project Title** | Web-Based Citizen Complaint Management System |
 | **Organization** | Adama City Administration |
-| **Document Version** | 2.15 |
+| **Document Version** | 2.17 |
 | **Date** | 22 August 2026 |
 | **Prepared By** | ____________________ (ID: __________) |
 | **Institution** | Haramaya University — College of Computing and Informatics, Department of Information Science |
@@ -72,6 +72,7 @@ Declaration ................................................................ i
 Acknowledgement ............................................................. ii
 Abstract (Executive Summary) ................................................ iii
 List of Acronyms ............................................................ iv
+List of Figures ............................................................. v
 CHAPTER ONE: INTRODUCTION ................................................... 1
     1.1 Background of the Study ............................................. 1
     1.2 Problem Statement ................................................... 2
@@ -131,7 +132,7 @@ CHAPTER THREE: METHODOLOGY AND PROJECT PLAN ................................. 16
         3.4.4 Minimum Server Requirements ................................... 20
 CHAPTER FOUR: RESULTS AND DISCUSSION ........................................ 21
     4.1 Results ............................................................. 21
-        4.1.1 Public Portal and Authentication .............................. 21
+        4.1.1 Guest UI (Landing, Register, Login) ........................... 21
         4.1.2 Citizen Modules ............................................... 22
         4.1.3 Officer Modules ............................................... 23
         4.1.4 Administrator Modules ......................................... 24
@@ -184,6 +185,43 @@ Document Revision History ................................................... 30
 | **URL** | Uniform Resource Locator |
 | **VPS** | Virtual Private Server |
 | **XSS** | Cross-Site Scripting |
+
+---
+
+## List of Figures
+
+**Design diagrams**
+
+| Figure | Description |
+|--------|-------------|
+| 2.1 | System architecture |
+| 2.2 | Use case diagram (Citizen, Administrator, Officer) |
+| 2.3 | Entity-relationship diagram |
+| 2.4 | Level-0 data flow diagram |
+| 2.5 | Complaint workflow |
+| 3.1 | Project timeline (Gantt) |
+| 3.2 | Deployment architecture |
+
+**Result screenshots (Guest UI first)**
+
+| Figure | Screen |
+|--------|--------|
+| 4.1 | Guest landing page |
+| 4.2 | Guest registration |
+| 4.3 | Guest sign-in |
+| 4.4 | Citizen dashboard |
+| 4.5 | Submit complaint |
+| 4.6 | My Complaints |
+| 4.7 | Citizen notifications |
+| 4.8 | Citizen profile |
+| 4.9 | Officer dashboard |
+| 4.10 | Officer assigned tasks |
+| 4.11 | Officer notifications |
+| 4.12 | Admin dashboard |
+| 4.13 | Manage complaints |
+| 4.14 | User management |
+| 4.15 | Reports |
+| 4.16 | Activity log |
 
 ---
 
@@ -460,232 +498,29 @@ Required area key from sub-cities (Lugo, Dabe, Bole, Dembela, Aba Geda, Hawas), 
 
 ### 2.5 System Architecture
 
-```mermaid
-flowchart TB
-    subgraph Client["Client Layer"]
-        Browser["Web Browser (React SPA)"]
-    end
-
-    subgraph Server["Application Layer"]
-        API["Node.js + Express REST API"]
-        Auth["JWT Auth Middleware"]
-        RBAC["Role-Based Access Control"]
-        AI["Optional AI sidecar"]
-    end
-
-    subgraph Data["Data Layer"]
-        MongoDB[(MongoDB Database)]
-        Storage["File Storage (uploads/)"]
-    end
-
-    Browser -->|HTTPS / JSON| API
-    Browser -.->|Assist / chat JSON| AI
-    API --> Auth
-    Auth --> RBAC
-    RBAC --> MongoDB
-    API --> Storage
-```
+![System architecture](scripts/assets/diagrams/fig-2-1-architecture.png)
 
 *Figure 2.1: System architecture — complaint portal with optional AI sidecar*
 
 ### 2.6 Use Case Diagram
 
-```mermaid
-%%{init: {
-  "theme": "base",
-  "themeVariables": {
-    "fontSize": "15px",
-    "fontFamily": "Arial",
-    "primaryColor": "#FFFFFF",
-    "primaryTextColor": "#111111",
-    "primaryBorderColor": "#003366",
-    "secondaryColor": "#E8EEF7",
-    "tertiaryColor": "#FFFFFF",
-    "lineColor": "#222222",
-    "clusterBkg": "#F7FAFC",
-    "clusterBorder": "#003366",
-    "titleColor": "#003366",
-    "mainBkg": "#FFFFFF",
-    "nodeBorder": "#003366",
-    "edgeLabelBackground": "#FFFFFF"
-  },
-  "flowchart": {
-    "nodeSpacing": 22,
-    "rankSpacing": 55,
-    "padding": 16,
-    "htmlLabels": true,
-    "curve": "basis",
-    "useMaxWidth": true
-  }
-}}%%
-flowchart LR
-    Citizen((Citizen))
+The system has three actors. Citizens register, submit and edit pending complaints, and track status. Administrators manage users and departments, assign work, and report. Officers process assigned complaints and add resolution notes.
 
-    subgraph System["Web-Based Citizen Complaint Management System"]
-        direction TB
-
-        UC_Register([Register Account])
-        UC_Login([Login])
-        UC_SubmitComplaint([Submit Complaint])
-        UC_EditComplaint([Edit Pending Complaint])
-        UC_Track([Track Complaint Status])
-        UC_Profile([Update Profile])
-        UC_Notify([View Notifications])
-
-        UC_Users([Manage Users])
-        UC_Depts([Manage Departments])
-        UC_Assign([Assign Complaints])
-        UC_Update([Update Status])
-        UC_Reports([Generate Reports])
-        UC_Activity([Monitor System Activities])
-        UC_Search([Search and Filter Complaints])
-
-        UC_Tasks([View Assigned Tasks])
-        UC_Process([Process Assigned Work])
-        UC_Note([Add Resolution Note])
-    end
-
-    Admin((Administrator))
-    Officer((Department Officer))
-
-    Citizen --- UC_Register
-    Citizen --- UC_Login
-    Citizen --- UC_SubmitComplaint
-    Citizen --- UC_EditComplaint
-    Citizen --- UC_Track
-    Citizen --- UC_Profile
-    Citizen --- UC_Notify
-
-    Admin --- UC_Login
-    Admin --- UC_Users
-    Admin --- UC_Depts
-    Admin --- UC_Assign
-    Admin --- UC_Update
-    Admin --- UC_Reports
-    Admin --- UC_Activity
-    Admin --- UC_Search
-    Admin --- UC_Notify
-
-    Officer --- UC_Login
-    Officer --- UC_Tasks
-    Officer --- UC_Process
-    Officer --- UC_Update
-    Officer --- UC_Note
-    Officer --- UC_Notify
-
-    UC_SubmitComplaint -.->|include| UC_Login
-    UC_EditComplaint -.->|include| UC_Login
-    UC_Process -.->|include| UC_Update
-    UC_Assign -.->|include| UC_Update
-```
+![Use case diagram](scripts/assets/diagrams/fig-2-2-use-case.png)
 
 *Figure 2.2: Use case diagram — citizen, administrator, and officer (complaints only)*
 
 ### 2.7 Entity-Relationship Diagram
 
-```mermaid
-erDiagram
-    USER ||--o{ COMPLAINT : submits
-    USER ||--o{ NOTIFICATION : receives
-    USER ||--o{ ACTIVITY_LOG : performs
-    USER }o--|| DEPARTMENT : "belongs to (officer)"
-    DEPARTMENT ||--o{ COMPLAINT : "assigned to"
-    COMPLAINT ||--o{ STATUS_HISTORY : has
+There is **no SERVICE_REQUEST collection**. Users, departments, and complaints are linked through Mongoose references. Status history, notifications, and the activity log complete the audit trail.
 
-    USER {
-        ObjectId _id PK
-        string fullName
-        string email UK
-        string passwordHash
-        string role
-        string phoneNumber
-        ObjectId departmentId FK
-        boolean isActive
-        datetime createdAt
-        datetime updatedAt
-    }
-
-    DEPARTMENT {
-        ObjectId _id PK
-        string name UK
-        string description
-        boolean isActive
-        datetime createdAt
-    }
-
-    COMPLAINT {
-        ObjectId _id PK
-        string referenceId UK
-        string title
-        string description
-        string category
-        string location
-        string landmark
-        string status
-        ObjectId citizenId FK
-        ObjectId departmentId FK
-        ObjectId assignedOfficerId FK
-        string photoUrl
-        string attachmentUrl
-        string resolutionNote
-        datetime createdAt
-        datetime updatedAt
-        datetime resolvedAt
-    }
-
-    STATUS_HISTORY {
-        ObjectId _id PK
-        string entityType
-        ObjectId entityId FK
-        string fromStatus
-        string toStatus
-        string note
-        ObjectId changedBy FK
-        datetime changedAt
-    }
-
-    NOTIFICATION {
-        ObjectId _id PK
-        ObjectId userId FK
-        string title
-        string message
-        string relatedEntityType
-        ObjectId relatedEntityId
-        boolean isRead
-        datetime createdAt
-    }
-
-    ACTIVITY_LOG {
-        ObjectId _id PK
-        ObjectId userId FK
-        string action
-        string entityType
-        ObjectId entityId
-        string details
-        datetime createdAt
-    }
-```
+![Entity-relationship diagram](scripts/assets/diagrams/fig-2-3-er.png)
 
 *Figure 2.3: Entity-relationship diagram — users, departments, and complaints*
 
-```mermaid
-flowchart LR
-    Citizen[Citizen]
-    Admin[Administrator]
-    Officer[Department Officer]
-    System((Web System))
-    DB[(Database)]
+### 2.8 Data Flow Diagram (Level 0)
 
-    Citizen -->|Complaint| System
-    Citizen -->|Login / Track| System
-    Admin -->|Manage / Assign / Report| System
-    Officer -->|Process / Update| System
-    System --> DB
-    DB --> System
-    System -->|Status / Notifications| Citizen
-    System -->|Dashboard / Reports| Admin
-    System -->|Assigned Tasks| Officer
-```
+![Level-0 data flow diagram](scripts/assets/diagrams/fig-2-4-dfd.png)
 
 *Figure 2.4: Level-0 data flow — complaints, assignment, and status feedback*
 
@@ -693,28 +528,7 @@ flowchart LR
 
 ### 2.9 System Workflow
 
-```mermaid
-flowchart TD
-    A[Citizen registers and logs in] --> B[Submit complaint with category, Adama location, and details]
-    B --> C{Citizen edits while pending?}
-    C -->|Yes| B
-    C -->|No, leave submitted| D[System stores record as Pending]
-    D --> E[Administrator reviews complaint]
-    E --> F{Valid?}
-    F -->|No| G[Status: Rejected]
-    F -->|Yes| H{Assign how?}
-    H -->|Department only| I[Status stays Pending - department queue]
-    H -->|Department + officer| J[Status: In Progress]
-    I --> K[Officer starts work]
-    K --> J
-    J --> L[Department officer processes]
-    L --> M{Outcome?}
-    M -->|Fixed| N[Status: Resolved]
-    M -->|Close| O[Status: Closed]
-    N --> P[Citizen notified and views update]
-    O --> P
-    G --> P
-```
+![Complaint workflow](scripts/assets/diagrams/fig-2-5-workflow.png)
 
 *Figure 2.5: Complaint workflow from submit/edit through assignment and resolution*
 
@@ -896,31 +710,7 @@ This project follows an **Agile-inspired iterative development** approach suited
 
 #### 3.2.1 Gantt Chart
 
-```mermaid
-gantt
-    title Project Timeline (12 Weeks) — planned schedule
-    dateFormat YYYY-MM-DD
-    axisFormat %b %d
-
-    section Planning & Design
-    Requirements & Proposal     :a1, 2025-06-26, 7d
-    UI & API Design             :a2, after a1, 7d
-
-    section Backend
-    Project Setup               :b1, after a2, 7d
-    Auth & Users                :b2, after b1, 7d
-    Complaint APIs              :b3, after b2, 7d
-    Workflow & Notifications    :b4, after b3, 7d
-
-    section Frontend
-    Citizen Interface           :c1, after b3, 14d
-    Admin Interface             :c2, after b4, 7d
-    Officer Interface           :c3, after c2, 7d
-
-    section Final
-    Testing                     :d1, after c3, 7d
-    Deployment & Documentation  :d2, after d1, 7d
-```
+![Project timeline Gantt chart](scripts/assets/diagrams/fig-3-1-gantt.png)
 
 *Figure 3.1: Planned 12-week schedule (complaint system)*
 
@@ -963,14 +753,7 @@ gantt
 
 #### 3.4.2 Deployment Architecture
 
-```mermaid
-flowchart LR
-    Users[Users] --> Nginx[Nginx Reverse Proxy]
-    Nginx --> Frontend[React Build Static Files]
-    Nginx --> API[Node.js API PM2]
-    API --> MongoDB[(MongoDB Atlas / VPS)]
-    API --> Uploads[File Upload Storage]
-```
+![Deployment architecture](scripts/assets/diagrams/fig-3-2-deployment.png)
 
 *Figure 3.2: Deployment architecture*
 
@@ -1000,23 +783,32 @@ This chapter presents the implemented **Adama City Citizen Portal** and discusse
 
 ### 4.1 Results
 
-The system was developed and tested successfully for the three primary roles: **Citizen**, **Department Officer**, and **Administrator**. Screenshots below were captured from the live Adama City Citizen Portal (18 August 2026 captures, documentation refreshed 22 August 2026). Navigation, tables, and forms use **complaint** terminology only (reference IDs `CMP-YYYY-NNNN`). An **AI Help** chatbot is available on every screen.
+Implemented screens are shown **in user-journey order**, starting with the **Guest UI**, then Citizen, Officer, and Administrator. Captures are from the live portal (18 August 2026; documentation refreshed 22 August 2026). Navigation and forms use **complaint** terminology only (`CMP-YYYY-NNNN`). **AI Help** is available on every screen.
 
-#### 4.1.1 Public Portal and Authentication
+**Order of result images**
 
-The public landing page introduces the portal, supports English / Amharic / Afaan Oromo, and offers a **Quick Submit** complaint card (login required to send). Registration creates a citizen account; sign-in supports demo Citizen, Officer, and Admin shortcuts plus email/password and forgot-password.
+1. Guest landing  
+2. Guest registration  
+3. Guest sign-in  
+4. Citizen dashboard → submit complaint → my complaints → notifications → profile  
+5. Officer dashboard → assigned tasks → notifications  
+6. Admin dashboard → complaints → users → reports → activity log  
+
+#### 4.1.1 Guest UI (Landing, Register, Login)
+
+The public **Guest UI** is the first screen a visitor sees. It introduces the portal in English / Amharic / Afaan Oromo and offers a **Quick Submit** complaint card (login required to send). Registration creates a citizen account. Sign-in supports demo Citizen, Officer, and Admin shortcuts plus email/password and forgot-password.
 
 ![Landing page of Adama City Citizen Portal](scripts/assets/results/landing.png)
 
-*Figure 4.1: Public landing page — Quick Submit complaint, not a service-request form*
+*Figure 4.1: Guest UI — “Your City. Your Voice.” landing page with Quick Submit complaint*
 
 ![Citizen registration page](scripts/assets/results/register.png)
 
-*Figure 4.2: Create Account — register as an Adama City citizen*
+*Figure 4.2: Guest UI — Create Account (register as an Adama City citizen)*
 
 ![Login page with demo role shortcuts](scripts/assets/results/login.png)
 
-*Figure 4.3: Sign In — demo Citizen / Officer / Admin and email login*
+*Figure 4.3: Guest UI — Sign In (demo Citizen / Officer / Admin and email login)*
 
 #### 4.1.2 Citizen Modules
 
@@ -1192,6 +984,8 @@ In conclusion, the project provides a working foundation for transparent, tracka
 | 2.13 | August 18, 2026 | Aligned documentation with the implemented complaint-only system: Adama location dropdown, pending edit, EN/AM/OM app i18n, email + password reset, auto-seen notifications, optional AI sidecar; removed service-request workflow from scope and schema |
 | 2.14 | August 18, 2026 | Replaced Chapter Four result screenshots with current UI captures (landing Quick Submit, citizen/officer/admin complaint screens); removed leftover service-request result figures |
 | 2.15 | August 22, 2026 | Forced a results pass: Chapter Four figures stay on the current UI captures; README now includes the same screenshot gallery; activity log stores department/officer names instead of MongoDB IDs |
+| 2.16 | August 22, 2026 | Added rendered use-case, ER, architecture, DFD, workflow, Gantt, and deployment diagrams; ordered Chapter Four result screenshots starting from Guest UI |
+| 2.17 | August 22, 2026 | Corrected Chapter Four result images: Figure 4.1 is the real Guest landing (“Your City. Your Voice.” / Quick Submit); remaining screenshots remapped so filenames match the actual screens |
 
 ---
 
