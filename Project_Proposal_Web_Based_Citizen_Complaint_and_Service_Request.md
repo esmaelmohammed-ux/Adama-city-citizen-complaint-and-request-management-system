@@ -8,8 +8,8 @@
 |-------|--------|
 | **Project Title** | Web-Based Citizen Complaint Management System |
 | **Organization** | Adama City Administration |
-| **Document Version** | 2.14 |
-| **Date** | 18 August 2026 |
+| **Document Version** | 2.15 |
+| **Date** | 22 August 2026 |
 | **Prepared By** | ____________________ (ID: __________) |
 | **Institution** | Haramaya University — College of Computing and Informatics, Department of Information Science |
 | **Supervisor / Advisor** | ____________________ |
@@ -62,7 +62,7 @@ The solution is built with the **MERN** stack (MongoDB, Express.js, React, Node.
 
 ### Implementation snapshot (August 2026)
 
-The **delivered application is complaints-only**. A parallel service-request module was removed so citizens, admins, and officers work from one complaint workflow. Location is selected from Adama sub-cities, kebeles 01–18, and landmarks, with an optional extra detail field. Authenticated screens are localized in English, Amharic, and Afaan Oromo. Opening the notifications page marks items as seen automatically. Demo logins (`*@test.com`) do not receive email.
+The **delivered application is complaints-only**. A parallel service-request module was removed so citizens, admins, and officers work from one complaint workflow. Location is selected from Adama sub-cities, kebeles 01–18, and landmarks, with an optional extra detail field. Authenticated screens are localized in English, Amharic, and Afaan Oromo. Opening the notifications page marks items as seen automatically. Demo logins (`*@test.com`) do not receive email. The Activity Log stores assignment details with department and officer **names** (not database IDs).
 
 ---
 
@@ -696,9 +696,9 @@ flowchart LR
 ```mermaid
 flowchart TD
     A[Citizen registers and logs in] --> B[Submit complaint with category, Adama location, and details]
-    B --> C{Still pending?}
-    C -->|Yes, citizen may edit| B
-    C -->|Submitted| D[System stores record as Pending]
+    B --> C{Citizen edits while pending?}
+    C -->|Yes| B
+    C -->|No, leave submitted| D[System stores record as Pending]
     D --> E[Administrator reviews complaint]
     E --> F{Valid?}
     F -->|No| G[Status: Rejected]
@@ -1000,7 +1000,7 @@ This chapter presents the implemented **Adama City Citizen Portal** and discusse
 
 ### 4.1 Results
 
-The system was developed and tested successfully for the three primary roles: **Citizen**, **Department Officer**, and **Administrator**. Screenshots below were captured from the live Adama City Citizen Portal on 18 August 2026. Navigation, tables, and forms use **complaint** terminology only (reference IDs `CMP-YYYY-NNNN`). An **AI Help** chatbot is available on every screen.
+The system was developed and tested successfully for the three primary roles: **Citizen**, **Department Officer**, and **Administrator**. Screenshots below were captured from the live Adama City Citizen Portal (18 August 2026 captures, documentation refreshed 22 August 2026). Navigation, tables, and forms use **complaint** terminology only (reference IDs `CMP-YYYY-NNNN`). An **AI Help** chatbot is available on every screen.
 
 #### 4.1.1 Public Portal and Authentication
 
@@ -1060,7 +1060,7 @@ The officer sidebar is **Dashboard**, **Assigned Tasks**, and **Notifications**.
 
 #### 4.1.4 Administrator Modules
 
-The admin sidebar is **Dashboard**, **Complaints**, **Users**, **Departments**, **Reports**, and **Activity Log**. The dashboard shows city-wide complaint totals and recent pending items. **Manage Complaints** searches and filters by status, then **View** opens assignment and status actions. **User Management** lists Citizen / Officer / Admin rows with department (officers) and Activate / Deactivate. **Reports** summarise totals by status and complaints by category. **Activity Log** records assign and status-update actions.
+The admin sidebar is **Dashboard**, **Complaints**, **Users**, **Departments**, **Reports**, and **Activity Log**. The dashboard shows city-wide complaint totals and recent pending items. **Manage Complaints** searches and filters by status, then **View** opens assignment and status actions. **User Management** lists Citizen / Officer / Admin rows with department (officers) and Activate / Deactivate. **Reports** summarise totals by status and complaints by category. **Activity Log** records assign and status-update actions using complaint reference IDs plus department and officer names.
 
 ![Admin dashboard](scripts/assets/results/admin-dashboard.png)
 
@@ -1080,7 +1080,7 @@ The admin sidebar is **Dashboard**, **Complaints**, **Users**, **Departments**, 
 
 ![Activity log](scripts/assets/results/admin-activity.png)
 
-*Figure 4.16: Activity Log — audit trail of assignments and status updates*
+*Figure 4.16: Activity Log — audit trail of assignments and status updates (new rows store names; older captured rows may still show IDs)*
 
 ### 4.2 Discussion
 
@@ -1191,6 +1191,7 @@ In conclusion, the project provides a working foundation for transparent, tracka
 | 2.12 | July 29, 2026 | Added CHAPTER FIVE: Conclusion; updated Table of Contents |
 | 2.13 | August 18, 2026 | Aligned documentation with the implemented complaint-only system: Adama location dropdown, pending edit, EN/AM/OM app i18n, email + password reset, auto-seen notifications, optional AI sidecar; removed service-request workflow from scope and schema |
 | 2.14 | August 18, 2026 | Replaced Chapter Four result screenshots with current UI captures (landing Quick Submit, citizen/officer/admin complaint screens); removed leftover service-request result figures |
+| 2.15 | August 22, 2026 | Forced a results pass: Chapter Four figures stay on the current UI captures; README now includes the same screenshot gallery; activity log stores department/officer names instead of MongoDB IDs |
 
 ---
 

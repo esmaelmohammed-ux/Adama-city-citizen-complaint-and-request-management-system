@@ -149,6 +149,7 @@ export async function assignComplaint(req, res, next) {
     }
 
     let assignedOfficerId = null;
+    let officerName = '';
     if (officerId) {
       const officer = await User.findById(officerId);
       if (
@@ -163,6 +164,7 @@ export async function assignComplaint(req, res, next) {
         });
       }
       assignedOfficerId = officer._id;
+      officerName = officer.fullName;
     }
 
     const previousStatus = complaint.status;
@@ -189,8 +191,8 @@ export async function assignComplaint(req, res, next) {
       entityType: 'complaint',
       entityId: complaint._id,
       details: assignedOfficerId
-        ? `Assigned to officer ${assignedOfficerId} in department ${departmentId}`
-        : `Routed to department ${departmentId}`,
+        ? `Assigned ${complaint.referenceId} to officer ${officerName} in ${department.name}`
+        : `Routed ${complaint.referenceId} to ${department.name}`,
     });
 
     await createNotification({
@@ -284,13 +286,13 @@ export async function updateComplaintStatus(req, res, next) {
         action: 'status_update',
         entityType: 'complaint',
         entityId: claimed._id,
-        details: `Status changed to ${status}`,
+        details: `${claimed.referenceId} status changed to ${status.replaceAll('_', ' ')}`,
       });
 
       await createNotification({
         userId: claimed.citizenId,
         title: 'Status Updated',
-        message: `Your ${claimed.referenceId} status is now ${status.replace('_', ' ')}.`,
+        message: `Your ${claimed.referenceId} status is now ${status.replaceAll('_', ' ')}.`,
         relatedEntityType: 'complaint',
         relatedEntityId: claimed._id,
       });
@@ -319,13 +321,13 @@ export async function updateComplaintStatus(req, res, next) {
       action: 'status_update',
       entityType: 'complaint',
       entityId: complaint._id,
-      details: `Status changed to ${status}`,
+      details: `${complaint.referenceId} status changed to ${status.replaceAll('_', ' ')}`,
     });
 
     await createNotification({
       userId: complaint.citizenId,
       title: 'Status Updated',
-      message: `Your ${complaint.referenceId} status is now ${status.replace('_', ' ')}.`,
+      message: `Your ${complaint.referenceId} status is now ${status.replaceAll('_', ' ')}.`,
       relatedEntityType: 'complaint',
       relatedEntityId: complaint._id,
     });

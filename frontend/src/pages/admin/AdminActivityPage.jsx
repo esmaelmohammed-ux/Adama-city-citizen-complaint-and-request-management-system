@@ -27,7 +27,7 @@ export default function AdminActivityPage() {
               <tr key={log.id}>
                 <td>{formatDate(log.createdAt)}</td>
                 <td>{getUser(log.userId)}</td>
-                <td>{log.action.replace('_', ' ')}</td>
+                <td>{log.action.replaceAll('_', ' ')}</td>
                 <td>{log.details}</td>
               </tr>
             ))}

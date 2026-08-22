@@ -4,8 +4,8 @@ import { aiAssist } from '../../services/aiApi';
 import './Ai.css';
 
 /**
- * Citizen writing assist + category/service suggestion.
- * onApply({ title, description, category?, serviceType?, department?, priority? })
+ * Citizen writing assist + category suggestion.
+ * onApply({ title, description, category?, department?, priority? })
  */
 export default function AiCitizenAssist({
   type = 'complaint',

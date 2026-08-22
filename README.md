@@ -103,6 +103,7 @@ Citizen/
 ├── frontend/          React SPA (Vite)
 ├── backend/           Node.js + Express REST API
 ├── ai-service/        Optional AI assist / chatbot
+├── scripts/assets/results/   Current UI screenshots (Chapter Four)
 ├── Project_Proposal_….md
 └── README.md
 ```
@@ -159,6 +160,46 @@ VITE_AI_URL=http://localhost:5100
 | `/api/reports/by-category` | GET | Counts by category |
 | `/api/reports/by-department` | GET | Counts by department |
 | `/api/activity-logs` | GET | Admin activity log |
+
+## Results (current UI)
+
+Screenshots captured from the running complaint portal (18 August 2026). The same figures are used in Chapter Four of the [project proposal](./Project_Proposal_Web_Based_Citizen_Complaint_and_Service_Request.md).
+
+### Public and authentication
+
+| Screen | Capture |
+|--------|---------|
+| Landing — Quick Submit complaint | ![Landing](scripts/assets/results/landing.png) |
+| Register | ![Register](scripts/assets/results/register.png) |
+| Sign in | ![Login](scripts/assets/results/login.png) |
+
+### Citizen
+
+| Screen | Capture |
+|--------|---------|
+| Dashboard | ![Citizen dashboard](scripts/assets/results/citizen-dashboard.png) |
+| Submit complaint | ![Submit complaint](scripts/assets/results/submit-complaint.png) |
+| My Complaints | ![My Complaints](scripts/assets/results/citizen-complaints.png) |
+| Notifications (auto-seen) | ![Citizen notifications](scripts/assets/results/citizen-notifications.png) |
+| Profile | ![Citizen profile](scripts/assets/results/citizen-profile.png) |
+
+### Officer
+
+| Screen | Capture |
+|--------|---------|
+| Dashboard | ![Officer dashboard](scripts/assets/results/officer-dashboard.png) |
+| Assigned Tasks | ![Assigned tasks](scripts/assets/results/officer-tasks.png) |
+| Notifications | ![Officer notifications](scripts/assets/results/officer-notifications.png) |
+
+### Administrator
+
+| Screen | Capture |
+|--------|---------|
+| Dashboard | ![Admin dashboard](scripts/assets/results/admin-dashboard.png) |
+| Manage Complaints | ![Manage complaints](scripts/assets/results/admin-complaints.png) |
+| Users | ![Users](scripts/assets/results/admin-users.png) |
+| Reports | ![Reports](scripts/assets/results/admin-reports.png) |
+| Activity Log | ![Activity log](scripts/assets/results/admin-activity.png) |
 
 ## Remaining work
 
