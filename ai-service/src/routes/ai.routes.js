@@ -11,7 +11,6 @@ import {
   CATEGORY_LABELS,
   COMPLAINT_CATEGORIES,
   DEPARTMENTS,
-  SERVICE_TYPES,
 } from '../constants.js';
 import { resolveEffectiveProvider } from '../config.js';
 
@@ -34,7 +33,6 @@ router.get('/meta', (_req, res) => {
       'similar-cases',
     ],
     categories: COMPLAINT_CATEGORIES.map((id) => ({ id, label: CATEGORY_LABELS[id] })),
-    serviceTypes: SERVICE_TYPES,
     departments: DEPARTMENTS,
   });
 });

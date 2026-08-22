@@ -24,15 +24,13 @@ function isOfficerScoped(item, user) {
 }
 
 export default function OfficerDashboard() {
-  const { currentUser, complaints, serviceRequests, departments } = useApp();
+  const { currentUser, complaints, departments } = useApp();
   const { t } = useLanguage();
 
-  const assignedComplaints = complaints.filter((c) => isOfficerScoped(c, currentUser));
-  const assignedRequests = serviceRequests.filter((r) => isOfficerScoped(r, currentUser));
-  const all = [...assignedComplaints, ...assignedRequests];
-  const openCount = all.filter((x) => OPEN_STATUSES.includes(x.status)).length;
-  const inProgress = all.filter((x) => x.status === STATUSES.IN_PROGRESS).length;
-  const pendingQueue = all.filter((x) => x.status === STATUSES.PENDING).length;
+  const assigned = complaints.filter((c) => isOfficerScoped(c, currentUser));
+  const openCount = assigned.filter((x) => OPEN_STATUSES.includes(x.status)).length;
+  const inProgress = assigned.filter((x) => x.status === STATUSES.IN_PROGRESS).length;
+  const pendingQueue = assigned.filter((x) => x.status === STATUSES.PENDING).length;
 
   const deptName = departments.find((d) => d.id === currentUser.departmentId)?.name;
 
@@ -51,7 +49,7 @@ export default function OfficerDashboard() {
         <StatCard label={t('officer.inProgress')} value={inProgress} icon="🔄" tone="info" />
         <StatCard
           label={t('officer.resolved')}
-          value={all.filter((x) => x.status === STATUSES.RESOLVED).length}
+          value={assigned.filter((x) => x.status === STATUSES.RESOLVED).length}
           icon="✅"
           tone="success"
         />
@@ -64,43 +62,32 @@ export function OfficerTasksPage() {
   const {
     currentUser,
     complaints,
-    serviceRequests,
     departments,
     statusHistories,
     updateSubmissionStatus,
   } = useApp();
   const { t } = useLanguage();
   const [selected, setSelected] = useState(null);
-  const [selectedType, setSelectedType] = useState('complaint');
   const [note, setNote] = useState('');
   const [actionError, setActionError] = useState('');
   const [busy, setBusy] = useState(false);
   const { showToast } = useToast();
 
   const tasks = useMemo(() => {
-    const c = complaints
+    return complaints
       .filter((x) => isOfficerScoped(x, currentUser) && OPEN_STATUSES.includes(x.status))
-      .map((x) => ({ ...x, itemType: 'complaint' }));
-    const r = serviceRequests
-      .filter((x) => isOfficerScoped(x, currentUser) && OPEN_STATUSES.includes(x.status))
-      .map((x) => ({ ...x, itemType: 'serviceRequest' }));
-    return [...c, ...r].sort((a, b) => {
-      if (a.status === b.status) return 0;
-      return a.status === STATUSES.PENDING ? -1 : 1;
-    });
-  }, [complaints, serviceRequests, currentUser]);
+      .sort((a, b) => {
+        if (a.status === b.status) return 0;
+        return a.status === STATUSES.PENDING ? -1 : 1;
+      });
+  }, [complaints, currentUser]);
 
   const history = selected
-    ? statusHistories.filter(
-        (h) =>
-          h.entityId === selected.id &&
-          h.entityType === (selectedType === 'complaint' ? 'complaint' : 'serviceRequest')
-      )
+    ? statusHistories.filter((h) => h.entityId === selected.id && h.entityType === 'complaint')
     : [];
 
   const openTask = (item) => {
     setSelected(item);
-    setSelectedType(item.itemType);
     setActionError('');
     setNote('');
   };
@@ -108,7 +95,7 @@ export function OfficerTasksPage() {
   const runStatus = async (status) => {
     setBusy(true);
     setActionError('');
-    const result = await updateSubmissionStatus(selectedType, selected.id, status, note);
+    const result = await updateSubmissionStatus(selected.id, status, note);
     setBusy(false);
     if (!result.success) {
       setActionError(result.message || t('officer.updateFailed'));
@@ -130,7 +117,6 @@ export function OfficerTasksPage() {
 
       <SubmissionTable
         items={tasks}
-        type="complaint"
         departments={departments}
         onView={openTask}
       />
@@ -138,7 +124,6 @@ export function OfficerTasksPage() {
       {selected && (
         <SubmissionDetail
           item={selected}
-          type={selectedType}
           history={history}
           departmentName={
             departments.find((d) => d.id === selected.departmentId)?.name
@@ -161,7 +146,6 @@ export function OfficerTasksPage() {
                 <>
                   <AiResolutionAssist
                     item={selected}
-                    type={selectedType}
                     actionTaken={note}
                     onApply={setNote}
                   />

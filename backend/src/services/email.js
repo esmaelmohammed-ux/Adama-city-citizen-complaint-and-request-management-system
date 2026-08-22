@@ -3,6 +3,33 @@ import { Resend } from 'resend';
 
 const from = () => process.env.EMAIL_FROM || 'Adama Citizen Portal <onboarding@resend.dev>';
 
+/** Demo/login addresses that cannot receive mail (no MX), e.g. officer@test.com. */
+const SKIP_EMAIL_HOSTS = new Set([
+  'test.com',
+  'example.com',
+  'example.org',
+  'example.net',
+  'localhost',
+  'invalid',
+]);
+
+export function isDeliverableEmail(address) {
+  const email = String(address || '').trim().toLowerCase();
+  const at = email.lastIndexOf('@');
+  if (at < 1) return false;
+  const host = email.slice(at + 1);
+  if (!host.includes('.')) return false;
+  if (SKIP_EMAIL_HOSTS.has(host)) return false;
+  if (host.endsWith('.test') || host.endsWith('.local') || host.endsWith('.invalid')) {
+    return false;
+  }
+  return true;
+}
+
+function recipientsOf(to) {
+  return (Array.isArray(to) ? to : [to]).map((item) => String(item || '').trim()).filter(Boolean);
+}
+
 /** Prefer SMTP "from" when sending via Gmail/SMTP (must match authenticated mailbox). */
 function smtpFrom() {
   if (process.env.SMTP_FROM) return process.env.SMTP_FROM;
@@ -62,9 +89,20 @@ export async function sendEmail({ to, subject, html, text }) {
     return { ok: false, channel: 'none', error: 'Missing recipient' };
   }
 
+  const recipients = recipientsOf(to);
+  if (recipients.length === 0) {
+    return { ok: false, channel: 'none', error: 'Missing recipient' };
+  }
+
+  const undeliverable = recipients.filter((address) => !isDeliverableEmail(address));
+  if (undeliverable.length) {
+    console.log('[email] skipped undeliverable address', undeliverable.join(', '));
+    return { ok: true, channel: 'skipped', skipped: true };
+  }
+
   const payload = {
     from: from(),
-    to: Array.isArray(to) ? to : [to],
+    to: recipients,
     subject,
     html: html || undefined,
     text: text || (html ? undefined : subject),

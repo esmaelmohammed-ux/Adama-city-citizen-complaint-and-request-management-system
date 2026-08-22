@@ -6,10 +6,10 @@ import { useLanguage } from '../../context/LanguageContext';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const { complaints, serviceRequests, users, departments } = useApp();
+  const { complaints, users, departments } = useApp();
   const { t } = useLanguage();
-  const pending = [...complaints, ...serviceRequests].filter((x) => x.status === 'pending').length;
-  const inProgress = [...complaints, ...serviceRequests].filter((x) => x.status === 'in_progress').length;
+  const pending = complaints.filter((x) => x.status === 'pending').length;
+  const inProgress = complaints.filter((x) => x.status === 'in_progress').length;
   const citizens = users.filter((u) => u.role === 'citizen').length;
 
   return (
@@ -21,7 +21,6 @@ export default function AdminDashboard() {
 
       <div className="stats-grid">
         <StatCard label={t('admin.totalComplaints')} value={complaints.length} icon="📢" />
-        <StatCard label={t('admin.serviceRequests')} value={serviceRequests.length} icon="📋" />
         <StatCard label={t('admin.pendingReview')} value={pending} icon="⏳" tone="warning" />
         <StatCard label={t('admin.inProgress')} value={inProgress} icon="🔄" tone="info" />
         <StatCard label={t('admin.registeredCitizens')} value={citizens} icon="👥" />
@@ -31,7 +30,6 @@ export default function AdminDashboard() {
       <h2 className="section-title">{t('admin.recentPending')}</h2>
       <SubmissionTable
         items={complaints.filter((c) => c.status === 'pending').slice(0, 5)}
-        type="complaint"
         showCitizen
         users={users}
         departments={departments}

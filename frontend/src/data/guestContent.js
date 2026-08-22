@@ -1,7 +1,6 @@
 export const guestStats = [
   { iconKey: 'citizens', value: '48,200+', labelKey: 'stats.registeredCitizens', tone: 'purple' },
   { iconKey: 'resolved', value: '12,500+', labelKey: 'stats.complaintsResolved', tone: 'green' },
-  { iconKey: 'requests', value: '9,300+', labelKey: 'stats.serviceRequests', tone: 'orange' },
   { iconKey: 'departments', value: '12', labelKey: 'stats.departments', tone: 'gray' },
 ];
 

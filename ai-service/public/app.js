@@ -118,7 +118,7 @@ document.getElementById('citizenForm').addEventListener('submit', async (e) => {
     document.getElementById('cOutDesc').value = data.improved.description || '';
     const c = data.classification;
     renderKv(document.getElementById('citizenKv'), [
-      ['Category', c.categoryLabel || c.serviceType],
+      ['Category', c.categoryLabel],
       ['Category ID', c.category || '—'],
       ['Department', c.department],
       ['Priority', c.priority],
@@ -175,7 +175,7 @@ document.getElementById('adminForm').addEventListener('submit', async (e) => {
     });
     const c = data.classification;
     renderKv(document.getElementById('adminClassKv'), [
-      ['Category', c.categoryLabel || c.serviceType],
+      ['Category', c.categoryLabel],
       ['Confidence', `${Math.round((c.confidence || 0) * 100)}%`],
       ['Rationale', c.rationale],
     ]);
@@ -301,7 +301,7 @@ document.querySelectorAll('[data-copy]').forEach((btn) => {
       text = `Title: ${i.title}\n\nDescription: ${i.description}`;
     } else if (key === 'citizen-class' && window.__last.citizen) {
       const c = window.__last.citizen.classification;
-      text = `Category: ${c.categoryLabel || c.serviceType}\nCategory ID: ${c.category || 'n/a'}\nDepartment: ${c.department}\nPriority: ${c.priority}`;
+      text = `Category: ${c.categoryLabel}\nCategory ID: ${c.category || 'n/a'}\nDepartment: ${c.department}\nPriority: ${c.priority}`;
     } else if (key === 'admin-advice' && window.__last.admin) {
       const a = window.__last.admin.advice;
       text = [`Department: ${a.recommendedDepartment}`, `Priority: ${a.recommendedPriority}`, `Duplicate risk: ${a.duplicateRisk}`, '', ...(a.actions || [])].join('\n');

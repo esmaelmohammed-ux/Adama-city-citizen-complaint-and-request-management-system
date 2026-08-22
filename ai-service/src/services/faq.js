@@ -7,11 +7,6 @@ export const FAQ_ENTRIES = [
     a: 'After you submit, you get a reference ID (e.g. CMP-2026-0001). Sign in as a citizen and open My Submissions / Notifications to see Pending → In Progress → Resolved / Closed.',
   },
   {
-    id: 'complaint-vs-service',
-    q: ['difference', 'complaint', 'service request', 'vs', 'what is'],
-    a: 'A Complaint reports a problem (pothole, leak, dark streetlight). A Service Request asks for a service (waste pickup, cleaning, water connection inquiry).',
-  },
-  {
     id: 'categories',
     q: ['category', 'categories', 'types of complaint'],
     a: 'Complaint categories: Road Maintenance, Waste Management, Water Supply, Street Lighting, Drainage, Public Safety, Noise Pollution, Other.',
@@ -58,7 +53,7 @@ export function heuristicChat(message = '') {
   if (!lower.trim()) {
     return {
       reply:
-        'Ask me anything — general questions, or Adama City portal help (tracking cases, complaint vs service request, categories, departments, photos, login).',
+        'Ask me anything — general questions, or Adama City portal help (tracking complaints, categories, departments, photos, login).',
       matchedFaqId: null,
       provider: 'heuristic',
     };

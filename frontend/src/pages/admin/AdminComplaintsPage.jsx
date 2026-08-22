@@ -62,7 +62,6 @@ export default function AdminComplaintsPage() {
     setBusy(true);
     setActionError('');
     const result = await assignSubmission(
-      'complaint',
       selected.id,
       assignDept,
       assignOfficer || null
@@ -86,7 +85,7 @@ export default function AdminComplaintsPage() {
     if (!selected) return;
     setBusy(true);
     setActionError('');
-    const result = await updateSubmissionStatus('complaint', selected.id, status, note);
+    const result = await updateSubmissionStatus(selected.id, status, note);
     setBusy(false);
     if (!result.success) {
       setActionError(result.message || t('admin.updateFailed'));
@@ -126,7 +125,6 @@ export default function AdminComplaintsPage() {
 
       <SubmissionTable
         items={filtered}
-        type="complaint"
         showCitizen
         users={users}
         departments={departments}
@@ -142,7 +140,6 @@ export default function AdminComplaintsPage() {
       {selected && (
         <SubmissionDetail
           item={selected}
-          type="complaint"
           history={history}
           departmentName={departments.find((d) => d.id === selected.departmentId)?.name}
           officerName={users.find((u) => u.id === selected.assignedOfficerId)?.fullName}
@@ -153,7 +150,6 @@ export default function AdminComplaintsPage() {
               {showAssign && (
                 <>
                   <AiTriagePanel
-                    type="complaint"
                     item={selected}
                     departments={departments}
                     onApplyDepartment={(deptId) => handleDeptChange(deptId)}
@@ -206,7 +202,6 @@ export default function AdminComplaintsPage() {
                 <>
                   <AiResolutionAssist
                     item={selected}
-                    type="complaint"
                     actionTaken={note}
                     onApply={setNote}
                   />

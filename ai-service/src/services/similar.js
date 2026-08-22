@@ -15,19 +15,7 @@ const complaintSchema = new mongoose.Schema(
   { collection: 'complaints', strict: false }
 );
 
-const serviceSchema = new mongoose.Schema(
-  {
-    referenceId: String,
-    serviceType: String,
-    description: String,
-    location: String,
-    status: String,
-  },
-  { collection: 'servicerequests', strict: false }
-);
-
 let Complaint;
-let ServiceRequest;
 
 export async function connectDbOptional() {
   if (!config.mongoUri) {
@@ -37,8 +25,6 @@ export async function connectDbOptional() {
   try {
     await mongoose.connect(config.mongoUri);
     Complaint = mongoose.models.AiComplaint || mongoose.model('AiComplaint', complaintSchema);
-    ServiceRequest =
-      mongoose.models.AiServiceRequest || mongoose.model('AiServiceRequest', serviceSchema);
     connected = true;
     console.log('[ai] MongoDB connected (read-only similar cases)');
     return true;
@@ -66,27 +52,23 @@ function overlapScore(queryTokens, docText) {
   return hits / queryTokens.length;
 }
 
-export async function findSimilarCases({ title = '', description = '', location = '', type = 'complaint', limit = 5 }) {
+export async function findSimilarCases({ title = '', description = '', location = '', limit = 5 }) {
   if (!connected) {
     return { enabled: false, items: [], message: 'MongoDB not connected. Set MONGODB_URI in ai-service/.env' };
   }
 
   const queryTokens = tokenize(`${title} ${description} ${location}`);
-  const Model = type === 'service' ? ServiceRequest : Complaint;
-  const docs = await Model.find({})
+  const docs = await Complaint.find({})
     .sort({ createdAt: -1 })
     .limit(200)
     .lean();
 
   const scored = docs
     .map((doc) => {
-      const blob =
-        type === 'service'
-          ? `${doc.serviceType || ''} ${doc.description || ''} ${doc.location || ''}`
-          : `${doc.title || ''} ${doc.description || ''} ${doc.location || ''} ${doc.category || ''}`;
+      const blob = `${doc.title || ''} ${doc.description || ''} ${doc.location || ''} ${doc.category || ''}`;
       return {
         referenceId: doc.referenceId,
-        title: type === 'service' ? doc.serviceType : doc.title,
+        title: doc.title,
         description: doc.description,
         location: doc.location,
         status: doc.status,

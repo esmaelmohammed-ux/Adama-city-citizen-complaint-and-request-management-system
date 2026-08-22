@@ -1,5 +1,4 @@
 import Complaint from '../models/Complaint.js';
-import ServiceRequest from '../models/ServiceRequest.js';
 import User from '../models/User.js';
 import Department from '../models/Department.js';
 import { STATUSES } from '../constants/index.js';
@@ -8,24 +7,16 @@ export async function getSummary(req, res, next) {
   try {
     const [
       totalComplaints,
-      totalRequests,
       pendingComplaints,
-      pendingRequests,
       inProgressComplaints,
-      inProgressRequests,
       resolvedComplaints,
-      resolvedRequests,
       totalUsers,
       totalDepartments,
     ] = await Promise.all([
       Complaint.countDocuments(),
-      ServiceRequest.countDocuments(),
       Complaint.countDocuments({ status: STATUSES.PENDING }),
-      ServiceRequest.countDocuments({ status: STATUSES.PENDING }),
       Complaint.countDocuments({ status: STATUSES.IN_PROGRESS }),
-      ServiceRequest.countDocuments({ status: STATUSES.IN_PROGRESS }),
       Complaint.countDocuments({ status: STATUSES.RESOLVED }),
-      ServiceRequest.countDocuments({ status: STATUSES.RESOLVED }),
       User.countDocuments(),
       Department.countDocuments({ isActive: true }),
     ]);
@@ -34,13 +25,9 @@ export async function getSummary(req, res, next) {
       success: true,
       summary: {
         totalComplaints,
-        totalRequests,
         pendingComplaints,
-        pendingRequests,
         inProgressComplaints,
-        inProgressRequests,
         resolvedComplaints,
-        resolvedRequests,
         totalUsers,
         totalDepartments,
       },
@@ -73,30 +60,19 @@ export async function getByDepartment(req, res, next) {
       { $group: { _id: '$departmentId', count: { $sum: 1 } } },
     ]);
 
-    const requestCounts = await ServiceRequest.aggregate([
-      { $match: { departmentId: { $ne: null } } },
-      { $group: { _id: '$departmentId', count: { $sum: 1 } } },
-    ]);
-
     const departments = await Department.find();
     const deptMap = Object.fromEntries(departments.map((d) => [d._id.toString(), d.name]));
 
-    const merged = {};
-
-    for (const row of complaintCounts) {
+    const byDepartment = complaintCounts.map((row) => {
       const key = row._id.toString();
-      merged[key] = { departmentId: key, departmentName: deptMap[key] || 'Unknown', complaints: row.count, requests: 0 };
-    }
+      return {
+        departmentId: key,
+        departmentName: deptMap[key] || 'Unknown',
+        complaints: row.count,
+      };
+    });
 
-    for (const row of requestCounts) {
-      const key = row._id.toString();
-      if (!merged[key]) {
-        merged[key] = { departmentId: key, departmentName: deptMap[key] || 'Unknown', complaints: 0, requests: 0 };
-      }
-      merged[key].requests = row.count;
-    }
-
-    res.json({ success: true, byDepartment: Object.values(merged) });
+    res.json({ success: true, byDepartment });
   } catch (err) {
     next(err);
   }

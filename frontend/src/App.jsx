@@ -12,13 +12,11 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import CitizenDashboard from './pages/citizen/CitizenDashboard';
 import NewComplaintPage from './pages/citizen/NewComplaintPage';
-import NewServiceRequestPage from './pages/citizen/NewServiceRequestPage';
 import MySubmissionsPage from './pages/citizen/MySubmissionsPage';
 import ProfilePage from './pages/citizen/ProfilePage';
 import NotificationsPage from './pages/shared/NotificationsPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminComplaintsPage from './pages/admin/AdminComplaintsPage';
-import AdminRequestsPage from './pages/admin/AdminRequestsPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
 import AdminDepartmentsPage from './pages/admin/AdminDepartmentsPage';
 import AdminReportsPage from './pages/admin/AdminReportsPage';
@@ -46,7 +44,6 @@ export default function App() {
           <Route element={<ProtectedRoute allowedRoles={[ROLES.CITIZEN]} />}>
             <Route path="/citizen" element={<CitizenDashboard />} />
             <Route path="/citizen/complaints/new" element={<NewComplaintPage />} />
-            <Route path="/citizen/requests/new" element={<NewServiceRequestPage />} />
             <Route path="/citizen/submissions" element={<MySubmissionsPage />} />
             <Route path="/citizen/notifications" element={<NotificationsPage />} />
             <Route path="/citizen/profile" element={<ProfilePage />} />
@@ -55,7 +52,6 @@ export default function App() {
           <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]} />}>
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/complaints" element={<AdminComplaintsPage />} />
-            <Route path="/admin/requests" element={<AdminRequestsPage />} />
             <Route path="/admin/users" element={<AdminUsersPage />} />
             <Route path="/admin/departments" element={<AdminDepartmentsPage />} />
             <Route path="/admin/reports" element={<AdminReportsPage />} />

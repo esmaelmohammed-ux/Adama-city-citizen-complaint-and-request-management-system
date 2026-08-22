@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { aiResolution } from '../../services/aiApi';
+import { formatComplaintLocation } from '../../utils/location';
 import './Ai.css';
 
 /** Draft resolution note from case + optional action text. */
-export default function AiResolutionAssist({ item, type = 'complaint', actionTaken = '', onApply }) {
+export default function AiResolutionAssist({ item, actionTaken = '', onApply }) {
   const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -16,10 +17,10 @@ export default function AiResolutionAssist({ item, type = 'complaint', actionTak
     setError('');
     try {
       const data = await aiResolution({
-        title: item.title || item.serviceType || '',
+        title: item.title || '',
         description: item.description || '',
-        location: item.location || '',
-        category: item.category || item.serviceType || '',
+        location: formatComplaintLocation(item, t),
+        category: item.category || '',
         actionTaken: actionTaken || 'Field work completed per department procedure',
         outcome: 'resolved',
       });

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const statusHistorySchema = new mongoose.Schema({
-  entityType: { type: String, enum: ['complaint', 'serviceRequest'], required: true },
+  entityType: { type: String, enum: ['complaint'], required: true },
   entityId: { type: mongoose.Schema.Types.ObjectId, required: true },
   fromStatus: { type: String, default: null },
   toStatus: { type: String, required: true },

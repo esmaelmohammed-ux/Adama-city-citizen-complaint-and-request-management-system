@@ -1,4 +1,4 @@
-/** Mirrors Adama Citizen complaint / service domain (read-only copy). */
+/** Mirrors Adama Citizen complaint domain (read-only copy). */
 
 export const COMPLAINT_CATEGORIES = [
   'roadMaintenance',
@@ -22,15 +22,6 @@ export const CATEGORY_LABELS = {
   other: 'Other',
 };
 
-export const SERVICE_TYPES = [
-  'Waste Collection Request',
-  'Street Cleaning',
-  'Water Connection Inquiry',
-  'Public Facility Access',
-  'General Information',
-  'Other',
-];
-
 export const DEPARTMENTS = [
   'Roads & Infrastructure',
   'Water Supply',
@@ -50,11 +41,3 @@ export const CATEGORY_TO_DEPARTMENT = {
   other: 'Roads & Infrastructure',
 };
 
-export const SERVICE_TO_DEPARTMENT = {
-  'Waste Collection Request': 'Sanitation',
-  'Street Cleaning': 'Sanitation',
-  'Water Connection Inquiry': 'Water Supply',
-  'Public Facility Access': 'Public Utilities',
-  'General Information': 'Public Utilities',
-  Other: 'Roads & Infrastructure',
-};

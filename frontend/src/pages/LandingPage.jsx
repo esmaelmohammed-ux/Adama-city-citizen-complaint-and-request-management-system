@@ -17,9 +17,9 @@ export default function LandingPage() {
       <section className="hero">
         <div className="hero-content">
           <p className="hero-tag">Citizen Service Portal</p>
-          <h1>Report issues. Request services. Track progress.</h1>
+          <h1>Report issues. Track progress.</h1>
           <p className="hero-text">
-            Submit complaints and service requests online, follow their status in real time,
+            Submit complaints online, follow their status in real time,
             and connect with Adama City Administration departments from one place.
           </p>
           <div className="hero-buttons">
@@ -31,7 +31,7 @@ export default function LandingPage() {
           <div className="feature-card">
             <span>📝</span>
             <h3>Submit Online</h3>
-            <p>File complaints and service requests without visiting offices.</p>
+            <p>File complaints without visiting offices.</p>
           </div>
           <div className="feature-card">
             <span>🔍</span>
@@ -41,7 +41,7 @@ export default function LandingPage() {
           <div className="feature-card">
             <span>🏛️</span>
             <h3>Department Routing</h3>
-            <p>Requests are assigned to the right municipal department.</p>
+            <p>Complaints are assigned to the right municipal department.</p>
           </div>
         </div>
       </section>

@@ -8,6 +8,7 @@ const complaintSchema = new mongoose.Schema(
     description: { type: String, required: true },
     category: { type: String, required: true, enum: COMPLAINT_CATEGORIES },
     location: { type: String, required: true },
+    landmark: { type: String, default: '' },
     status: { type: String, enum: STATUS_LIST, default: 'pending' },
     citizenId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     departmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Department', default: null },

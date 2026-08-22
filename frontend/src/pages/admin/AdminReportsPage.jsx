@@ -4,18 +4,17 @@ import { useApp } from '../../context/AppContext';
 import { useLanguage } from '../../context/LanguageContext';
 
 export default function AdminReportsPage() {
-  const { complaints, serviceRequests, departments } = useApp();
+  const { complaints, departments } = useApp();
   const { t } = useLanguage();
-  const all = [...complaints, ...serviceRequests];
 
-  const byStatus = (status) => all.filter((x) => x.status === status).length;
+  const byStatus = (status) => complaints.filter((x) => x.status === status).length;
 
   return (
     <div>
       <PageHeader title={t('admin.reportsTitle')} subtitle={t('admin.reportsSubtitle')} />
 
       <div className="stats-grid">
-        <StatCard label={t('admin.totalRecords')} value={all.length} icon="📊" />
+        <StatCard label={t('admin.totalRecords')} value={complaints.length} icon="📊" />
         <StatCard label={t('status.pending')} value={byStatus('pending')} icon="⏳" tone="warning" />
         <StatCard label={t('status.in_progress')} value={byStatus('in_progress')} icon="🔄" tone="info" />
         <StatCard label={t('status.resolved')} value={byStatus('resolved')} icon="✅" tone="success" />
@@ -50,7 +49,6 @@ export default function AdminReportsPage() {
             <tr>
               <th>{t('table.department')}</th>
               <th>{t('table.complaints')}</th>
-              <th>{t('table.requests')}</th>
             </tr>
           </thead>
           <tbody>
@@ -58,7 +56,6 @@ export default function AdminReportsPage() {
               <tr key={d.id}>
                 <td>{d.name}</td>
                 <td>{complaints.filter((c) => c.departmentId === d.id).length}</td>
-                <td>{serviceRequests.filter((r) => r.departmentId === d.id).length}</td>
               </tr>
             ))}
           </tbody>

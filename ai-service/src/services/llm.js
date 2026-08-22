@@ -3,8 +3,6 @@ import {
   CATEGORY_TO_DEPARTMENT,
   COMPLAINT_CATEGORIES,
   DEPARTMENTS,
-  SERVICE_TO_DEPARTMENT,
-  SERVICE_TYPES,
 } from '../constants.js';
 import { config, resolveEffectiveProvider } from '../config.js';
 import {
@@ -77,30 +75,12 @@ async function llmJson(prompt) {
   return null;
 }
 
-function normalizeCategorizeResult(raw, type, provider) {
-  if (type === 'service') {
-    const serviceType = SERVICE_TYPES.includes(raw.serviceType) ? raw.serviceType : 'Other';
-    return {
-      type: 'service',
-      category: null,
-      categoryLabel: null,
-      serviceType,
-      department: DEPARTMENTS.includes(raw.department)
-        ? raw.department
-        : SERVICE_TO_DEPARTMENT[serviceType],
-      priority: ['high', 'medium', 'low'].includes(raw.priority) ? raw.priority : 'medium',
-      confidence: clampConfidence(raw.confidence),
-      rationale: String(raw.rationale || 'AI classification'),
-      provider,
-    };
-  }
-
+function normalizeCategorizeResult(raw, provider) {
   const category = COMPLAINT_CATEGORIES.includes(raw.category) ? raw.category : 'other';
   return {
     type: 'complaint',
     category,
     categoryLabel: CATEGORY_LABELS[category],
-    serviceType: null,
     department: DEPARTMENTS.includes(raw.department)
       ? raw.department
       : CATEGORY_TO_DEPARTMENT[category],
@@ -118,23 +98,11 @@ function clampConfidence(value) {
 }
 
 export async function categorizeSubmission(input) {
-  const type = input.type === 'service' ? 'service' : 'complaint';
-  const fallback = heuristicCategorize({ ...input, type });
+  const fallback = heuristicCategorize(input);
 
-  const prompt =
-    type === 'complaint'
-      ? `Classify this Adama City citizen complaint.
+  const prompt = `Classify this Adama City citizen complaint.
 Return JSON with keys: category, department, priority, confidence (0-1), rationale.
 category must be one of: ${COMPLAINT_CATEGORIES.join(', ')}
-department must be one of: ${DEPARTMENTS.join(', ')}
-priority must be one of: high, medium, low
-
-Title: ${input.title || ''}
-Description: ${input.description || ''}
-Location: ${input.location || ''}`
-      : `Classify this Adama City service request.
-Return JSON with keys: serviceType, department, priority, confidence (0-1), rationale.
-serviceType must be one of: ${SERVICE_TYPES.map((s) => `"${s}"`).join(', ')}
 department must be one of: ${DEPARTMENTS.join(', ')}
 priority must be one of: high, medium, low
 
@@ -145,7 +113,7 @@ Location: ${input.location || ''}`;
   try {
     const llm = await llmJson(prompt);
     if (!llm) return fallback;
-    return normalizeCategorizeResult(llm.data, type, llm.provider);
+    return normalizeCategorizeResult(llm.data, llm.provider);
   } catch (err) {
     console.warn('[ai] categorize LLM failed, using heuristic:', err.message);
     return { ...fallback, rationale: `${fallback.rationale} (LLM unavailable: ${err.message})` };
@@ -153,10 +121,9 @@ Location: ${input.location || ''}`;
 }
 
 export async function improveSubmission(input) {
-  const type = input.type === 'service' ? 'service' : 'complaint';
-  const fallback = heuristicImprove({ ...input, type });
+  const fallback = heuristicImprove(input);
 
-  const prompt = `Improve this Adama City ${type} submission for clarity.
+  const prompt = `Improve this Adama City complaint submission for clarity.
 Keep the original meaning. Do not invent facts. Prefer simple English.
 Fix capitalization carefully:
 - Title: use Title Case (e.g. "Broken Streetlight Near Adama Stadium")
@@ -223,7 +190,7 @@ export async function chatAssistant(message, history = []) {
 
   const prompt = `You are a helpful AI assistant for the Adama City Citizen Portal.
 You can answer general questions on everyday topics (explanations, how-tos, ideas, etc.).
-When the user asks about this municipal system, prefer the FAQ facts below (submit/track complaints & service requests, roles, departments, statuses).
+When the user asks about this municipal system, prefer the FAQ facts below (submit/track complaints, roles, departments, statuses).
 Be concise, clear, and polite. Do not claim to submit, assign, or close cases in the portal.
 Return JSON with keys: reply (string), matchedFaqId (string|null). Use matchedFaqId only when a FAQ fact clearly matches; otherwise null.
 

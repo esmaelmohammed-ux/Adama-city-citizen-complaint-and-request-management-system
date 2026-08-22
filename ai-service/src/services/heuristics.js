@@ -2,8 +2,6 @@ import {
   CATEGORY_LABELS,
   CATEGORY_TO_DEPARTMENT,
   COMPLAINT_CATEGORIES,
-  SERVICE_TO_DEPARTMENT,
-  SERVICE_TYPES,
 } from '../constants.js';
 
 const CATEGORY_KEYWORDS = {
@@ -15,15 +13,6 @@ const CATEGORY_KEYWORDS = {
   publicSafety: ['accident', 'danger', 'hazard', 'unsafe', 'crime', 'fire', 'collapse'],
   noisePollution: ['noise', 'loud', 'music', 'disturbance', 'horn'],
   other: [],
-};
-
-const SERVICE_KEYWORDS = {
-  'Waste Collection Request': ['waste bin', 'collection', 'pickup', 'garbage truck'],
-  'Street Cleaning': ['street cleaning', 'sweep', 'clean street'],
-  'Water Connection Inquiry': ['water connection', 'new connection', 'meter'],
-  'Public Facility Access': ['facility', 'park', 'hall', 'public toilet'],
-  'General Information': ['information', 'inquiry', 'how to', 'question'],
-  Other: [],
 };
 
 function scoreText(text, keywords) {
@@ -39,27 +28,8 @@ function pickBest(entries) {
   return { value: best.value, confidence: best.score === 0 ? 0.4 : Number(confidence.toFixed(2)) };
 }
 
-export function heuristicCategorize({ title = '', description = '', location = '', type = 'complaint' }) {
+export function heuristicCategorize({ title = '', description = '', location = '' }) {
   const blob = `${title} ${description} ${location}`;
-
-  if (type === 'service') {
-    const scored = SERVICE_TYPES.map((st) => ({
-      value: st,
-      score: scoreText(blob, SERVICE_KEYWORDS[st] || []),
-    }));
-    const { value, confidence } = pickBest(scored);
-    return {
-      type: 'service',
-      category: null,
-      categoryLabel: null,
-      serviceType: value,
-      department: SERVICE_TO_DEPARTMENT[value] || 'Public Utilities',
-      priority: inferPriority(blob),
-      confidence,
-      rationale: 'Matched keywords in title/description (offline heuristic).',
-      provider: 'heuristic',
-    };
-  }
 
   const scored = COMPLAINT_CATEGORIES.map((cat) => ({
     value: cat,
@@ -70,7 +40,6 @@ export function heuristicCategorize({ title = '', description = '', location = '
     type: 'complaint',
     category: value,
     categoryLabel: CATEGORY_LABELS[value],
-    serviceType: null,
     department: CATEGORY_TO_DEPARTMENT[value],
     priority: inferPriority(blob),
     confidence,
@@ -147,7 +116,7 @@ function toTitleCase(text) {
     .join(' ');
 }
 
-export function heuristicImprove({ title = '', description = '', type = 'complaint' }) {
+export function heuristicImprove({ title = '', description = '' }) {
   const cleanTitle = normalizeSpaces(title);
   let cleanDesc = normalizeSpaces(description);
   if (cleanDesc && !/[.!?]$/.test(cleanDesc)) cleanDesc += '.';
@@ -155,9 +124,7 @@ export function heuristicImprove({ title = '', description = '', type = 'complai
   const improvedTitle =
     cleanTitle.length > 0
       ? toTitleCase(cleanTitle)
-      : type === 'complaint'
-        ? 'Municipal Issue Report'
-        : 'Service Request';
+      : 'Municipal Issue Report';
 
   const improvedDescription =
     cleanDesc.length > 0

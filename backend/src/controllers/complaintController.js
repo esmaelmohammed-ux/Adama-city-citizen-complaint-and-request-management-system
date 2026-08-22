@@ -1,7 +1,7 @@
 import Complaint from '../models/Complaint.js';
 import Department from '../models/Department.js';
 import User from '../models/User.js';
-import { ROLES, STATUSES } from '../constants/index.js';
+import { ADAMA_LOCATIONS, ROLES, STATUSES } from '../constants/index.js';
 import { generateReferenceId } from '../utils/referenceId.js';
 import { buildOfficerEntityFilter, officerCanAccessEntity } from '../utils/officerScope.js';
 import { toClient, toClientList } from '../utils/toClient.js';
@@ -33,9 +33,59 @@ export async function listComplaints(req, res, next) {
   }
 }
 
+export async function updateComplaint(req, res, next) {
+  try {
+    const complaint = await Complaint.findById(req.params.id);
+
+    if (!complaint) {
+      return res.status(404).json({ success: false, message: 'Complaint not found.' });
+    }
+
+    if (complaint.citizenId.toString() !== req.userId.toString()) {
+      return res.status(403).json({ success: false, message: 'Access denied.' });
+    }
+
+    if (complaint.status !== STATUSES.PENDING) {
+      return res.status(400).json({
+        success: false,
+        message: 'Only pending complaints can be edited.',
+      });
+    }
+
+    const { title, description, category, location, landmark, photoUrl } = req.body;
+    if (!ADAMA_LOCATIONS.includes(location) && location !== complaint.location) {
+      return res.status(400).json({
+        success: false,
+        message: 'Select a valid Adama location.',
+      });
+    }
+    complaint.title = title;
+    complaint.description = description;
+    complaint.category = category;
+    complaint.location = location;
+    complaint.landmark = (landmark || '').trim();
+    if (photoUrl !== undefined) {
+      complaint.photoUrl = photoUrl || '';
+    }
+    await complaint.save();
+
+    await recordActivity({
+      userId: req.userId,
+      action: 'update',
+      entityType: 'complaint',
+      entityId: complaint._id,
+      details: `Updated complaint ${complaint.referenceId}`,
+    });
+
+    res.json({ success: true, complaint: toClient(complaint) });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function createComplaint(req, res, next) {
   try {
-    const { title, description, category, location, photoUrl } = req.body;
+    const { title, description, category, location, landmark, photoUrl } = req.body;
     const referenceId = await generateReferenceId(Complaint, 'CMP');
 
     const complaint = await Complaint.create({
@@ -44,6 +94,7 @@ export async function createComplaint(req, res, next) {
       description,
       category,
       location,
+      landmark: (landmark || '').trim(),
       photoUrl: photoUrl || '',
       attachmentUrl: req.file ? `/uploads/${req.file.filename}` : '',
       status: STATUSES.PENDING,

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { aiTriage } from '../../services/aiApi';
+import { formatComplaintLocation } from '../../utils/location';
 import './Ai.css';
 
 /**
@@ -8,7 +9,6 @@ import './Ai.css';
  * onApplyDepartment(departmentId)
  */
 export default function AiTriagePanel({
-  type = 'complaint',
   item,
   departments = [],
   onApplyDepartment,
@@ -25,10 +25,10 @@ export default function AiTriagePanel({
     setError('');
     try {
       const data = await aiTriage({
-        type: type === 'serviceRequest' ? 'service' : 'complaint',
-        title: item.title || item.serviceType || '',
+        type: 'complaint',
+        title: item.title || '',
         description: item.description || '',
-        location: item.location || '',
+        location: formatComplaintLocation(item, t),
       });
       setPack(data);
     } catch (err) {

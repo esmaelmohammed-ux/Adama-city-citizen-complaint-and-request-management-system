@@ -79,7 +79,6 @@ export async function notifyOfficersOnAssign({
   entityType,
   entityId,
 }) {
-  const label = entityType === 'complaint' ? 'complaint' : 'service request';
   const title = 'New assignment';
   const message = `${referenceId} has been assigned to you.`;
 
@@ -107,7 +106,7 @@ export async function notifyOfficersOnAssign({
       createNotification({
         userId: officer._id,
         title,
-        message: `${referenceId} has been assigned to your department (${label}).`,
+        message: `${referenceId} has been assigned to your department (complaint).`,
         relatedEntityType: entityType,
         relatedEntityId: entityId,
       })

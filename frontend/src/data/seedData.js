@@ -50,7 +50,8 @@ export const seedComplaints = [
     title: 'Broken streetlight on Main Road',
     description: 'The streetlight near Adama Stadium has been out for two weeks.',
     category: 'Street Lighting',
-    location: 'Main Road, near Adama Stadium',
+    location: 'adamaStadium',
+    landmark: 'Main Road',
     status: STATUSES.IN_PROGRESS,
     citizenId: 'user-citizen-1',
     departmentId: 'dept-4',
@@ -66,7 +67,8 @@ export const seedComplaints = [
     title: 'Water leak on Bole Road',
     description: 'Continuous water leak causing road damage.',
     category: 'Water Supply',
-    location: 'Bole Road, Kebele 05',
+    location: 'kebele05',
+    landmark: 'Bole Road',
     status: STATUSES.PENDING,
     citizenId: 'user-citizen-1',
     departmentId: null,
@@ -75,24 +77,6 @@ export const seedComplaints = [
     createdAt: now,
     updatedAt: now,
     resolvedAt: null,
-  },
-];
-
-export const seedServiceRequests = [
-  {
-    id: 'srv-1',
-    referenceId: 'SRV-2025-0001',
-    serviceType: 'Waste Collection Request',
-    description: 'Need additional waste bin for residential block.',
-    location: 'Kebele 03, Adama',
-    status: STATUSES.RESOLVED,
-    citizenId: 'user-citizen-1',
-    departmentId: 'dept-3',
-    assignedOfficerId: null,
-    resolutionNote: 'Waste bin delivered and installed.',
-    createdAt: yesterday,
-    updatedAt: now,
-    resolvedAt: now,
   },
 ];
 
@@ -139,7 +123,6 @@ export function getInitialState() {
     users: seedUsers,
     departments: seedDepartments,
     complaints: seedComplaints,
-    serviceRequests: seedServiceRequests,
     notifications: seedNotifications,
     statusHistories: seedStatusHistories,
     activityLogs: seedActivityLogs,

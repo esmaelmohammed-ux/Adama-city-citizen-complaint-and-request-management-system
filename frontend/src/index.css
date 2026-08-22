@@ -288,10 +288,6 @@ input:disabled {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
 }
 
 .notification-item.unread {

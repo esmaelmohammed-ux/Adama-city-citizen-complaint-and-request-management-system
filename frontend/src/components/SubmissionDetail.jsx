@@ -1,13 +1,12 @@
 import StatusBadge from './UI';
-import { SERVICE_TYPE_I18N_KEYS } from '../constants';
 import { useLanguage } from '../context/LanguageContext';
 import { formatDate } from '../utils/storage';
+import { formatComplaintLocation } from '../utils/location';
 import './SubmissionTable.css';
 import './ImageUpload.css';
 //  comment added by 
 export default function SubmissionDetail({
   item,
-  type,
   history = [],
   departmentName,
   officerName,
@@ -17,13 +16,6 @@ export default function SubmissionDetail({
   const { t } = useLanguage();
   if (!item) return null;
 
-  const title =
-    type === 'complaint'
-      ? item.title
-      : (SERVICE_TYPE_I18N_KEYS[item.serviceType]
-        ? t(`serviceTypes.${SERVICE_TYPE_I18N_KEYS[item.serviceType]}`)
-        : item.serviceType);
-
   const statusLabel = (status) => (status ? t(`status.${status}`) : status);
 
   return (
@@ -32,7 +24,7 @@ export default function SubmissionDetail({
         <div className="modal-header">
           <div>
             <code>{item.referenceId}</code>
-            <h2>{title}</h2>
+            <h2>{item.title}</h2>
           </div>
           <StatusBadge status={item.status} />
         </div>
@@ -45,10 +37,10 @@ export default function SubmissionDetail({
           {item.location && (
             <div>
               <span className="detail-label">{t('detail.location')}</span>
-              <p>{item.location}</p>
+              <p>{formatComplaintLocation(item, t)}</p>
             </div>
           )}
-          {type === 'complaint' && (
+          {item.category && (
             <div>
               <span className="detail-label">{t('detail.category')}</span>
               <p>{t(`categories.${item.category}`) || item.category}</p>

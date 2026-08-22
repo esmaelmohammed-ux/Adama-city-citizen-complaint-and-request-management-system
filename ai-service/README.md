@@ -1,17 +1,21 @@
-# Adama Citizen — AI Hub (sidecar)
+# Adama Citizen — AI service
 
-Standalone AI layer for the Adama City Citizen Complaint & Service Request system.
+Optional sidecar for the Adama City Citizen **Complaint** system. The main React app calls this service for writing help, admin triage, officer resolution drafts, and a FAQ chatbot.
 
-**Does not modify** `backend/` or `frontend/`. Open the helper UI, get suggestions, paste into the main app.
+If this process is not running, the main app still works; AI panels show a connection error until you start it.
 
-## Modes (A + B + D)
+AI **suggests only**. Assign, reject, resolve, and close stay in the main Citizen app with a human confirmation.
 
-| Mode | What it does |
-|------|----------------|
-| **Citizen** | Writing assist, category/service type, department, priority, similar cases, **voice input** |
-| **Admin triage** | Routing advice, priority, duplicate risk, action checklist |
-| **Officer** | Resolution note + citizen update draft from action taken |
-| **Chatbot** | FAQ for tracking, roles, categories, departments, login |
+## Used from the main app
+
+| Place | What it does |
+|-------|----------------|
+| **Citizen — New complaint** | Improve title/description, suggest category, similar cases, browser **voice input** |
+| **Admin — complaint detail** | Department / priority advice and duplicate risk |
+| **Officer — task detail** | Draft a resolution note from the case |
+| **Chat widget** | FAQ (tracking, roles, categories, login) on any signed-in or public page |
+
+A standalone helper UI is also available at **http://localhost:5100**.
 
 ## Quick start
 
@@ -22,7 +26,11 @@ cp .env.example .env
 npm run dev
 ```
 
-Open **http://localhost:5100**
+Frontend `.env` should include:
+
+```
+VITE_AI_URL=http://localhost:5100
+```
 
 ### Providers
 
@@ -30,11 +38,11 @@ Open **http://localhost:5100**
 |---------------|--------|
 | `gemini` (default, free tier) | `GEMINI_API_KEY` from [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
 | `openai` (paid) | `OPENAI_API_KEY` |
-| `heuristic` (offline free) | none |
+| `heuristic` (offline) | none |
 
 Missing cloud keys → automatic **heuristic** fallback.
 
-### Optional MongoDB (duplicates)
+### Optional MongoDB (similar cases)
 
 Use the same Atlas credentials as the main backend (`MONGODB_URI` or `MONGODB_USER` / `PASSWORD` / `CLUSTER` / `DB`).
 
@@ -53,8 +61,4 @@ Use the same Atlas credentials as the main backend (`MONGODB_URI` or `MONGODB_US
 
 ## Voice
 
-🎤 buttons use the **browser Web Speech API** (Chrome/Edge). Audio is not uploaded to the server.
-
-## Safety
-
-AI **suggests only**. Assignment, reject, resolve, and close stay in the main Citizen app with human confirmation.
+Microphone buttons in the main app use the **browser Web Speech API** (Chrome / Edge). Audio is not uploaded to this server.

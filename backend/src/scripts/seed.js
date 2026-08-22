@@ -6,7 +6,6 @@ import { ROLES, STATUSES } from '../constants/index.js';
 import User from '../models/User.js';
 import Department from '../models/Department.js';
 import Complaint from '../models/Complaint.js';
-import ServiceRequest from '../models/ServiceRequest.js';
 import Notification from '../models/Notification.js';
 import StatusHistory from '../models/StatusHistory.js';
 import ActivityLog from '../models/ActivityLog.js';
@@ -18,7 +17,6 @@ async function seed() {
     User.deleteMany({}),
     Department.deleteMany({}),
     Complaint.deleteMany({}),
-    ServiceRequest.deleteMany({}),
     Notification.deleteMany({}),
     StatusHistory.deleteMany({}),
     ActivityLog.deleteMany({}),
@@ -33,7 +31,7 @@ async function seed() {
     { name: 'Public Utilities', description: 'Street lighting and utilities', isActive: true },
   ]);
 
-  const [, water, sanitation, utilities] = departments;
+  const [, water, , utilities] = departments;
 
   const citizen = await User.create({
     fullName: 'Abebe Kebede',
@@ -72,7 +70,8 @@ async function seed() {
     title: 'Broken streetlight on Main Road',
     description: 'The streetlight near Adama Stadium has been out for two weeks.',
     category: 'streetLighting',
-    location: 'Main Road, near Adama Stadium',
+    location: 'adamaStadium',
+    landmark: 'Main Road',
     status: STATUSES.PENDING,
     citizenId: citizen._id,
     departmentId: utilities._id,
@@ -87,7 +86,8 @@ async function seed() {
     title: 'Water leak on Bole Road',
     description: 'Continuous water leak causing road damage.',
     category: 'waterSupply',
-    location: 'Bole Road, Kebele 05',
+    location: 'kebele05',
+    landmark: 'Bole Road',
     status: STATUSES.IN_PROGRESS,
     citizenId: citizen._id,
     departmentId: water._id,
@@ -102,7 +102,8 @@ async function seed() {
     title: 'Low water pressure in Kebele 08',
     description: 'Residents report low pressure since Monday morning.',
     category: 'waterSupply',
-    location: 'Kebele 08, Adama',
+    location: 'kebele08',
+    landmark: '',
     status: STATUSES.PENDING,
     citizenId: citizen._id,
     departmentId: water._id,
@@ -117,38 +118,11 @@ async function seed() {
     title: 'Pothole near bus station',
     description: 'Large pothole causing traffic hazard.',
     category: 'roadMaintenance',
-    location: 'Central Bus Station',
+    location: 'centralBusStation',
+    landmark: '',
     status: STATUSES.PENDING,
     citizenId: citizen._id,
     createdAt: now,
-    updatedAt: now,
-  });
-
-  await ServiceRequest.create({
-    referenceId: 'SRV-2026-0001',
-    serviceType: 'Waste Collection Request',
-    description: 'Need additional waste bin for residential block.',
-    location: 'Kebele 03, Adama',
-    status: STATUSES.RESOLVED,
-    citizenId: citizen._id,
-    departmentId: sanitation._id,
-    resolutionNote: 'Waste bin delivered and installed.',
-    createdAt: yesterday,
-    updatedAt: now,
-    resolvedAt: now,
-  });
-
-  // Water Supply — service request in progress for Dawit
-  const waterRequest = await ServiceRequest.create({
-    referenceId: 'SRV-2026-0002',
-    serviceType: 'Water Connection Inquiry',
-    description: 'Request for new household water connection assessment.',
-    location: 'Kebele 12, Adama',
-    status: STATUSES.IN_PROGRESS,
-    citizenId: citizen._id,
-    departmentId: water._id,
-    assignedOfficerId: officer._id,
-    createdAt: yesterday,
     updatedAt: now,
   });
 
@@ -177,15 +151,6 @@ async function seed() {
       message: 'CMP-2026-0003 has been assigned to your department (complaint).',
       relatedEntityType: 'complaint',
       relatedEntityId: complaintWaterQueue._id,
-      isRead: false,
-      createdAt: now,
-    },
-    {
-      userId: officer._id,
-      title: 'New assignment',
-      message: 'SRV-2026-0002 has been assigned to you.',
-      relatedEntityType: 'serviceRequest',
-      relatedEntityId: waterRequest._id,
       isRead: false,
       createdAt: now,
     },

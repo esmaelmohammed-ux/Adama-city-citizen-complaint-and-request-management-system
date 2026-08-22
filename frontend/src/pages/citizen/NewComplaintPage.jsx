@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { COMPLAINT_CATEGORIES } from '../../constants';
 import ImageUpload from '../../components/ImageUpload';
+import LocationSelect from '../../components/LocationSelect';
 import SuccessPopup from '../../components/SuccessPopup';
 import AiCitizenAssist from '../../components/ai/AiCitizenAssist';
 import VoiceButton from '../../components/ai/VoiceButton';
@@ -9,6 +10,7 @@ import { PageHeader } from '../../components/UI';
 import { useApp } from '../../context/AppContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../context/ToastContext';
+import { formatComplaintLocation } from '../../utils/location';
 import '../../components/ImageUpload.css';
 
 export default function NewComplaintPage() {
@@ -21,6 +23,7 @@ export default function NewComplaintPage() {
     description: '',
     category: COMPLAINT_CATEGORIES[0],
     location: '',
+    landmark: '',
     photoUrl: null,
   });
   const [referenceId, setReferenceId] = useState('');
@@ -94,18 +97,11 @@ export default function NewComplaintPage() {
             <VoiceButton onTranscript={appendVoice('title')} />
           </div>
         </label>
-        <label className={highlight.location ? 'ai-field-flash' : undefined}>
-          {t('form.location')}
-          <div className="ai-field-row">
-            <input
-              value={form.location}
-              onChange={(e) => setForm({ ...form, location: e.target.value })}
-              required
-              placeholder={t('form.locationPlaceholder')}
-            />
-            <VoiceButton onTranscript={appendVoice('location')} />
-          </div>
-        </label>
+        <LocationSelect
+          location={form.location}
+          landmark={form.landmark}
+          onChange={(partial) => setForm({ ...form, ...partial })}
+        />
         <label className={highlight.description ? 'ai-field-flash' : undefined}>
           {t('form.description')}
           <div className="ai-field-row">
@@ -124,7 +120,7 @@ export default function NewComplaintPage() {
           type="complaint"
           title={form.title}
           description={form.description}
-          location={form.location}
+          location={formatComplaintLocation(form, t)}
           onApply={applyAi}
         />
 

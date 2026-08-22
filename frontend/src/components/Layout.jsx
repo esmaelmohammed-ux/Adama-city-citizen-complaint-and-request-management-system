@@ -7,12 +7,11 @@ import LanguageSwitcher from './LanguageSwitcher';
 import './BrandLogo.css';
 import './LanguageSwitcher.css';
 import './Layout.css';
-// commen
+// comment
 const navByRole = {
   [ROLES.CITIZEN]: [
     { to: '/citizen', labelKey: 'sidebar.dashboard', end: true },
     { to: '/citizen/complaints/new', labelKey: 'sidebar.newComplaint' },
-    { to: '/citizen/requests/new', labelKey: 'sidebar.newRequest' },
     { to: '/citizen/submissions', labelKey: 'sidebar.mySubmissions' },
     { to: '/citizen/notifications', labelKey: 'sidebar.notifications' },
     { to: '/citizen/profile', labelKey: 'sidebar.profile' },
@@ -20,7 +19,6 @@ const navByRole = {
   [ROLES.ADMIN]: [
     { to: '/admin', labelKey: 'sidebar.dashboard', end: true },
     { to: '/admin/complaints', labelKey: 'sidebar.complaints' },
-    { to: '/admin/requests', labelKey: 'sidebar.serviceRequests' },
     { to: '/admin/users', labelKey: 'sidebar.users' },
     { to: '/admin/departments', labelKey: 'sidebar.departments' },
     { to: '/admin/reports', labelKey: 'sidebar.reports' },

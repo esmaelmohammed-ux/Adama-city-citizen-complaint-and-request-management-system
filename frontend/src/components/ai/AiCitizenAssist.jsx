@@ -46,7 +46,6 @@ export default function AiCitizenAssist({
       title: result.improved?.title ?? title,
       description: result.improved?.description ?? description,
       category: result.classification?.category,
-      serviceType: result.classification?.serviceType,
       department: result.classification?.department,
       priority: result.classification?.priority,
     };
@@ -55,7 +54,6 @@ export default function AiCitizenAssist({
     if (next.title !== title) changed.push('title');
     if (next.description !== description) changed.push('description');
     if (type === 'complaint' && next.category) changed.push('category');
-    if (type === 'service' && next.serviceType) changed.push('service type');
 
     onApply?.(next);
 
@@ -90,7 +88,7 @@ export default function AiCitizenAssist({
         <div className="ai-panel-body">
           <div className="ai-chips">
             <span className="ai-chip">
-              {c?.categoryLabel || c?.serviceType || '—'}
+              {c?.categoryLabel || '—'}
             </span>
             <span className="ai-chip">{c?.department}</span>
             <span className={`ai-chip priority-${c?.priority || 'low'}`}>

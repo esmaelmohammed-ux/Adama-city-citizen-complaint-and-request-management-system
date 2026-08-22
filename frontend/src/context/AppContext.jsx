@@ -7,7 +7,6 @@ const EMPTY_DATA = {
   users: [],
   departments: [],
   complaints: [],
-  serviceRequests: [],
   notifications: [],
   statusHistories: [],
   activityLogs: [],
@@ -23,11 +22,10 @@ export function AppProvider({ children }) {
     try {
       const isAdmin = user.role === 'admin';
 
-      const [departments, complaints, serviceRequests, notifications, statusHistories, users, activityLogs] =
+      const [departments, complaints, notifications, statusHistories, users, activityLogs] =
         await Promise.all([
           api.get('/departments'),
           api.get('/complaints'),
-          api.get('/service-requests'),
           api.get('/notifications'),
           api.get('/status-histories'),
           isAdmin ? api.get('/users') : Promise.resolve(null),
@@ -37,7 +35,6 @@ export function AppProvider({ children }) {
       setData({
         departments: departments.departments,
         complaints: complaints.complaints,
-        serviceRequests: serviceRequests.serviceRequests,
         notifications: notifications.notifications,
         statusHistories: statusHistories.statusHistories,
         users: users?.users || [],
@@ -113,16 +110,19 @@ export function AppProvider({ children }) {
     return res.referenceId;
   };
 
-  const submitServiceRequest = async (formData) => {
-    const res = await api.post('/service-requests', formData);
-    await refreshData(currentUser);
-    return res.referenceId;
+  const updateComplaint = async (id, formData) => {
+    try {
+      await api.patch(`/complaints/${id}`, formData);
+      await refreshData(currentUser);
+      return { success: true };
+    } catch (err) {
+      return { success: false, message: err.message || 'Failed to update complaint.' };
+    }
   };
 
-  const assignSubmission = async (type, id, departmentId, officerId = null) => {
-    const base = type === 'complaint' ? '/complaints' : '/service-requests';
+  const assignSubmission = async (id, departmentId, officerId = null) => {
     try {
-      await api.patch(`${base}/${id}/assign`, { departmentId, officerId });
+      await api.patch(`/complaints/${id}/assign`, { departmentId, officerId });
       await refreshData(currentUser);
       return { success: true };
     } catch (err) {
@@ -131,10 +131,9 @@ export function AppProvider({ children }) {
     }
   };
 
-  const updateSubmissionStatus = async (type, id, status, note = '') => {
-    const base = type === 'complaint' ? '/complaints' : '/service-requests';
+  const updateSubmissionStatus = async (id, status, note = '') => {
     try {
-      await api.patch(`${base}/${id}/status`, { status, note });
+      await api.patch(`/complaints/${id}/status`, { status, note });
       await refreshData(currentUser);
       return { success: true };
     } catch (err) {
@@ -144,30 +143,30 @@ export function AppProvider({ children }) {
   };
 
   const markNotificationRead = async (id) => {
+    setData((prev) => ({
+      ...prev,
+      notifications: prev.notifications.map((n) =>
+        n.id === id ? { ...n, isRead: true } : n
+      ),
+    }));
     try {
       await api.patch(`/notifications/${id}/read`);
-      setData((prev) => ({
-        ...prev,
-        notifications: prev.notifications.map((n) =>
-          n.id === id ? { ...n, isRead: true } : n
-        ),
-      }));
     } catch (err) {
       console.error('Mark read failed:', err);
     }
   };
 
-  const markAllNotificationsRead = async () => {
+  const markAllNotificationsRead = useCallback(async () => {
+    setData((prev) => ({
+      ...prev,
+      notifications: prev.notifications.map((n) => ({ ...n, isRead: true })),
+    }));
     try {
       await api.patch('/notifications/read-all');
-      setData((prev) => ({
-        ...prev,
-        notifications: prev.notifications.map((n) => ({ ...n, isRead: true })),
-      }));
     } catch (err) {
       console.error('Mark all read failed:', err);
     }
-  };
+  }, []);
 
   const addDepartment = async (formData) => {
     try {
@@ -203,7 +202,7 @@ export function AppProvider({ children }) {
     logout,
     updateProfile,
     submitComplaint,
-    submitServiceRequest,
+    updateComplaint,
     assignSubmission,
     updateSubmissionStatus,
     markNotificationRead,
