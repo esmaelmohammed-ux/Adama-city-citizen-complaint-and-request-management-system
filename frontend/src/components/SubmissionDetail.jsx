@@ -4,7 +4,7 @@ import { formatDate } from '../utils/storage';
 import { formatComplaintLocation } from '../utils/location';
 import './SubmissionTable.css';
 import './ImageUpload.css';
-
+// comment added by me
 export default function SubmissionDetail({
   item,
   history = [],
