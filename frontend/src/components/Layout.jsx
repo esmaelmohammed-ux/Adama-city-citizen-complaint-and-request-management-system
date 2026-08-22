@@ -7,7 +7,7 @@ import LanguageSwitcher from './LanguageSwitcher';
 import './BrandLogo.css';
 import './LanguageSwitcher.css';
 import './Layout.css';
-// comment
+// comment added by me
 const navByRole = {
   [ROLES.CITIZEN]: [
     { to: '/citizen', labelKey: 'sidebar.dashboard', end: true },
