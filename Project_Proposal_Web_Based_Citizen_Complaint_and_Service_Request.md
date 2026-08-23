@@ -22,9 +22,9 @@
 
 {center}**Prepared by**
 
-{center}Name: ____________________
+{center}Name: Esmael Mohammed Kedir
 
-{center}ID number: ____________________
+{center}ID number: 1160/16
 
 {center}**Summer 2026**
 
@@ -60,7 +60,7 @@ This page follows **Appendix B** of the Haramaya University Practical Attachment
 | Field | Detail |
 |-------|--------|
 | **Project Title** | Web-Based Citizen Complaint Management System |
-| **Document Version** | 2.20 |
+| **Document Version** | 2.21 |
 | **Date** | 23 August 2026 |
 | **Institution** | Haramaya University — College of Computing and Informatics, Department of Information Science |
 | **University advisor** | ____________________ |
@@ -122,8 +122,8 @@ I further declare that:
 
 | | |
 |--|--|
-| **Name** | ____________________ |
-| **ID** | __________ |
+| **Name** | Esmael Mohammed Kedir |
+| **ID** | 1160/16 |
 | **Signature** | ______________________________ |
 | **Date** | ____________________ |
 
@@ -1281,6 +1281,7 @@ The attachment met its learning purpose: applying Information Science skills in 
 | 2.18 | August 22, 2026 | Merged the practical attachment report into this documentation: Appendix A/B covers, organization profile, tasks done/undone, challenges, career opportunities, learning, and recommendations (Chapters Five–Eight) |
 | 2.19 | August 23, 2026 | Distinct Adama identity: portal motto in three languages on the cover, navy-and-gold Word layout matching the Citizen Portal, running header, and a place-bound “signature of this report” |
 | 2.20 | August 23, 2026 | Project timeline set to the actual attachment period: started 7 June 2026, finished 16 August 2026 (10 weeks); Gantt chart and Chapter 3.2 table updated |
+| 2.21 | August 23, 2026 | Filled student name (Esmael Mohammed Kedir) and ID (1160/16) on the cover and declaration |
 
 ---
 
