@@ -15,7 +15,7 @@ The delivered product is **complaints only** (no separate service-request module
 
 ## Documentation
 
-- [Project proposal](./Project_Proposal_Web_Based_Citizen_Complaint_and_Service_Request.md) — academic specification (updated to match the implemented complaint system)
+- [Project documentation / practical attachment report](./Project_Proposal_Web_Based_Citizen_Complaint_and_Service_Request.md) — one document (v2.18): system specification plus Haramaya CCI attachment chapters
 - [Frontend README](./frontend/README.md) — SPA structure and scripts
 - [AI service README](./ai-service/README.md) — writing assist, triage, resolution drafts, chatbot
 

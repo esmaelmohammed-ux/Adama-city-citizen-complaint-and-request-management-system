@@ -13,9 +13,13 @@ FILL = (247, 250, 252)
 OVAL = (255, 255, 255)
 LINE = (34, 34, 34)
 GOLD = (184, 134, 11)
+CTA = (229, 160, 16)
 WHITE = (255, 255, 255)
 HEADER = (0, 51, 102)
 SOFT = (232, 238, 247)
+ETH_GREEN = (7, 137, 48)
+ETH_YELLOW = (252, 209, 22)
+ETH_RED = (218, 18, 26)
 
 
 def fonts():
@@ -346,35 +350,115 @@ def draw_workflow():
 
 def draw_gantt():
     regular, small, tiny, bold, title, h = fonts()
-    img, draw = canvas(1600, 720, "Figure 3.1  Project Timeline (12 weeks)")
+    img, draw = canvas(1600, 740, "Figure 3.1  Project Timeline  (7 Jun – 16 Aug 2026)")
+    week_labels = [
+        "7–13 Jun",
+        "14–20 Jun",
+        "21–27 Jun",
+        "28 Jun–4 Jul",
+        "5–11 Jul",
+        "12–18 Jul",
+        "19–25 Jul",
+        "26 Jul–1 Aug",
+        "2–8 Aug",
+        "9–16 Aug",
+    ]
     rows = [
-        ("Requirements & proposal", 0, 1),
-        ("UI & API design", 1, 2),
-        ("Project setup", 2, 3),
-        ("Auth & users", 3, 4),
-        ("Complaint APIs", 4, 5),
-        ("Workflow & notifications", 5, 6),
+        ("Requirements & proposal", 0, 0),
+        ("UI & API design", 0, 1),
+        ("Project setup", 2, 2),
+        ("Auth & users", 3, 3),
+        ("Complaint APIs", 4, 4),
+        ("Workflow & notifications", 5, 5),
         ("Citizen interface", 4, 6),
-        ("Admin interface", 6, 7),
+        ("Admin interface", 7, 7),
         ("Officer interface", 7, 8),
         ("Testing", 8, 9),
-        ("Deployment & docs", 9, 10),
+        ("Deployment & docs", 9, 9),
     ]
-    left = 320
-    top = 90
-    week_w = 110
-    for w in range(12):
+    left = 300
+    top = 110
+    week_w = 126
+    date_font = _try_font(r"C:\Windows\Fonts\arial.ttf", 10)
+    for w, label in enumerate(week_labels):
         x = left + w * week_w
-        draw.text((x + 8, 64), f"W{w+1}", fill=NAVY, font=tiny)
-        draw.line((x, 86, x, 680), fill=SOFT, width=1)
+        draw.text((x + 6, 58), f"W{w + 1}", fill=NAVY, font=tiny)
+        draw.text((x + 6, 76), label, fill=NAVY, font=date_font)
+        draw.line((x, 98, x, 700), fill=SOFT, width=1)
+    end_x = left + len(week_labels) * week_w
+    draw.line((end_x, 98, end_x, 700), fill=SOFT, width=1)
     for i, (name, start, end) in enumerate(rows):
-        y = top + i * 50
-        draw.text((24, y + 8), name, fill=LINE, font=small)
-        x1 = left + start * week_w
+        y = top + i * 52
+        draw.text((18, y + 8), name, fill=LINE, font=small)
+        x1 = left + start * week_w + 4
         x2 = left + (end + 1) * week_w - 8
         rounded(draw, (x1, y, x2, y + 28), NAVY, NAVY, 0, 6)
     img.save(OUT / "fig-3-1-gantt.png", optimize=True)
     return OUT / "fig-3-1-gantt.png"
+
+
+def draw_org_chart():
+    regular, small, tiny, bold, title, h = fonts()
+    img, draw = canvas(1400, 720, "Figure 5.1  Organizational Chart (host office context)")
+    boxes = [
+        (430, 80, 970, 150, "Adama City Administration"),
+        (430, 210, 970, 280, "Science and Technology Administration Office"),
+        (80, 400, 380, 490, "ICT and systems\nsupport"),
+        (510, 400, 890, 490, "Digital / SMART Adama\nservices"),
+        (1020, 400, 1320, 490, "Administration and\ncoordination"),
+        (430, 580, 970, 670, "Practical attachment student\n(complaint portal development)"),
+    ]
+    for b in boxes:
+        rounded(draw, b[:4], SOFT, NAVY, 2, 10)
+        center_text(draw, b[:4], b[4], h, NAVY)
+    arrow(draw, (700, 150), (700, 210), NAVY, 3)
+    arrow(draw, (700, 280), (230, 400), NAVY, 3)
+    arrow(draw, (700, 280), (700, 400), NAVY, 3)
+    arrow(draw, (700, 280), (1170, 400), NAVY, 3)
+    arrow(draw, (700, 490), (700, 580), NAVY, 3)
+    note = "Placement is shown for this attachment. Official titles should be confirmed with the host supervisor."
+    draw.text((80, 688), note, fill=LINE, font=tiny)
+    img.save(OUT / "fig-attachment-org-chart.png", optimize=True)
+    return OUT / "fig-attachment-org-chart.png"
+
+
+def _try_font(path, size):
+    try:
+        return ImageFont.truetype(path, size)
+    except OSError:
+        return ImageFont.truetype(r"C:\Windows\Fonts\arial.ttf", size)
+
+
+def draw_cover_banner():
+    """Navy-and-gold identity band for the Word cover — matches the Citizen Portal."""
+    w, h = 1700, 430
+    img = Image.new("RGB", (w, h), NAVY)
+    draw = ImageDraw.Draw(img)
+    display = _try_font(r"C:\Windows\Fonts\arialbd.ttf", 42)
+    small = _try_font(r"C:\Windows\Fonts\arial.ttf", 18)
+    motto_en = _try_font(r"C:\Windows\Fonts\arialbd.ttf", 28)
+    ethiopic = _try_font(r"C:\Windows\Fonts\ebrima.ttf", 22)
+    oromo = _try_font(r"C:\Windows\Fonts\ariali.ttf", 20)
+
+    stripe_h = 8
+    colors = [ETH_GREEN, ETH_YELLOW, ETH_RED]
+    band = w // 3
+    for i, color in enumerate(colors):
+        draw.rectangle((i * band, 0, w if i == 2 else (i + 1) * band, stripe_h), fill=color)
+    draw.rectangle((0, stripe_h, w, stripe_h + 4), fill=CTA)
+
+    draw.text((48, 36), "ADAMA CITY ADMINISTRATION", fill=(197, 212, 232), font=small)
+    draw.text((48, 72), "Science and Technology Office", fill=WHITE, font=small)
+    draw.text((48, 130), "Citizen Complaint Portal", fill=WHITE, font=display)
+    draw.rectangle((48, 192, 220, 198), fill=CTA)
+
+    draw.text((48, 220), "Your City.  Your Voice.", fill=CTA, font=motto_en)
+    draw.text((48, 268), "ከተማዎ።  ድምፅዎ።", fill=WHITE, font=ethiopic)
+    draw.text((48, 308), "Magaalaa Keessan.  Sagalee Keessan.", fill=(232, 238, 247), font=oromo)
+
+    draw.text((48, 372), "Haramaya University  ·  College of Computing and Informatics  ·  Summer 2026", fill=(197, 212, 232), font=small)
+    img.save(OUT / "cover-banner.png", optimize=True)
+    return OUT / "cover-banner.png"
 
 
 def draw_deployment():
@@ -403,6 +487,7 @@ def draw_deployment():
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     files = [
+        draw_cover_banner(),
         draw_architecture(),
         draw_use_case(),
         draw_er(),
@@ -410,6 +495,7 @@ def main():
         draw_workflow(),
         draw_gantt(),
         draw_deployment(),
+        draw_org_chart(),
     ]
     for f in files:
         print(f.name, f.stat().st_size)

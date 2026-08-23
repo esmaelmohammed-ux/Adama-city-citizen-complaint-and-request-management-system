@@ -19,10 +19,17 @@ ROOT = Path(__file__).resolve().parents[1]
 MD_PATH = ROOT / "Project_Proposal_Web_Based_Citizen_Complaint_and_Service_Request.md"
 DIAGRAM_DIR = ROOT / "scripts" / "assets" / "diagrams"
 NAVY = RGBColor(0x00, 0x33, 0x66)
+GOLD = RGBColor(0xC8, 0x87, 0x0A)
+GOLD_HEX = "C8870A"
+NAVY_HEX = "003366"
+COVER_BANNER = DIAGRAM_DIR / "cover-banner.png"
 WORD_NAMES = [
     "ADAMA CITY CITIZEN COMPLIANT AND SERVICE REQUEST MANAGEMENT SYSTEM DOCUMENTATION.docx",
     "ADAMA CITY CITIZEN COMPLAINT MANAGEMENT SYSTEM DOCUMENTATION.docx",
+    "NARRATIVE REPORT ON PRACTICAL ATTACHMENT - ADAMA STO.docx",
 ]
+DEFAULT_ROMAN_HEADING = "Abstract (Executive Summary)"
+DEFAULT_ARABIC_HEADING = "CHAPTER ONE"
 
 
 def set_run_font(run, name="Times New Roman", size=12, bold=False, italic=False, color=None):
@@ -43,16 +50,33 @@ def set_paragraph_spacing(paragraph, before=0, after=8, line=1.15):
     pf.line_spacing_rule = WD_LINE_SPACING.MULTIPLE
 
 
-def add_bottom_border(paragraph):
+def add_bottom_border(paragraph, color=NAVY_HEX, sz="12"):
     pPr = paragraph._p.get_or_add_pPr()
     pBdr = OxmlElement("w:pBdr")
     bottom = OxmlElement("w:bottom")
     bottom.set(qn("w:val"), "single")
-    bottom.set(qn("w:sz"), "12")
+    bottom.set(qn("w:sz"), sz)
     bottom.set(qn("w:space"), "1")
-    bottom.set(qn("w:color"), "003366")
+    bottom.set(qn("w:color"), color)
     pBdr.append(bottom)
     pPr.append(pBdr)
+
+
+def set_cell_left_accent(cell, color=GOLD_HEX):
+    tc = cell._tc
+    tcPr = tc.get_or_add_tcPr()
+    borders = OxmlElement("w:tcBorders")
+    for edge in ("top", "left", "bottom", "right"):
+        el = OxmlElement(f"w:{edge}")
+        if edge == "left":
+            el.set(qn("w:val"), "single")
+            el.set(qn("w:sz"), "24")
+            el.set(qn("w:space"), "0")
+            el.set(qn("w:color"), color)
+        else:
+            el.set(qn("w:val"), "nil")
+        borders.append(el)
+    tcPr.append(borders)
 
 
 def shade_cell(cell, fill="003366"):
@@ -95,20 +119,46 @@ def add_heading(doc, text, level):
     run = p.add_run(text)
     set_run_font(run, size=sizes.get(level, 12), bold=True, color=NAVY)
     if level == 0:
-        add_bottom_border(p)
+        add_bottom_border(p, GOLD_HEX, "18")
+    elif level == 1 and text.upper().startswith("CHAPTER"):
+        add_bottom_border(p, GOLD_HEX, "12")
     return p
 
 
-def add_body(doc, text, italic=False, center=False, size=12):
+def add_body(doc, text, italic=False, center=False, size=12, color=None):
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER if center else WD_ALIGN_PARAGRAPH.JUSTIFY
     set_paragraph_spacing(p, after=8)
     if italic:
         run = p.add_run(text)
-        set_run_font(run, size=size, italic=True)
+        set_run_font(run, size=size, italic=True, color=color)
     else:
-        add_formatted_runs(p, text, size=size)
+        add_formatted_runs(p, text, size=size, color=color)
     return p
+
+
+def add_epigraph(doc, text):
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    set_paragraph_spacing(p, before=10, after=10)
+    run = p.add_run(text)
+    set_run_font(run, size=11, italic=True, color=GOLD)
+    return p
+
+
+def add_callout(doc, text):
+    table = doc.add_table(rows=1, cols=1)
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    cell = table.cell(0, 0)
+    shade_cell(cell, "F4F7FB")
+    set_cell_left_accent(cell)
+    cell.text = ""
+    p = cell.paragraphs[0]
+    set_paragraph_spacing(p, before=6, after=6, line=1.15)
+    add_formatted_runs(p, text, size=11, color=NAVY)
+    spacer = doc.add_paragraph()
+    set_paragraph_spacing(spacer, after=8)
+    return table
 
 
 def add_list_item(doc, text, ordered=False, number=1):
@@ -155,7 +205,7 @@ def add_table(doc, rows):
     doc.add_paragraph()
 
 
-def add_image(doc, path: Path, caption: str | None = None):
+def add_image(doc, path: Path, caption: str | None = None, width: float | None = None):
     if not path.exists():
         add_body(doc, f"[Missing image: {path.name}]", italic=True)
         return
@@ -163,13 +213,21 @@ def add_image(doc, path: Path, caption: str | None = None):
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     set_paragraph_spacing(p, before=8, after=4)
     run = p.add_run()
-    run.add_picture(str(path), width=Inches(6.2))
+    inches = width if width is not None else (6.5 if path.name == "cover-banner.png" else 6.2)
+    run.add_picture(str(path), width=Inches(inches))
     if caption:
         cap = doc.add_paragraph()
         cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
         set_paragraph_spacing(cap, after=10)
-        run = cap.add_run(caption)
-        set_run_font(run, size=10, italic=True)
+        label, _, rest = caption.partition(":")
+        if rest:
+            run = cap.add_run(label + ":")
+            set_run_font(run, size=10, italic=True, bold=True, color=GOLD)
+            run = cap.add_run(rest)
+            set_run_font(run, size=10, italic=True, color=NAVY)
+        else:
+            run = cap.add_run(caption)
+            set_run_font(run, size=10, italic=True, color=NAVY)
 
 
 def render_mermaid(source: str, index: int) -> Path | None:
@@ -237,14 +295,36 @@ def set_page_numbering(section, fmt="decimal", start=1):
     pgNumType.set(qn("w:start"), str(start))
 
 
+def setup_running_header(section):
+    header = section.header
+    header.is_linked_to_previous = False
+    paragraph = header.paragraphs[0] if header.paragraphs else header.add_paragraph()
+    paragraph.text = ""
+    paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    set_paragraph_spacing(paragraph, before=0, after=2, line=1.0)
+    run = paragraph.add_run("ADAMA CITY CITIZEN PORTAL")
+    set_run_font(run, size=9, bold=True, color=NAVY)
+    run = paragraph.add_run("  ·  Practical Attachment Report  ·  Summer 2026")
+    set_run_font(run, size=9, italic=True, color=GOLD)
+    add_bottom_border(paragraph, GOLD_HEX, "8")
+    section.header_distance = Cm(1.0)
+
+
 def setup_centered_page_footer(section, fmt="decimal", start=1):
     footer = section.footer
     footer.is_linked_to_previous = False
-    paragraph = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
-    paragraph.text = ""
-    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    set_paragraph_spacing(paragraph, before=0, after=0, line=1.0)
-    run = paragraph.add_run()
+    motto = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
+    motto.text = ""
+    motto.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    set_paragraph_spacing(motto, before=0, after=0, line=1.0)
+    run = motto.add_run("Your City. Your Voice.")
+    set_run_font(run, size=8, italic=True, color=GOLD)
+    add_bottom_border(motto, NAVY_HEX, "6")
+
+    page = footer.add_paragraph()
+    page.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    set_paragraph_spacing(page, before=2, after=0, line=1.0)
+    run = page.add_run()
     set_run_font(run, size=11, color=NAVY)
     add_page_field(run)
     set_page_numbering(section, fmt=fmt, start=start)
@@ -261,6 +341,7 @@ def start_new_numbered_section(doc, fmt, start=1):
     section.top_margin = previous.top_margin
     section.bottom_margin = previous.bottom_margin
     section.different_first_page_header_footer = False
+    setup_running_header(section)
     setup_centered_page_footer(section, fmt=fmt, start=start)
     return section
 
@@ -274,8 +355,16 @@ def enable_update_fields_on_open(doc):
         settings.append(update)
 
 
-def convert():
-    text = MD_PATH.read_text(encoding="utf-8")
+def convert(
+    md_path: Path | None = None,
+    word_names: list[str] | None = None,
+    roman_heading: str = DEFAULT_ROMAN_HEADING,
+    arabic_heading: str = DEFAULT_ARABIC_HEADING,
+    extra_fallbacks: list[Path] | None = None,
+):
+    source = Path(md_path) if md_path else MD_PATH
+    output_names = word_names if word_names else WORD_NAMES
+    text = source.read_text(encoding="utf-8")
     lines = text.splitlines()
     doc = Document()
 
@@ -307,6 +396,26 @@ def convert():
         stripped = line.strip()
 
         if not stripped:
+            i += 1
+            continue
+
+        if stripped in ("<!-- pagebreak -->", "<!--pagebreak-->"):
+            doc.add_page_break()
+            i += 1
+            continue
+
+        if stripped.startswith("{epigraph}"):
+            add_epigraph(doc, stripped[len("{epigraph}"):].strip())
+            i += 1
+            continue
+
+        if stripped.startswith("{callout}"):
+            add_callout(doc, stripped[len("{callout}"):].strip())
+            i += 1
+            continue
+
+        if stripped.startswith("{center}"):
+            add_body(doc, stripped[len("{center}"):].strip(), center=True)
             i += 1
             continue
 
@@ -374,10 +483,10 @@ def convert():
         heading = re.match(r"^(#{1,4})\s+(.*)$", stripped)
         if heading:
             title = heading.group(2).strip()
-            if title == "Declaration" and not front_matter_started:
+            if title == roman_heading and not front_matter_started:
                 start_new_numbered_section(doc, fmt="lowerRoman", start=1)
                 front_matter_started = True
-            elif title.startswith("CHAPTER ONE") and not body_started:
+            elif title.startswith(arabic_heading) and not body_started:
                 start_new_numbered_section(doc, fmt="decimal", start=1)
                 body_started = True
             level = len(heading.group(1)) - 1
@@ -407,16 +516,17 @@ def convert():
 
     written = []
     errors = []
-    extra_fallbacks = [
+    fallbacks = extra_fallbacks or [
         ROOT / "ADAMA CITY CITIZEN COMPLAINT MANAGEMENT SYSTEM DOCUMENTATION - WITH PAGE NUMBERS.docx",
         ROOT / "DOCUMENTATION WITH PAGE NUMBERS.docx",
     ]
-    for name in WORD_NAMES:
+    for name in output_names:
         dest = ROOT / name
         candidates = [
             dest,
+            ROOT / name.replace(".docx", " - UPDATED 23 AUG 2026.docx"),
             ROOT / name.replace(".docx", " - UPDATED 22 AUG 2026.docx"),
-            *extra_fallbacks,
+            *fallbacks,
         ]
         saved = False
         last_err = None

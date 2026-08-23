@@ -1,25 +1,118 @@
-# PROJECT PROPOSAL
+# NARRATIVE REPORT ON PRACTICAL ATTACHMENT
 
-## Web-Based Citizen Complaint Management System for Adama City Administration
+![Cover identity band — Adama City Citizen Portal](scripts/assets/diagrams/cover-banner.png)
 
----
+{center}**COLLEGE OF COMPUTING AND INFORMATICS**
+
+{center}**HARAMAYA UNIVERSITY**
+
+{center}**DEPARTMENT OF INFORMATION SCIENCE**
+
+{center}**NARRATIVE REPORT ON PRACTICAL ATTACHMENT**
+
+{center}**and System Documentation**
+
+{center}Web-Based Citizen Complaint Management System
+
+{center}Adama City Administration Science and Technology Office
+
+{center}*(Host organization / industry partner)*
+
+{epigraph}Your City. Your Voice.  ·  ከተማዎ። ድምፅዎ።  ·  Magaalaa Keessan. Sagalee Keessan.
+
+{center}**Prepared by**
+
+{center}Name: ____________________
+
+{center}ID number: ____________________
+
+{center}**Summer 2026**
+
+<!-- pagebreak -->
+
+## Cover Page — Organizational Information
+
+This page follows **Appendix B** of the Haramaya University Practical Attachment Report Guideline. Complete the blank fields with values confirmed at the host office.
+
+### Organization Profile (Appendix B)
+
+| Field | Detail |
+|-------|--------|
+| **Name** | Adama City Administration Science and Technology Office |
+| **Region** | Oromia |
+| **Zone** | East Shewa (East Shoa) |
+| **District / City** | Adama City |
+| **Town** | Adama |
+| **P.O. Box** | ____________________ |
+| **Telephone** | +251-22-110-0000 *(city administration contact published on the citizen portal)* |
+| **Email** | info@adama.gov.et |
+| **Office hours** | Monday–Friday, 8:30 AM – 5:30 PM |
+
+### Supervisor’s Profile (Appendix B)
+
+| Field | Detail |
+|-------|--------|
+| **Name** | ____________________ |
+| **Profession** | ____________________ |
+| **Title** | ____________________ |
+| **Telephone** | ____________________ |
 
 | Field | Detail |
 |-------|--------|
 | **Project Title** | Web-Based Citizen Complaint Management System |
-| **Organization** | Adama City Administration |
-| **Document Version** | 2.17 |
-| **Date** | 22 August 2026 |
-| **Prepared By** | ____________________ (ID: __________) |
+| **Document Version** | 2.20 |
+| **Date** | 23 August 2026 |
 | **Institution** | Haramaya University — College of Computing and Informatics, Department of Information Science |
-| **Supervisor / Advisor** | ____________________ |
+| **University advisor** | ____________________ |
 | **Host Organization** | Adama City Administration Science and Technology Office |
+
+This **single document** is both the practical attachment narrative (guideline sections) and the system documentation (requirements, design, methodology, and Chapter Four results).
+
+---
+
+## Abstract (Executive Summary)
+
+This document reports the **Summer 2026 practical attachment** at **Adama City Administration Science and Technology Office** and documents the **Web-Based Citizen Complaint Management System** (Adama City Citizen Portal) produced during that attachment.
+
+Municipal complaint handling in Adama City Administration has traditionally relied on paper-based processes and office visits. This approach causes delays, weak record keeping, limited status tracking, and reduced transparency between citizens and responsible departments.
+
+The implemented system digitizes submission, assignment, tracking, and reporting of citizen complaints. It supports three roles: **Citizen**, **Administrator**, and **Department Officer**. Citizens can register, submit categorized complaints (Adama area, optional landmark and photo), edit pending complaints, and track progress using unique reference numbers. Administrators manage users and departments, assign work, update status, and generate reports. Officers process assigned tasks within their department scope and add resolution notes.
+
+The solution is built with the **MERN** stack (MongoDB, Express.js, React, Node.js), using JWT authentication and role-based access control. Optional AI assistance (writing help, triage, resolution drafts, chatbot) runs as a sidecar service. Status history, in-app notifications (marked seen when opened), and email alerts (real mailboxes only) improve accountability and communication. Public and authenticated screens support **English, Amharic, and Afaan Oromo**.
+
+Chapters One to Four specify and evidence the system. Chapters Five to Seven cover the College practical attachment sections (organization profile, tasks done and undone, challenges, career opportunities, and learning). Chapter Eight concludes and recommends.
+
+**Keywords:** practical attachment, citizen complaint, e-governance, Adama City Administration, Science and Technology Office, MERN, role-based access control
+
+### Signature of this report
+
+This is not a generic software proposal written for any city. It is a **place-bound** attachment record: the host is Adama’s Science and Technology Office; the public face of the artefact is the Citizen Portal landing page that opens with *Your City. Your Voice.* / *ከተማዎ። ድምፅዎ።* / *Magaalaa Keessan. Sagalee Keessan.*; and authenticated screens are offered in **English, Amharic, and Afaan Oromo**. Chapters One–Four specify that system. Chapters Five–Seven report the attachment as required by the College guideline. Chapter Eight closes both threads.
+
+{callout}Read the screenshots in Chapter Four as evidence of workplace output, not as optional decoration. Figure 4.1 is the same Guest landing a resident would see.
+
+### Implementation snapshot (August 2026)
+
+The **delivered application is complaints-only**. A parallel service-request module was removed so citizens, admins, and officers work from one complaint workflow. Location is selected from Adama sub-cities, kebeles 01–18, and landmarks, with an optional extra detail field. Authenticated screens are localized in English, Amharic, and Afaan Oromo. Opening the notifications page marks items as seen automatically. Demo logins (`*@test.com`) do not receive email. The Activity Log stores assignment details with department and officer **names** (not database IDs).
+
+---
+
+## Acknowledgement
+
+First and foremost, I would like to thank **Almighty God** for the strength, guidance, and opportunity to complete this practical attachment and documentation.
+
+I express sincere gratitude to my advisor for continuous guidance, constructive feedback, and encouragement throughout the attachment period, the development of the system, and the preparation of this document.
+
+I also thank the instructors and staff of the **Department of Information Science, College of Computing and Informatics, Haramaya University** for the knowledge and support provided during the course of study.
+
+Special appreciation is extended to **Adama City Administration Science and Technology Office** for hosting the attachment, and to officers and colleagues who explained municipal workflows and reviewed the complaint portal. I also thank classmates and family members who offered advice and moral support.
+
+Finally, I acknowledge all authors, developers, and organizations whose published works, documentation, and open-source tools contributed to the system and this report.
 
 ---
 
 ## Declaration
 
-I hereby declare that this project proposal, titled **"Web-Based Citizen Complaint Management System for Adama City Administration"**, is my original work. It has been prepared as part of the academic requirements of **Haramaya University, College of Computing and Informatics, Department of Information Science** under the guidance of my advisor.
+I hereby declare that this document, titled **"Narrative Report on Practical Attachment and System Documentation: Web-Based Citizen Complaint Management System for Adama City Administration"**, is my original work. It has been prepared as part of the academic requirements of **Haramaya University, College of Computing and Informatics, Department of Information Science** under the guidance of my advisor, following the College practical attachment guideline.
 
 I further declare that:
 
@@ -36,41 +129,12 @@ I further declare that:
 
 ---
 
-## Acknowledgement
-
-First and foremost, I would like to thank **Almighty God** for the strength, guidance, and opportunity to complete this project proposal.
-
-I express sincere gratitude to my advisor for continuous guidance, constructive feedback, and encouragement throughout the preparation of this document and the development of the system.
-
-I also thank the instructors and staff of the **Department of Information Science, College of Computing and Informatics, Haramaya University** for the knowledge and support provided during the course of study.
-
-Special appreciation is extended to **Adama City Administration Science and Technology Office** as the host organization for this work, and to colleagues, classmates, and family members who offered advice, motivation, and moral support.
-
-Finally, I acknowledge all authors, developers, and organizations whose published works, documentation, and open-source tools contributed to the completion of this proposal.
-
----
-
-## Abstract (Executive Summary)
-
-Municipal complaint handling in Adama City Administration has traditionally relied on paper-based processes and office visits. This approach causes delays, weak record keeping, limited status tracking, and reduced transparency between citizens and responsible departments.
-
-This project implements a **Web-Based Citizen Complaint Management System** to digitize submission, assignment, tracking, and reporting of citizen complaints. The system supports three roles: **Citizen**, **Administrator**, and **Department Officer**. Citizens can register, submit categorized complaints (Adama area, optional landmark and photo), edit pending complaints, and track progress using unique reference numbers. Administrators manage users and departments, assign work, update status, and generate reports. Officers process assigned tasks within their department scope and add resolution notes.
-
-The solution is built with the **MERN** stack (MongoDB, Express.js, React, Node.js), using JWT authentication and role-based access control. Optional AI assistance (writing help, triage, resolution drafts, chatbot) runs as a sidecar service. Status history, in-app notifications (marked seen when opened), and email alerts (real mailboxes only) improve accountability and communication.
-
-**Keywords:** citizen complaint, e-governance, Adama City Administration, MERN, role-based access control
-
-### Implementation snapshot (August 2026)
-
-The **delivered application is complaints-only**. A parallel service-request module was removed so citizens, admins, and officers work from one complaint workflow. Location is selected from Adama sub-cities, kebeles 01–18, and landmarks, with an optional extra detail field. Authenticated screens are localized in English, Amharic, and Afaan Oromo. Opening the notifications page marks items as seen automatically. Demo logins (`*@test.com`) do not receive email. The Activity Log stores assignment details with department and officer **names** (not database IDs).
-
----
-
 ## Table of contents
 
-Declaration ................................................................ i
+Abstract (Executive Summary) ................................................ i
+    Signature of this report ................................................ i
 Acknowledgement ............................................................. ii
-Abstract (Executive Summary) ................................................ iii
+Declaration ................................................................ iii
 List of Acronyms ............................................................ iv
 List of Figures ............................................................. v
 CHAPTER ONE: INTRODUCTION ................................................... 1
@@ -85,7 +149,8 @@ CHAPTER ONE: INTRODUCTION ................................................... 1
         1.4.3 Complaint-only scope .......................................... 3
     1.5 Limitations ......................................................... 4
     1.6 Literature Review and Related Work .................................. 4
-CHAPTER TWO: SYSTEM REQUIREMENTS AND DESIGN ................................. 5
+    1.7 Purpose of the Practical Attachment ................................. 5
+CHAPTER TWO: SYSTEM REQUIREMENTS AND DESIGN ................................. 6
     2.1 Proposed System ..................................................... 5
         2.1.1 Citizens Can .................................................. 5
         2.1.2 Administrators Can ............................................ 5
@@ -142,9 +207,22 @@ CHAPTER FOUR: RESULTS AND DISCUSSION ........................................ 21
         4.3.2 For Adama City Administration ................................. 26
     4.4 Expected Outcome .................................................... 27
     4.5 Future Enhancements ................................................. 27
-CHAPTER FIVE: CONCLUSION .................................................... 28
-References .................................................................. 29
-Document Revision History ................................................... 30
+CHAPTER FIVE: ORGANIZATION PROFILE .......................................... 28
+    5.1 Mission ............................................................. 28
+    5.2 Vision .............................................................. 28
+    5.3 Organizational Chart ................................................ 28
+    5.4 Core Values ......................................................... 29
+    5.5 Product / Services Description ...................................... 29
+    5.6 Stakeholders ........................................................ 29
+    5.7 Organizational History .............................................. 30
+CHAPTER SIX: ACTIVITIES DONE AND UNDONE ..................................... 31
+CHAPTER SEVEN: CHALLENGES, CAREER OPPORTUNITIES, AND LEARNING ............... 33
+    7.1 Challenges faced in the practical attachment ........................ 33
+    7.2 Career opportunities in the organization ............................ 34
+    7.3 Significance of learning gained ..................................... 34
+CHAPTER EIGHT: CONCLUSION AND RECOMMENDATION ................................ 35
+References .................................................................. 36
+Document Revision History ................................................... 37
 
 ---
 
@@ -179,6 +257,7 @@ Document Revision History ................................................... 30
 | **SMS** | Short Message Service |
 | **SPA** | Single-Page Application |
 | **SSL** | Secure Sockets Layer |
+| **STO** | Science and Technology Office |
 | **UAT** | User Acceptance Testing |
 | **UI** | User Interface |
 | **UK** | Unique Key |
@@ -199,8 +278,9 @@ Document Revision History ................................................... 30
 | 2.3 | Entity-relationship diagram |
 | 2.4 | Level-0 data flow diagram |
 | 2.5 | Complaint workflow |
-| 3.1 | Project timeline (Gantt) |
+| 3.1 | Project timeline (Gantt), 7 June–16 August 2026 |
 | 3.2 | Deployment architecture |
+| 5.1 | Host organizational chart (attachment placement) |
 
 **Result screenshots (Guest UI first)**
 
@@ -229,16 +309,16 @@ Document Revision History ................................................... 30
 
 ### 1.1 Background of the Study
 
-Adama City Administration provides various municipal services to citizens. Citizens often need to submit complaints regarding public services such as road maintenance, waste management, water supply, street lighting, and other community-related issues. In addition, citizens may request different municipal services from the city administration.
+Adama (historically also known as Nazareth) is the capital of East Shewa Zone in Oromia and a major transport and industrial hub. Residents, travellers, and businesses depend on municipal services such as roads, water, waste collection, and street lighting. When those services fail, citizens often have little choice but to visit an office or leave a paper complaint with no reliable way to follow what happens next.
 
-Currently, many complaints are handled manually through paper-based processes or office visits. This leads to:
+Adama City Administration therefore handles a steady volume of complaints on public services — road maintenance, waste management, water supply, street lighting, and related community issues. Currently, many of those complaints are still processed manually through paper files or counter visits. This leads to:
 
 - Delays in service delivery
 - Poor record management
 - Limited tracking capabilities
 - Reduced transparency between citizens and administration
 
-To address these challenges, a **web-based system** is implemented to allow citizens to submit complaints online, track their progress in real time, and receive feedback from responsible departments.
+To address these challenges, a **web-based system** is implemented so that citizens can submit complaints online, track progress in real time, and receive feedback from the responsible department — the same idea the portal states in public: *Your City. Your Voice.*
 
 ---
 
@@ -342,6 +422,21 @@ Several municipal and e-governance systems demonstrate the value of digital comp
 | **CRM-based municipal portals** | Role-based dashboards and ticketing | Supports assignment, tracking, and reporting workflows |
 
 **Gap identified:** Adama City Administration lacks a dedicated, centralized web platform that connects citizens, administrators, and department officers with transparent status tracking and reporting. This project fills that gap using a modern MERN stack suitable for rapid development and scalability.
+
+---
+
+### 1.7 Purpose of the Practical Attachment
+
+This work was carried out as a **practical attachment** at **Adama City Administration Science and Technology Office** during **Summer 2026**, in partial fulfilment of the requirements of the Department of Information Science.
+
+The attachment objectives were:
+
+- To understand the structure, mission, and digital-service role of the host office
+- To observe how complaints were handled and where information was lost
+- To design and implement an online complaint workflow for Citizen, Administrator, and Department Officer roles
+- To document both the system (Chapters Two to Four) and the attachment experience (Chapters Five to Seven) in one College-ready report
+
+The student worked as a junior full-stack developer and documenter. Chapter Five follows the guideline organization-profile headings. Chapter Six lists tasks done and undone. Chapter Seven records challenges, career opportunities, and learning gained.
 
 ---
 
@@ -690,29 +785,27 @@ This project follows an **Agile-inspired iterative development** approach suited
 
 ### 3.2 Project Timeline
 
-**Estimated duration:** 12 weeks  
-**Implementation status (as of August 2026):** Core MERN complaint system delivered (API, role UIs, Atlas DB, photo upload, Adama location dropdown, pending edit, EN/AM/OM i18n, email + password reset, optional AI sidecar). Remaining work focuses on hardening, live SMS, GIS, and production deployment.
+**Actual duration:** 10 weeks (**7 June 2026 – 16 August 2026**)  
+**Implementation status (as of 16 August 2026):** Core MERN complaint system delivered (API, role UIs, Atlas DB, photo upload, Adama location dropdown, pending edit, EN/AM/OM i18n, email + password reset, optional AI sidecar). Remaining work focuses on hardening, live SMS, GIS, and production deployment.
 
-| Week | Phase | Tasks | Deliverables |
-|------|-------|-------|--------------|
-| 1 | Planning | Finalize requirements, proposal, ER diagram | Approved proposal |
-| 2 | Design | UI wireframes, API specification, DB schema | Design documents |
-| 3 | Setup | Init React + Node + MongoDB, Git repo, folder structure | Project scaffold |
-| 4 | Backend Core | Auth (JWT), user model, department model | Working login/register API |
-| 5 | Backend Features | Complaint APIs | Create/list/update endpoints |
-| 6 | Backend Workflow | Assignment, status history, notifications | Workflow APIs |
-| 7 | Frontend Core | Login, register, citizen dashboard | Citizen UI shell |
-| 8 | Frontend Citizen | Submit/edit complaint, track status | Citizen features complete |
-| 9 | Frontend Admin | Admin dashboard, user/dept management, assignment | Admin UI complete |
-| 10 | Frontend Officer | Officer dashboard, process assigned items | Officer UI complete |
-| 11 | Testing | Manual/API testing, UAT, bug fixes | Test report |
-| 12 | Deployment | Deploy backend and frontend, documentation, final report | Live system + report |
+| Week | Dates | Phase | Tasks | Deliverables |
+|------|-------|-------|-------|--------------|
+| 1 | 7–13 June 2026 | Planning | Finalize requirements, proposal, ER diagram | Approved proposal |
+| 2 | 14–20 June 2026 | Design | UI wireframes, API specification, DB schema | Design documents |
+| 3 | 21–27 June 2026 | Setup | Init React + Node + MongoDB, Git repo, folder structure | Project scaffold |
+| 4 | 28 June–4 July 2026 | Backend Core | Auth (JWT), user model, department model | Working login/register API |
+| 5 | 5–11 July 2026 | Backend Features | Complaint APIs | Create/list/update endpoints |
+| 6 | 12–18 July 2026 | Backend Workflow | Assignment, status history, notifications | Workflow APIs |
+| 7 | 19–25 July 2026 | Frontend Core | Login, register, citizen dashboard; start complaint forms | Citizen UI shell |
+| 8 | 26 July–1 August 2026 | Frontend Citizen & Admin | Submit/edit/track complaints; start admin dashboard | Citizen features; admin in progress |
+| 9 | 2–8 August 2026 | Frontend Admin & Officer | User/dept management, assignment; officer queue | Admin and officer UIs complete |
+| 10 | 9–16 August 2026 | Testing, deployment & documentation | Manual/API testing, UAT, bug fixes, documentation, final report | Tested system + report (finished 16 August 2026) |
 
 #### 3.2.1 Gantt Chart
 
 ![Project timeline Gantt chart](scripts/assets/diagrams/fig-3-1-gantt.png)
 
-*Figure 3.1: Planned 12-week schedule (complaint system)*
+*Figure 3.1: Actual 10-week schedule, 7 June–16 August 2026 (complaint system)*
 
 ---
 
@@ -936,30 +1029,229 @@ The project delivers a **fully functional web-based system** for managing citize
 
 ---
 
-## CHAPTER FIVE: CONCLUSION
+## CHAPTER FIVE: ORGANIZATION PROFILE
 
-This project designed and implemented a **Web-Based Citizen Complaint Management System** for Adama City Administration to replace fragmented, paper-based processes with a centralized digital portal.
+This chapter satisfies the practical attachment guideline (mission, vision, organizational chart, core values, products/services, stakeholders, and history). Official titles on the cover-page supervisor table should be confirmed at the host office.
+
+### 5.1 Mission
+
+According to the Adama City Administration public portal, the mission of the **Adama Science and Technology Administration Office** is **making the city convenient for residents**. In the attachment context, this mission was interpreted as using information systems so that residents can reach city services without unnecessary travel, lost paper files, or unclear status.
+
+The complaint portal supports that mission by giving citizens a single online channel to report municipal problems and to follow progress with a unique reference number.
+
+### 5.2 Vision
+
+The same official office profile states the vision as **making the services provided in the city digitalized**. The attachment project was aligned with this vision: moving complaint intake, assignment, status updates, notifications, and summary reports from paper logs onto a web platform.
+
+Digitalization in this sense does not mean replacing officers. It means giving officers a department queue, administrators a city-wide view, and citizens a way to see whether a case is pending, in progress, resolved, or rejected.
+
+### 5.3 Organizational Chart
+
+The host office sits under **Adama City Administration**. Internally it coordinates ICT support, digital / SMART Adama services, and administrative follow-up. During the attachment, the student was placed against the digital-services and ICT-support line of work, building the complaint portal that municipal departments (Water Supply, Roads and Infrastructure, Sanitation, Public Utilities) would later use through role-based accounts.
+
+![Organizational chart of the host office context](scripts/assets/diagrams/fig-attachment-org-chart.png)
+
+*Figure 5.1: Organizational chart — Adama City Administration, Science and Technology Administration Office, and attachment placement*
+
+### 5.4 Core Values
+
+The office profile on the Adama City portal lists the core values as **excellence, teamwork, innovation, and open and continuous communication**. These values shaped how the attachment work was done:
+
+| Core value | How it appeared in the attachment |
+|------------|-----------------------------------|
+| **Excellence** | Role-based security (JWT, RBAC), status history, and an activity log so actions can be audited |
+| **Teamwork** | Separate Citizen, Officer, and Admin workspaces that still share one complaint record |
+| **Innovation** | Optional AI assist and a trilingual interface (EN / Amharic / Afaan Oromo) |
+| **Open communication** | In-app notifications, email to real mailboxes, and visible `CMP-` reference numbers |
+
+### 5.5 Product / Services Description
+
+The Science and Technology Administration Office does not sell commercial products. Its service is **public digital capability** for the city. From the attachment and the published SMART Adama office description, the relevant services are:
+
+- Information and support for digital / SMART Adama initiatives
+- Support to city offices that need ICT tools for day-to-day work
+- Promotion of convenient, digital access to municipal services for residents
+
+The **Citizen Portal** developed during the attachment is a concrete service output of that mandate. It provides public guest information and Quick Submit (login required to send); citizen registration, complaint submission, tracking, and profile; officer assigned-task processing; and administrator assignment, user/department management, reports, and activity log.
+
+Municipal issue categories used in the portal include road maintenance, waste management, water supply, street lighting, and related environmental and infrastructure problems. Location is selected from Adama sub-cities, kebeles, and landmarks.
+
+### 5.6 Stakeholders
+
+| Stakeholder | Interest during the attachment |
+|-------------|-------------------------------|
+| **Adama residents (citizens)** | Easy submission and transparent tracking of complaints |
+| **Science and Technology Office** | Digitalization of a high-volume citizen process |
+| **City Administration leadership** | Accountability, reports, and reduced paper backlog |
+| **Department officers** (e.g. Water Supply) | A clear assigned-task queue and resolution notes |
+| **Administrators** | User control, routing, rejection of invalid cases, audit trail |
+| **Haramaya University / Department of Information Science** | Supervised professional practice and a graded report |
+| **Attachment student** | Workplace learning and a deployable software artefact |
+
+Citizens, administrators, and officers are also the three **system actors** specified in Chapter Two. Host-office staff remain organizational stakeholders even when they are not daily users of a given screen.
+
+### 5.7 Organizational History
+
+Adama (historically also known as Nazareth) is the capital of East Shewa Zone in Oromia and a major transport and industrial hub. City administration is organized into offices that cover service sectors such as roads, water, sanitation, and utilities.
+
+The **Science and Technology Administration Office** is the unit presented on the city portal as the contact for **SMART Adama** and for digitalizing services. Its published mission and vision emphasize resident convenience and digital service delivery. Precise founding dates and historical staffing were not available as a complete public archive during the attachment; the student therefore recorded the official mission, vision, and values from the city portal and confirmed the host name used throughout this document: **Adama City Administration Science and Technology Office**.
+
+Ethiopia’s wider **Digital Ethiopia 2025** agenda provides national context: government services are expected to move online where feasible. The complaint portal is a local, city-level contribution to that direction.
+
+---
+
+## CHAPTER SIX: ACTIVITIES DONE AND UNDONE
+
+Activities are listed **per task**, as required by the guideline. “Done” means completed during the attachment to a demonstrable working state. “Undone” means identified, partly prepared, or left for the host after the attachment. Chapter Four screenshots are the visual evidence for Tasks 4–8.
+
+### 6.1 Tasks completed (done)
+
+**Task 1 — Orientation and process study.**  
+The student reviewed how complaints were received through office visits and paper records, and mapped the delay, tracking, and accountability problems that the portal needed to address.
+
+**Task 2 — Requirements and role design.**  
+Citizen, Administrator, and Department Officer roles were defined. Status values (Pending, In Progress, Resolved, Rejected, Closed) and transition rules were specified so officers cannot reject cases and citizens can edit only while a case is pending.
+
+**Task 3 — System architecture and data design.**  
+A MERN architecture was implemented: React (Vite) frontend, Express API, MongoDB collections for users, departments, complaints, status history, notifications, and activity logs. JWT protects APIs.
+
+**Task 4 — Guest (public) interface.**  
+A public landing page was built with city branding, language switcher, Quick Submit (login required), and information sections. This is the first screen a visitor sees (Figure 4.1).
+
+**Task 5 — Authentication and citizen registration.**  
+Login, registration, forgot/reset password, and demo role shortcuts were implemented. Demo `@test.com` accounts are login-only and do not receive email (Figures 4.2–4.3).
+
+**Task 6 — Citizen complaint workflow.**  
+Citizens can submit a complaint (title, category, Adama location, optional landmark and photo), use optional voice input and AI writing assist, edit pending items, track `CMP-` references, open notifications (marked seen automatically), and update profile name and phone (Figures 4.4–4.8).
+
+**Task 7 — Officer workflow.**  
+Officers see a department-scoped dashboard and an Assigned Tasks list, start work, add resolution notes (optional AI draft), and resolve or close cases (Figures 4.9–4.11).
+
+**Task 8 — Administrator workflow.**  
+Administrators view city-wide totals, assign complaints to departments and officers, manage users (activate/deactivate) and departments (add), open reports by status and category, and inspect the activity log. New log details store **names**, not database IDs (Figures 4.12–4.16).
+
+**Task 9 — Localization and optional AI.**  
+Authenticated and public screens support English, Amharic, and Afaan Oromo. An optional AI sidecar provides writing help, triage suggestions, resolution drafts, and an FAQ chatbot, with heuristic fallback if no API key is set.
+
+**Task 10 — Testing, seeding, and documentation.**  
+Demo data was seeded for defence and training. This combined academic report was prepared. Result screenshots were captured from the running application.
+
+### 6.2 Tasks not completed (undone)
+
+| Task | Description | Why it remained undone |
+|------|-------------|------------------------|
+| Production deployment | HTTPS hosting, backups, and a public city domain | Requires host ICT policy, server budget, and official go-live approval |
+| Live SMS | Status SMS to citizens’ phones | Africa’s Talking sandbox exists but is off by default; live SMS needs a paid sender ID |
+| GIS map pin | Map click instead of (or with) the Adama area dropdown | Out of scope for the attachment period; list-based location was delivered instead |
+| Full user/department CRUD | Edit/delete users and departments; delete complaints; export reports | Admin can add departments and activate/deactivate users; remaining CRUD is future work |
+| Native mobile apps | Android / iOS stores | The web app is responsive; native clients were not started |
+| Legacy paper migration | Import of old paper complaints | No complete digitized archive was available |
+| Government system integration | Link to other city databases | Needs formal interoperability agreements |
+| Hardening extras | Pagination, rate limiting, JWT refresh tokens | Noted as remaining engineering work |
+
+The attachment therefore delivered a **working prototype suitable for demonstration and supervised trial**, not a fully production-hardened city-wide rollout.
+
+---
+
+## CHAPTER SEVEN: CHALLENGES, CAREER OPPORTUNITIES, AND LEARNING
+
+### 7.1 Challenges faced in the practical attachment
+
+**Paper-based baseline.** Official complaint files were not available as a complete electronic dataset. Requirements had to be inferred from municipal practice, related e-governance examples, and iterative review rather than from a single written SOP.
+
+**Scope change.** An earlier idea treated **service requests** as a second module. The implemented system is **complaints-only** so that routing and reporting stay on one path. Removing the extra module took time but made the product clearer for officers.
+
+**Workplace versus academic documentation.** The host needed a usable portal; the university needed diagrams, test cases, and guideline sections. Combining both into this single document was the chosen solution.
+
+**Technical integration.** Connecting React, the Express API, MongoDB Atlas, email, and an optional AI service introduced environment-configuration issues (secrets, CORS, demo email that must not bounce). Activity-log details initially stored MongoDB IDs until the code was changed to store department and officer names.
+
+**Language and usability.** Supporting Amharic and Afaan Oromo required keeping translation keys complete so that no screen silently fell back to English.
+
+**Access and time.** Attachment hours, supervisor availability, and the need to keep demo accounts separate from real citizen mailboxes limited live user testing with the general public.
+
+### 7.2 Career opportunities in the organization
+
+The Science and Technology Administration Office, and the wider Adama City Administration ICT function, can absorb graduates of Information Science in several directions:
+
+**ICT / systems support officer.** Maintain networks, user accounts, backups, and first-line support for city offices that use digital tools, including the complaint portal.
+
+**Application or web developer.** Extend the MERN system (new reports, SMS, GIS, integrations) under host supervision.
+
+**Digital services / e-governance officer.** Translate office procedures into online services, train department users, and monitor adoption of SMART Adama tools.
+
+**Data and records officer.** Use reports and the activity log for planning: which categories (for example water supply versus roads) generate the most complaints, and which departments are slow to assign work.
+
+**Information security awareness role.** Help enforce password policy, role separation, and responsible handling of citizen data.
+
+The attachment showed that a student who can analyse a municipal process, implement a secure web workflow, and document it for both the university and the office is employable in city ICT units. Permanent hiring still depends on civil-service rules and vacant posts; the attachment itself is training, not a job offer.
+
+### 7.3 Significance of learning gained during the attachment
+
+The attachment converted course knowledge into a full, role-based information system used in a government-like setting.
+
+**Technical learning.** Practical experience was gained in React, Node/Express, MongoDB, JWT authentication, REST APIs, environment configuration, image upload limits, and optional AI API integration. Debugging real UI and data issues (for example audit-log IDs versus names) was more instructive than textbook exercises.
+
+**Domain learning.** Municipal complaint handling has legal and social weight. Status transitions, who may reject a case, and what citizens may still edit are policy rules, not only database fields.
+
+**Professional learning.** Work had to be explained to non-programmer stakeholders, recorded in academic format, and kept within a time box. Incomplete tasks were listed honestly instead of being hidden.
+
+**Inclusion and language.** Building EN / AM / OM screens showed that e-governance in Oromia is not English-only.
+
+**Ethics and data.** Demo accounts, skipped email to `@test.com`, and role-based views illustrated that citizen data must be limited by need-to-know.
+
+These outcomes match the purpose of practical attachment: competence, professional attitude, and a portfolio artefact (the Citizen Portal) that can be demonstrated to the department and the host.
+
+---
+
+## CHAPTER EIGHT: CONCLUSION AND RECOMMENDATION
+
+### 8.1 Conclusion
+
+This practical attachment at **Adama City Administration Science and Technology Office** designed and implemented a **Web-Based Citizen Complaint Management System** to replace fragmented, paper-based processes with a centralized digital portal.
 
 The system meets the stated objectives by enabling citizens to register, submit categorized complaints, edit pending cases, and track status through unique reference numbers; enabling administrators to manage users and departments, assign work, update status, and generate reports; and enabling department officers to process assigned tasks and record resolution notes. JWT authentication and role-based access control protect resources according to user roles, while status history, in-app notifications, and email to real mailboxes improve transparency and accountability.
 
-Implementation with the MERN stack demonstrated technical feasibility and practical value for municipal service delivery. Remaining limitations—such as live SMS, GIS mapping, and advanced analytics—are documented as future enhancements and do not prevent the current system from delivering the core complaint workflow.
+Implementation with the MERN stack demonstrated technical feasibility and practical value for municipal service delivery. Remaining limitations—such as live SMS, GIS mapping, and advanced analytics—are documented as undone tasks and future enhancements and do not prevent the current system from delivering the core complaint workflow.
 
-In conclusion, the project provides a working foundation for transparent, trackable, and more efficient citizen–administration interaction in Adama City, and it supports further improvement as the host organization adopts and expands the platform.
+The attachment met its learning purpose: applying Information Science skills in a municipal ICT environment and producing one report that covers both the College guideline and the working system. The portal is a foundation for transparent, trackable citizen–administration interaction in Adama City as the host organization trials and expands it. In the language of the artefact itself: *Your City. Your Voice.* The attachment leaves Adama with a working channel for that voice, and the College with a documented record of how it was built.
+
+### 8.2 Recommendation
+
+**To the host organization**
+
+- Appoint a named system owner and complete the supervisor table on the cover page for the official file.
+- Trial the portal with a small set of real officers (Water Supply and Roads) before city-wide launch.
+- Budget for HTTPS hosting, backups, and, if required, a live SMS sender ID.
+- Keep demo `@test.com` accounts out of production; use real mailboxes for live users.
+- Confirm mission, vision, and the organizational chart with an official stamp so later students inherit an approved profile.
+
+**To the Department of Information Science**
+
+- Continue placing students in city ICT offices; the complaint domain is a strong match for Information Science.
+- Accept this **single document** as both the practical attachment narrative (Chapters Five–Seven) and the system specification (Chapters One–Four).
+
+**To future attachment students**
+
+- Complete Appendix B (P.O. Box, supervisor name, title, phone) in the first week.
+- Log tasks weekly as done/undone; do not wait until the final report.
+- Treat language files (EN/AM/OM) as part of testing, not as an optional extra.
 
 ---
 
 ## References
 
-1. FixMyStreet. *Report, view, or discuss local problems*. mySociety. https://www.fixmystreet.com/
-2. IBM. *Entity-Relationship Modeling*. Software Engineering best practices.
-3. MongoDB Inc. *MongoDB Documentation*. https://www.mongodb.com/docs/
-4. Express.js. *Web framework for Node.js*. https://expressjs.com/
-5. React. *A JavaScript library for building user interfaces*. https://react.dev/
-6. OWASP. *Authentication Cheat Sheet*. https://cheatsheetseries.owasp.org/
-7. Ethiopian Ministry of Innovation and Technology. *Digital Ethiopia 2025* (e-governance context).
-8. Sommerville, I. *Software Engineering* (10th ed.). Pearson — requirements and testing methodologies.
-9. JWT.io. *JSON Web Token Introduction*. https://jwt.io/introduction
-10. Adama City Administration. *Municipal service delivery context* (local organizational reference).
+1. Adama City Administration. *Adama Science and Technology Administration Office* (mission, vision, core values). https://portal.adamacity.gov.et/officedetails/2
+2. Adama City Administration. *Citizen Portal contact details* (telephone, email, office hours used in the implemented guest interface).
+3. Haramaya University, College of Computing and Informatics. *Practical Attachment Report Guideline* (front page Appendix A; organization and supervisor profile Appendix B).
+4. Ethiopian Ministry of Innovation and Technology. *Digital Ethiopia 2025* (e-governance context).
+5. FixMyStreet. *Report, view, or discuss local problems*. mySociety. https://www.fixmystreet.com/
+6. IBM. *Entity-Relationship Modeling*. Software Engineering best practices.
+7. MongoDB Inc. *MongoDB Documentation*. https://www.mongodb.com/docs/
+8. Express.js. *Web framework for Node.js*. https://expressjs.com/
+9. React. *A JavaScript library for building user interfaces*. https://react.dev/
+10. OWASP. *Authentication Cheat Sheet*. https://cheatsheetseries.owasp.org/
+11. JWT.io. *JSON Web Token Introduction*. https://jwt.io/introduction
+12. Sommerville, I. *Software Engineering* (10th ed.). Pearson — requirements and testing methodologies.
 
 ---
 
@@ -986,7 +1278,10 @@ In conclusion, the project provides a working foundation for transparent, tracka
 | 2.15 | August 22, 2026 | Forced a results pass: Chapter Four figures stay on the current UI captures; README now includes the same screenshot gallery; activity log stores department/officer names instead of MongoDB IDs |
 | 2.16 | August 22, 2026 | Added rendered use-case, ER, architecture, DFD, workflow, Gantt, and deployment diagrams; ordered Chapter Four result screenshots starting from Guest UI |
 | 2.17 | August 22, 2026 | Corrected Chapter Four result images: Figure 4.1 is the real Guest landing (“Your City. Your Voice.” / Quick Submit); remaining screenshots remapped so filenames match the actual screens |
+| 2.18 | August 22, 2026 | Merged the practical attachment report into this documentation: Appendix A/B covers, organization profile, tasks done/undone, challenges, career opportunities, learning, and recommendations (Chapters Five–Eight) |
+| 2.19 | August 23, 2026 | Distinct Adama identity: portal motto in three languages on the cover, navy-and-gold Word layout matching the Citizen Portal, running header, and a place-bound “signature of this report” |
+| 2.20 | August 23, 2026 | Project timeline set to the actual attachment period: started 7 June 2026, finished 16 August 2026 (10 weeks); Gantt chart and Chapter 3.2 table updated |
 
 ---
 
-*End of Proposal*
+{epigraph}Your City. Your Voice.  ·  ከተማዎ። ድምፅዎ።  ·  Magaalaa Keessan. Sagalee Keessan.
