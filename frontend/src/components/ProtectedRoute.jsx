@@ -2,7 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { ROLES } from '../constants';
 import { useApp } from '../context/AppContext';
 import Layout from './Layout';
-// comment added by me
+// comment added by 
 export function ProtectedRoute({ allowedRoles }) {
   const { currentUser, initializing } = useApp();
 
