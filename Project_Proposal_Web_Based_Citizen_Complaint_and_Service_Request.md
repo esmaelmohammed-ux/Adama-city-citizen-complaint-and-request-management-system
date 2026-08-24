@@ -1,6 +1,6 @@
-# NARRATIVE REPORT ON PRACTICAL ATTACHMENT
+![Haramaya University logo](scripts/assets/haramaya-university-logo.png)
 
-![Cover identity band — Adama City Citizen Portal](scripts/assets/diagrams/cover-banner.png)
+# NARRATIVE REPORT ON PRACTICAL ATTACHMENT
 
 {center}**COLLEGE OF COMPUTING AND INFORMATICS**
 
@@ -17,8 +17,6 @@
 {center}Adama City Administration Science and Technology Office
 
 {center}*(Host organization / industry partner)*
-
-{epigraph}Your City. Your Voice.  ·  ከተማዎ። ድምፅዎ።  ·  Magaalaa Keessan. Sagalee Keessan.
 
 {center}**Prepared by**
 
@@ -52,16 +50,15 @@ This page follows **Appendix B** of the Haramaya University Practical Attachment
 
 | Field | Detail |
 |-------|--------|
-| **Name** | ____________________ |
-| **Profession** | ____________________ |
-| **Title** | ____________________ |
-| **Telephone** | ____________________ |
+| **Name** | Mr. Muktar |
+| **Profession** | Software Engineer |
+| **Telephone** | 0912807372 |
 
 | Field | Detail |
 |-------|--------|
 | **Project Title** | Web-Based Citizen Complaint Management System |
-| **Document Version** | 2.21 |
-| **Date** | 23 August 2026 |
+| **Document Version** | 2.24 |
+| **Submission date** | 24 August 2026 |
 | **Institution** | Haramaya University — College of Computing and Informatics, Department of Information Science |
 | **University advisor** | ____________________ |
 | **Host Organization** | Adama City Administration Science and Technology Office |
@@ -83,12 +80,6 @@ The solution is built with the **MERN** stack (MongoDB, Express.js, React, Node.
 Chapters One to Four specify and evidence the system. Chapters Five to Seven cover the College practical attachment sections (organization profile, tasks done and undone, challenges, career opportunities, and learning). Chapter Eight concludes and recommends.
 
 **Keywords:** practical attachment, citizen complaint, e-governance, Adama City Administration, Science and Technology Office, MERN, role-based access control
-
-### Signature of this report
-
-This is not a generic software proposal written for any city. It is a **place-bound** attachment record: the host is Adama’s Science and Technology Office; the public face of the artefact is the Citizen Portal landing page that opens with *Your City. Your Voice.* / *ከተማዎ። ድምፅዎ።* / *Magaalaa Keessan. Sagalee Keessan.*; and authenticated screens are offered in **English, Amharic, and Afaan Oromo**. Chapters One–Four specify that system. Chapters Five–Seven report the attachment as required by the College guideline. Chapter Eight closes both threads.
-
-{callout}Read the screenshots in Chapter Four as evidence of workplace output, not as optional decoration. Figure 4.1 is the same Guest landing a resident would see.
 
 ### Implementation snapshot (August 2026)
 
@@ -125,14 +116,13 @@ I further declare that:
 | **Name** | Esmael Mohammed Kedir |
 | **ID** | 1160/16 |
 | **Signature** | ______________________________ |
-| **Date** | ____________________ |
+| **Date** | 24 August 2026 |
 
 ---
 
 ## Table of contents
 
 Abstract (Executive Summary) ................................................ i
-    Signature of this report ................................................ i
 Acknowledgement ............................................................. ii
 Declaration ................................................................ iii
 List of Acronyms ............................................................ iv
@@ -318,7 +308,7 @@ Adama City Administration therefore handles a steady volume of complaints on pub
 - Limited tracking capabilities
 - Reduced transparency between citizens and administration
 
-To address these challenges, a **web-based system** is implemented so that citizens can submit complaints online, track progress in real time, and receive feedback from the responsible department — the same idea the portal states in public: *Your City. Your Voice.*
+To address these challenges, a **web-based system** is implemented to allow citizens to submit complaints online, track their progress in real time, and receive feedback from responsible departments.
 
 ---
 
@@ -1031,7 +1021,7 @@ The project delivers a **fully functional web-based system** for managing citize
 
 ## CHAPTER FIVE: ORGANIZATION PROFILE
 
-This chapter satisfies the practical attachment guideline (mission, vision, organizational chart, core values, products/services, stakeholders, and history). Official titles on the cover-page supervisor table should be confirmed at the host office.
+This chapter satisfies the practical attachment guideline (mission, vision, organizational chart, core values, products/services, stakeholders, and history). Supervisor details on the cover page should be confirmed at the host office.
 
 ### 5.1 Mission
 
@@ -1213,13 +1203,13 @@ The system meets the stated objectives by enabling citizens to register, submit 
 
 Implementation with the MERN stack demonstrated technical feasibility and practical value for municipal service delivery. Remaining limitations—such as live SMS, GIS mapping, and advanced analytics—are documented as undone tasks and future enhancements and do not prevent the current system from delivering the core complaint workflow.
 
-The attachment met its learning purpose: applying Information Science skills in a municipal ICT environment and producing one report that covers both the College guideline and the working system. The portal is a foundation for transparent, trackable citizen–administration interaction in Adama City as the host organization trials and expands it. In the language of the artefact itself: *Your City. Your Voice.* The attachment leaves Adama with a working channel for that voice, and the College with a documented record of how it was built.
+The attachment met its learning purpose: applying Information Science skills in a municipal ICT environment and producing one report that covers both the College guideline and the working system. The portal is a foundation for transparent, trackable citizen–administration interaction in Adama City as the host organization trials and expands it.
 
 ### 8.2 Recommendation
 
 **To the host organization**
 
-- Appoint a named system owner and complete the supervisor table on the cover page for the official file.
+- Appoint a named system owner for the official file.
 - Trial the portal with a small set of real officers (Water Supply and Roads) before city-wide launch.
 - Budget for HTTPS hosting, backups, and, if required, a live SMS sender ID.
 - Keep demo `@test.com` accounts out of production; use real mailboxes for live users.
@@ -1282,7 +1272,10 @@ The attachment met its learning purpose: applying Information Science skills in 
 | 2.19 | August 23, 2026 | Distinct Adama identity: portal motto in three languages on the cover, navy-and-gold Word layout matching the Citizen Portal, running header, and a place-bound “signature of this report” |
 | 2.20 | August 23, 2026 | Project timeline set to the actual attachment period: started 7 June 2026, finished 16 August 2026 (10 weeks); Gantt chart and Chapter 3.2 table updated |
 | 2.21 | August 23, 2026 | Filled student name (Esmael Mohammed Kedir) and ID (1160/16) on the cover and declaration |
+| 2.22 | August 24, 2026 | Restored academic cover using the Haramaya University logo; removed decorative banner, motto, gold headers/footers, and signature callout |
+| 2.23 | August 24, 2026 | Filled host supervisor profile: Mr. Muktar, Software Engineer, 0912807372 |
+| 2.24 | August 24, 2026 | Added submission date 24 August 2026 on the cover and declaration |
 
 ---
 
-{epigraph}Your City. Your Voice.  ·  ከተማዎ። ድምፅዎ።  ·  Magaalaa Keessan. Sagalee Keessan.
+*End of report*

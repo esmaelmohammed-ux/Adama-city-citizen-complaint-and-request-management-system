@@ -487,7 +487,6 @@ def draw_deployment():
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     files = [
-        draw_cover_banner(),
         draw_architecture(),
         draw_use_case(),
         draw_er(),
