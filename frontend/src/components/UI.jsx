@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import './StatusBadge.css';
-// comment added by me
+// comment added by 
 export default function StatusBadge({ status }) {
   const { t } = useLanguage();
   return (
