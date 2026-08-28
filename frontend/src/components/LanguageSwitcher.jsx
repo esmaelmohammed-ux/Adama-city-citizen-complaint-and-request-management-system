@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import './LanguageSwitcher.css';
-// comment added by m
+// comment added by 
 export default function LanguageSwitcher({ className = '' }) {
   const { language, setLanguage, languages, t } = useLanguage();
   const [open, setOpen] = useState(false);
