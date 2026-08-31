@@ -18,7 +18,7 @@ async function start() {
     console.log(`API base: http://localhost:${PORT}/api`);
     const sms = getSmsRuntime();
     if (sms.mode === 'live') {
-      console.log(`[sms] Live Africa's Talking → real phones (${sms.username})`);
+      console.log(`[sms] Live Africa's Talking → real phones (username: ${sms.username})`);
     } else if (sms.mode === 'sandbox') {
       console.warn('[sms] Sandbox username — will not deliver to real phones.');
     } else if (sms.mode === 'unconfigured') {
