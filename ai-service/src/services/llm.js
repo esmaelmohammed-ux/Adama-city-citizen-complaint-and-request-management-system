@@ -29,11 +29,7 @@ async function callGemini(prompt) {
     },
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.2,
-        responseMimeType: 'application/json',
-        thinkingConfig: { thinkingLevel: 'MINIMAL' },
-      },
+      generationConfig: { temperature: 0.2, responseMimeType: 'application/json' },
     }),
   });
   if (!res.ok) {

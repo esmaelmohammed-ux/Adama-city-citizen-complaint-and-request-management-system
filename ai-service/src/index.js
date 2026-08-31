@@ -35,7 +35,7 @@ app.use((err, _req, res, _next) => {
 
 await connectDbOptional();
 
-// dotenv is loaded once at process start (config.js)
+// dotenv is loaded once at process start from ai-service/.env
 
 app.listen(config.port, () => {
   const provider = resolveEffectiveProvider();
