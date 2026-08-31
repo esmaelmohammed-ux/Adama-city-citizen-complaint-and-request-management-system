@@ -75,8 +75,10 @@ export const ADAMA_LOCATION_GROUPS = [
 
 export const ADAMA_LOCATIONS = ADAMA_LOCATION_GROUPS.flatMap((group) => group.keys);
 
-export const DEMO_ACCOUNTS = [
-  { email: 'citizen@test.com', password: 'citizen123', label: 'Citizen' },
-  { email: 'admin@test.com', password: 'admin123', label: 'Administrator' },
-  { email: 'officer@test.com', password: 'officer123', label: 'Department Officer' },
-];
+export const DEMO_ACCOUNTS = import.meta.env.PROD
+  ? []
+  : [
+      { email: 'citizen@test.com', password: 'citizen123', label: 'Citizen' },
+      { email: 'admin@test.com', password: 'admin123', label: 'Administrator' },
+      { email: 'officer@test.com', password: 'officer123', label: 'Department Officer' },
+    ];

@@ -9,6 +9,12 @@ async function start() {
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is required. Set it in backend/.env');
   }
+  if (
+    process.env.NODE_ENV === 'production' &&
+    /change-this-to-a-long-random-secret/i.test(process.env.JWT_SECRET)
+  ) {
+    throw new Error('JWT_SECRET must not be the placeholder value in production.');
+  }
 
   await connectDB();
 

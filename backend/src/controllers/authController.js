@@ -6,6 +6,7 @@ import { ROLES } from '../constants/index.js';
 import { toClient } from '../utils/toClient.js';
 import { sendEmail } from '../services/email.js';
 import { sendSms } from '../services/sms.js';
+import { publicOrigin } from '../utils/publicOrigin.js';
 
 const RESET_TTL_MS = 60 * 60 * 1000; // 1 hour
 const FORGOT_MSG =
@@ -125,11 +126,7 @@ export async function forgotPassword(req, res, next) {
       user.passwordResetExpires = new Date(Date.now() + RESET_TTL_MS);
       await user.save();
 
-      const origin = (req.get('origin') || process.env.CLIENT_ORIGIN || 'http://localhost:5173').replace(
-        /\/$/,
-        ''
-      );
-      const resetUrl = `${origin}/reset-password?token=${rawToken}`;
+      const resetUrl = `${publicOrigin()}/reset-password?token=${rawToken}`;
 
       await sendEmail({
         to: user.email,

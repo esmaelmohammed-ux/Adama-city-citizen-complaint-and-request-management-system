@@ -201,9 +201,23 @@ Screenshots captured from the running complaint portal (18 August 2026; Guest la
 | Reports | ![Reports](scripts/assets/results/admin-reports.png) |
 | Activity Log | ![Activity log](scripts/assets/results/admin-activity.png) |
 
+## Deploy on Render
+
+The repo includes `render.yaml`. One free web service builds the React app and runs the API + AI sidecar behind a single HTTPS URL.
+
+1. In MongoDB Atlas → **Network Access**, allow `0.0.0.0/0` (Render uses changing IPs).
+2. Open [Deploy to Render](https://render.com/deploy?repo=https://github.com/esmaelmohammed-ux/Adama-city-citizen-complaint-and-request-management-system) and sign in.
+3. When prompted, paste:
+   - **MONGODB_URI** — Atlas connection string (same cluster as local is fine)
+   - **GEMINI_API_KEY** — optional; chatbot falls back to heuristic if empty
+   - **SMTP_USER / SMTP_PASS / EMAIL_FROM** — optional; needed for password-reset email
+4. Apply the blueprint. The live URL is `https://adama-citizen-portal.onrender.com` (Render may add a suffix).
+
+Free instances sleep after 15 minutes idle; the first request can take about a minute. Uploaded files on disk are lost when the instance restarts — use the same Atlas database for complaint data.
+
 ## Remaining work
 
 - Full user / department edit-delete, report export, pagination
-- Production deployment (HTTPS, backups)
+- Persistent photo storage (cloud bucket) and backups
 - Live SMS (Africa’s Talking live app username + API key + credits)
 - GIS / map pin on top of the Adama area dropdown

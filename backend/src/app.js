@@ -1,26 +1,26 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import routes from './routes/index.js';
+import { aiProxy } from './middleware/aiProxy.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+import { isAllowedOrigin } from './utils/publicOrigin.js';
 
-function isAllowedOrigin(origin) {
-  if (!origin) return true;
-  const configured = (process.env.CLIENT_ORIGIN || 'http://localhost:5173').replace(/\/$/, '');
-  if (origin === configured) return true;
-  try {
-    const { hostname } = new URL(origin);
-    return hostname === 'localhost' || hostname === '127.0.0.1';
-  } catch {
-    return false;
-  }
-}
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function createApp() {
   const app = express();
+  app.set('trust proxy', 1);
 
-  app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+      contentSecurityPolicy: false,
+    })
+  );
   app.use(
     cors({
       origin(origin, callback) {
@@ -33,10 +33,23 @@ export function createApp() {
   app.use(express.json({ limit: '5mb' }));
   app.use(express.urlencoded({ extended: true }));
 
-  const uploadDir = process.env.UPLOAD_DIR || 'uploads';
-  app.use('/uploads', express.static(path.resolve(uploadDir)));
+  const uploadDir = path.resolve(process.env.UPLOAD_DIR || 'uploads');
+  fs.mkdirSync(uploadDir, { recursive: true });
+  app.use('/uploads', express.static(uploadDir));
 
+  app.use('/api/ai', aiProxy);
   app.use('/api', routes);
+
+  const frontendDist = path.resolve(__dirname, '../../frontend/dist');
+  const distIndex = path.join(frontendDist, 'index.html');
+  if (fs.existsSync(distIndex)) {
+    app.use(express.static(frontendDist));
+    app.use((req, res, next) => {
+      if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+      if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) return next();
+      res.sendFile(distIndex, (err) => (err ? next(err) : undefined));
+    });
+  }
 
   app.use(notFound);
   app.use(errorHandler);

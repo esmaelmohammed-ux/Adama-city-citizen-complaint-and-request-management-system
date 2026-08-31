@@ -118,23 +118,27 @@ export default function LoginPage() {
             <p>{t('auth.signInCardSubtitle')}</p>
           </div>
 
-          <p className="auth-demo-label">{t('auth.demoAccounts')}</p>
-          <div className="auth-demo-row">
-            {sortedDemoAccounts.map((acc) => (
-              <button
-                key={acc.email}
-                type="button"
-                className="auth-demo-btn"
-                onClick={() => fillDemoAccount(acc)}
-              >
-                {t(DEMO_BTN_KEYS[acc.label] || acc.label)}
-              </button>
-            ))}
-          </div>
+          {sortedDemoAccounts.length > 0 && (
+            <>
+              <p className="auth-demo-label">{t('auth.demoAccounts')}</p>
+              <div className="auth-demo-row">
+                {sortedDemoAccounts.map((acc) => (
+                  <button
+                    key={acc.email}
+                    type="button"
+                    className="auth-demo-btn"
+                    onClick={() => fillDemoAccount(acc)}
+                  >
+                    {t(DEMO_BTN_KEYS[acc.label] || acc.label)}
+                  </button>
+                ))}
+              </div>
 
-          <div className="auth-divider">
-            <span>{t('auth.orContinueEmail')}</span>
-          </div>
+              <div className="auth-divider">
+                <span>{t('auth.orContinueEmail')}</span>
+              </div>
+            </>
+          )}
 
           {error && <div className="alert alert-error">{error}</div>}
           {info && <div className="alert alert-info">{info}</div>}
