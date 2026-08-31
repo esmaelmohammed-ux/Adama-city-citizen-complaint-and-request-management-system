@@ -3,7 +3,7 @@ import { ADAMA_LOCATION_GROUPS, ADAMA_LOCATIONS } from '../constants';
 import { useLanguage } from '../context/LanguageContext';
 import { locationLabel } from '../utils/location';
 import './LocationSelect.css';
-// comment added by m
+// comment added by me
 export default function LocationSelect({ location = '', landmark = '', onChange }) {
   const { t } = useLanguage();
   const known = !location || ADAMA_LOCATIONS.includes(location);
