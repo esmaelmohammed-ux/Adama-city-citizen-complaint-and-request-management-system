@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import './ImageUpload.css';
-// comment added by m
+// comment added by me
 const MAX_SIZE_BYTES = 2 * 1024 * 1024;
 
 export default function ImageUpload({
