@@ -12,7 +12,7 @@ import {
   COMPLAINT_CATEGORIES,
   DEPARTMENTS,
 } from '../constants.js';
-import { resolveEffectiveProvider } from '../config.js';
+import { config, resolveEffectiveProvider } from '../config.js';
 
 const router = Router();
 
@@ -22,8 +22,10 @@ function requireText(body) {
 }
 
 router.get('/meta', (_req, res) => {
+  const provider = resolveEffectiveProvider();
   res.json({
-    provider: resolveEffectiveProvider(),
+    provider,
+    model: provider === 'gemini' ? config.geminiModel : undefined,
     features: [
       'citizen-assist',
       'admin-triage',

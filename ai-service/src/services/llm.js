@@ -13,6 +13,11 @@ import {
 } from './heuristics.js';
 import { FAQ_ENTRIES, heuristicChat } from './faq.js';
 
+function extractGeminiText(data) {
+  const parts = data?.candidates?.[0]?.content?.parts || [];
+  return parts.map((p) => p.text).filter(Boolean).join('\n').trim();
+}
+
 async function callGemini(prompt) {
   // Auth keys (AQ.*) need x-goog-api-key header; query ?key= is for older AIza keys.
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${config.geminiModel}:generateContent`;
@@ -24,7 +29,11 @@ async function callGemini(prompt) {
     },
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.2, responseMimeType: 'application/json' },
+      generationConfig: {
+        temperature: 0.2,
+        responseMimeType: 'application/json',
+        thinkingConfig: { thinkingLevel: 'MINIMAL' },
+      },
     }),
   });
   if (!res.ok) {
@@ -32,7 +41,7 @@ async function callGemini(prompt) {
     throw new Error(`Gemini error ${res.status}: ${errText.slice(0, 300)}`);
   }
   const data = await res.json();
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = extractGeminiText(data);
   if (!text) throw new Error('Gemini returned empty response');
   return JSON.parse(stripCodeFences(text));
 }

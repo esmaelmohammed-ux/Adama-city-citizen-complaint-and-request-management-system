@@ -15,8 +15,8 @@ const provider = (process.env.AI_PROVIDER || 'gemini').toLowerCase();
 export const config = {
   port: Number(process.env.PORT) || 5100,
   provider,
-  geminiApiKey: process.env.GEMINI_API_KEY || '',
-  geminiModel: process.env.GEMINI_MODEL || 'gemini-flash-lite-latest',
+  geminiApiKey: (process.env.GEMINI_API_KEY || '').trim(),
+  geminiModel: process.env.GEMINI_MODEL || 'gemini-3.6-flash',
   openaiApiKey: process.env.OPENAI_API_KEY || '',
   openaiModel: process.env.OPENAI_MODEL || 'gpt-4o-mini',
   mongoUri: buildMongoUri(),

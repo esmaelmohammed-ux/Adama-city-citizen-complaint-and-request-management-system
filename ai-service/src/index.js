@@ -21,6 +21,7 @@ app.get('/api/health', (_req, res) => {
     ok: true,
     service: 'adama-citizen-ai-service',
     provider: resolveEffectiveProvider(),
+    model: resolveEffectiveProvider() === 'gemini' ? config.geminiModel : undefined,
     port: config.port,
   });
 });
@@ -34,8 +35,14 @@ app.use((err, _req, res, _next) => {
 
 await connectDbOptional();
 
+// dotenv is loaded once at process start (config.js)
+
 app.listen(config.port, () => {
+  const provider = resolveEffectiveProvider();
   console.log(`[ai] Helper UI  → http://localhost:${config.port}`);
   console.log(`[ai] API        → http://localhost:${config.port}/api/ai`);
-  console.log(`[ai] Provider   → ${resolveEffectiveProvider()}`);
+  console.log(`[ai] Provider   → ${provider}${provider === 'gemini' ? ` (${config.geminiModel})` : ''}`);
+  if (config.provider === 'gemini' && !config.geminiApiKey) {
+    console.warn('[ai] GEMINI_API_KEY is empty — falling back to heuristic.');
+  }
 });
