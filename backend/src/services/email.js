@@ -94,15 +94,21 @@ export async function sendEmail({ to, subject, html, text }) {
     return { ok: false, channel: 'none', error: 'Missing recipient' };
   }
 
+  const fallback = (process.env.TEST_EMAIL || '').trim();
   const undeliverable = recipients.filter((address) => !isDeliverableEmail(address));
-  if (undeliverable.length) {
+  let deliverTo = recipients.filter((address) => isDeliverableEmail(address));
+
+  if (undeliverable.length && isDeliverableEmail(fallback)) {
+    console.log('[email] redirecting', undeliverable.join(', '), '->', fallback);
+    deliverTo = [...new Set([...deliverTo, fallback])];
+  } else if (undeliverable.length && deliverTo.length === 0) {
     console.log('[email] skipped undeliverable address', undeliverable.join(', '));
     return { ok: true, channel: 'skipped', skipped: true };
   }
 
   const payload = {
     from: from(),
-    to: recipients,
+    to: deliverTo,
     subject,
     html: html || undefined,
     text: text || (html ? undefined : subject),
@@ -115,7 +121,14 @@ export async function sendEmail({ to, subject, html, text }) {
     try {
       const result = await sendViaSmtp(payload);
       if (result) return result;
-      console.warn('[email] EMAIL_PROVIDER=smtp but SMTP is not configured');
+      console.warn(
+        '[email] EMAIL_PROVIDER=smtp but SMTP is not configured. Set SMTP_USER and SMTP_PASS (Gmail App Password) in backend/.env'
+      );
+      return {
+        ok: false,
+        channel: 'smtp',
+        error: 'SMTP is not configured. Set SMTP_USER and SMTP_PASS in backend/.env',
+      };
     } catch (err) {
       console.warn('[email] SMTP failed:', err.message);
       return { ok: false, channel: 'smtp', error: err.message };

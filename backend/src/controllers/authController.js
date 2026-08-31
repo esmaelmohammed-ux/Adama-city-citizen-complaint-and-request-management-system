@@ -125,7 +125,10 @@ export async function forgotPassword(req, res, next) {
       user.passwordResetExpires = new Date(Date.now() + RESET_TTL_MS);
       await user.save();
 
-      const origin = (process.env.CLIENT_ORIGIN || 'http://localhost:5173').replace(/\/$/, '');
+      const origin = (req.get('origin') || process.env.CLIENT_ORIGIN || 'http://localhost:5173').replace(
+        /\/$/,
+        ''
+      );
       const resetUrl = `${origin}/reset-password?token=${rawToken}`;
 
       await sendEmail({

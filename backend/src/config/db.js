@@ -26,13 +26,18 @@ export async function connectDB() {
 
   try {
     await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 15000,
+      serverSelectionTimeoutMS: 30000,
+      family: 4,
     });
     console.log(`MongoDB connected (${mongoose.connection.name})`);
   } catch (err) {
     if (err.code === 8000 || err.codeName === 'AtlasError') {
       console.error(
         'MongoDB Atlas authentication failed. Check MONGODB_USER and MONGODB_PASSWORD in backend/.env'
+      );
+    } else if (err.name === 'MongooseServerSelectionError') {
+      console.error(
+        'MongoDB Atlas timed out. On Atlas: Network Access → add your current IP (or 0.0.0.0/0 for local testing), and confirm the cluster is not paused.'
       );
     }
     throw err;
