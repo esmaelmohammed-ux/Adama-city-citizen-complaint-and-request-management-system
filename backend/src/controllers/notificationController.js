@@ -5,6 +5,7 @@ import Complaint from '../models/Complaint.js';
 import User from '../models/User.js';
 import { ROLES } from '../constants/index.js';
 import { deliverUserChannels } from '../services/notifyChannels.js';
+import { getSmsRuntime } from '../services/sms.js';
 import { buildOfficerEntityFilter } from '../utils/officerScope.js';
 import { createNotification } from '../utils/workflow.js';
 import { toClient, toClientList } from '../utils/toClient.js';
@@ -86,9 +87,12 @@ export async function testNotifyChannels(req, res, next) {
       });
     }
 
+    const sms = getSmsRuntime();
     const config = {
-      smsEnabled: process.env.SMS_ENABLED === 'true',
-      atUsername: process.env.AT_USERNAME || null,
+      smsEnabled: sms.enabled,
+      smsMode: sms.mode,
+      atUsername: sms.username,
+      hasApiKey: sms.hasApiKey,
       hasResend: Boolean(process.env.RESEND_API_KEY),
       emailFrom: process.env.EMAIL_FROM || null,
     };

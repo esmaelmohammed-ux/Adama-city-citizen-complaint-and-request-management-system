@@ -93,7 +93,7 @@ The frontend talks to the live API (`VITE_API_URL`). JWT is stored in `localStor
 | Auth | JWT + bcrypt, role-based route protection |
 | i18n | English, Amharic, Afaan Oromo (public site and authenticated UI) |
 | Email | SMTP (Gmail) or Resend; placeholder `@test.com` addresses are skipped |
-| SMS | Africa’s Talking scaffold (off by default) |
+| SMS | Africa’s Talking live SMS (needs live username + API key + credits) |
 | AI | Optional Express sidecar (`ai-service`) with Gemini / OpenAI / heuristic |
 
 ## Project structure
@@ -123,7 +123,7 @@ Copy `backend/.env.example` → `backend/.env`:
 | `EMAIL_PROVIDER` | `smtp` (recommended), `auto`, or `resend` |
 | `SMTP_HOST` / `SMTP_USER` / `SMTP_PASS` | Outbound email via Gmail SMTP |
 | `EMAIL_FROM` / `RESEND_API_KEY` | Resend path if used |
-| `SMS_ENABLED` / `AT_*` | Africa’s Talking SMS (off by default) |
+| `SMS_ENABLED` / `AT_*` | Africa’s Talking **live** SMS (off until live username + API key are set) |
 
 Also whitelist your IP in MongoDB Atlas **Network Access**.
 
@@ -205,5 +205,5 @@ Screenshots captured from the running complaint portal (18 August 2026; Guest la
 
 - Full user / department edit-delete, report export, pagination
 - Production deployment (HTTPS, backups)
-- Live SMS (Africa’s Talking is sandbox-ready, off by default)
+- Live SMS (Africa’s Talking live app username + API key + credits)
 - GIS / map pin on top of the Adama area dropdown

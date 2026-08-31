@@ -1,11 +1,11 @@
 /**
- * Africa's Talking SMS.
- * Enable with SMS_ENABLED=true and set AT_USERNAME + AT_API_KEY.
- * Sandbox: AT_USERNAME=sandbox + sandbox API key (Settings → API Key in sandbox app).
- * Live: your app username + live API key (not "sandbox").
+ * Africa's Talking SMS — live (real phones) by default.
  *
- * Sandbox does NOT deliver to real handsets — open
- * https://simulator.africastalking.com:1517 and register the same number there.
+ * Live: SMS_ENABLED=true, AT_USERNAME=<app username, not "sandbox">, AT_API_KEY=<live key>.
+ * Create an app at https://account.africastalking.com , enable SMS, and add credits.
+ * Optional AT_SENDER_ID must be an approved sender (otherwise omit it).
+ *
+ * Sandbox (simulator only): AT_USERNAME=sandbox — does not reach real handsets.
  */
 
 let atSms;
@@ -13,6 +13,23 @@ let loadedCredsKey = '';
 
 function credsFingerprint() {
   return `${process.env.AT_USERNAME || ''}|${process.env.AT_API_KEY || ''}`;
+}
+
+export function getSmsRuntime() {
+  const enabled = process.env.SMS_ENABLED === 'true';
+  const username = (process.env.AT_USERNAME || '').trim();
+  const apiKey = (process.env.AT_API_KEY || '').trim();
+  const senderId = (process.env.AT_SENDER_ID || '').trim();
+  const sandbox = username.toLowerCase() === 'sandbox';
+
+  let mode = 'disabled';
+  if (enabled && username && apiKey) {
+    mode = sandbox ? 'sandbox' : 'live';
+  } else if (enabled) {
+    mode = 'unconfigured';
+  }
+
+  return { enabled, username: username || null, hasApiKey: Boolean(apiKey), senderId: senderId || null, sandbox, mode };
 }
 
 /** Normalize to E.164-ish (+…). Ethiopian local 09… → +2519… */
@@ -102,7 +119,8 @@ async function loadAtSms() {
  * @returns {{ ok: boolean, channel: string, error?: string, skipped?: boolean, response?: unknown }}
  */
 export async function sendSms({ to, message }) {
-  if (process.env.SMS_ENABLED !== 'true') {
+  const runtime = getSmsRuntime();
+  if (!runtime.enabled) {
     return { ok: true, channel: 'disabled', skipped: true };
   }
 
@@ -111,10 +129,18 @@ export async function sendSms({ to, message }) {
     return { ok: false, channel: 'none', error: 'Missing to or message' };
   }
 
+  if (runtime.sandbox) {
+    const error =
+      'AT_USERNAME=sandbox cannot send to real phones. Set your live Africa\'s Talking app username and live API key.';
+    console.warn('[sms]', error);
+    return { ok: false, channel: 'sandbox', error };
+  }
+
   const sms = await loadAtSms();
   if (!sms) {
-    console.log('[sms:console]', { to: phone, message });
-    return { ok: true, channel: 'console' };
+    const error = 'SMS is enabled but AT_USERNAME or AT_API_KEY is missing.';
+    console.warn('[sms]', error);
+    return { ok: false, channel: 'unconfigured', error };
   }
 
   const options = {
