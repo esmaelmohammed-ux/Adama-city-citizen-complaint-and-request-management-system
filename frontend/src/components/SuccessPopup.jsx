@@ -1,11 +1,11 @@
-import './SuccessPopup.css';
-// comment added by me
+import "./SuccessPopup.css";
+// comment added by m
 export default function SuccessPopup({
   open,
-  title = 'Submitted successfully',
+  title = "Submitted successfully",
   message,
   referenceId,
-  confirmLabel = 'Continue',
+  confirmLabel = "Continue",
   onConfirm,
 }) {
   if (!open) return null;
@@ -18,7 +18,9 @@ export default function SuccessPopup({
         aria-modal="true"
         aria-labelledby="success-popup-title"
       >
-        <div className="success-popup-icon" aria-hidden="true">✓</div>
+        <div className="success-popup-icon" aria-hidden="true">
+          ✓
+        </div>
         <h2 id="success-popup-title">{title}</h2>
         {message && <p className="success-popup-message">{message}</p>}
         {referenceId && (
