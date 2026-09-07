@@ -1,10 +1,18 @@
-import { Link } from 'react-router-dom';
-import logo from '../assets/adama-logo.png';
-// comment added by me
-export default function BrandLogo({ className = '', showText = true, to = '/' }) {
+import { Link } from "react-router-dom";
+import logo from "../assets/adama-logo.png";
+// comment added by m
+export default function BrandLogo({
+  className = "",
+  showText = true,
+  to = "/",
+}) {
   return (
     <Link to={to} className={`brand-logo ${className}`}>
-      <img src={logo} alt="Adama City Administration" className="brand-logo-img" />
+      <img
+        src={logo}
+        alt="Adama City Administration"
+        className="brand-logo-img"
+      />
       {showText && (
         <span className="brand-logo-text">
           <strong>Adama City</strong>
