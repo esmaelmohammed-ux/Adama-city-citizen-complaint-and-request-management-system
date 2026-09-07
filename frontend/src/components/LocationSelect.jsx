@@ -1,10 +1,14 @@
-import { useEffect, useId, useRef, useState } from 'react';
-import { ADAMA_LOCATION_GROUPS, ADAMA_LOCATIONS } from '../constants';
-import { useLanguage } from '../context/LanguageContext';
-import { locationLabel } from '../utils/location';
-import './LocationSelect.css';
-// comment added by me
-export default function LocationSelect({ location = '', landmark = '', onChange }) {
+import { useEffect, useId, useRef, useState } from "react";
+import { ADAMA_LOCATION_GROUPS, ADAMA_LOCATIONS } from "../constants";
+import { useLanguage } from "../context/LanguageContext";
+import { locationLabel } from "../utils/location";
+import "./LocationSelect.css";
+// comment added by m
+export default function LocationSelect({
+  location = "",
+  landmark = "",
+  onChange,
+}) {
   const { t } = useLanguage();
   const known = !location || ADAMA_LOCATIONS.includes(location);
   const [open, setOpen] = useState(false);
@@ -18,19 +22,21 @@ export default function LocationSelect({ location = '', landmark = '', onChange 
       }
     };
     const handleKey = (e) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === "Escape") setOpen(false);
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleKey);
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKey);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKey);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKey);
     };
   }, []);
 
   const display = location
-    ? (known ? locationLabel(location, t) : location)
-    : t('form.selectLocation');
+    ? known
+      ? locationLabel(location, t)
+      : location
+    : t("form.selectLocation");
 
   const handleSelect = (value) => {
     onChange({ location: value });
@@ -40,21 +46,23 @@ export default function LocationSelect({ location = '', landmark = '', onChange 
   return (
     <>
       <label>
-        {t('form.location')}
+        {t("form.location")}
         <div
           ref={rootRef}
-          className={`location-select ${open ? 'open' : ''}`.trim()}
+          className={`location-select ${open ? "open" : ""}`.trim()}
         >
           <button
             type="button"
-            className={`location-select-trigger ${location ? '' : 'placeholder'}`.trim()}
+            className={`location-select-trigger ${location ? "" : "placeholder"}`.trim()}
             aria-haspopup="listbox"
             aria-expanded={open}
             aria-controls={listId}
             onClick={() => setOpen((prev) => !prev)}
           >
             <span>{display}</span>
-            <span className="location-select-chevron" aria-hidden="true">▾</span>
+            <span className="location-select-chevron" aria-hidden="true">
+              ▾
+            </span>
           </button>
           <input
             className="location-select-required"
@@ -93,7 +101,7 @@ export default function LocationSelect({ location = '', landmark = '', onChange 
                       type="button"
                       role="option"
                       aria-selected={location === id}
-                      className={location === id ? 'active' : undefined}
+                      className={location === id ? "active" : undefined}
                       onClick={() => handleSelect(id)}
                     >
                       {t(`locations.${id}`)}
@@ -106,14 +114,14 @@ export default function LocationSelect({ location = '', landmark = '', onChange 
         </div>
       </label>
       <label>
-        {t('form.landmark')}
+        {t("form.landmark")}
         <input
           value={landmark}
           onChange={(e) => onChange({ landmark: e.target.value })}
-          placeholder={t('form.landmarkPlaceholder')}
+          placeholder={t("form.landmarkPlaceholder")}
           maxLength={120}
         />
-        <small className="field-hint">{t('form.landmarkHint')}</small>
+        <small className="field-hint">{t("form.landmarkHint")}</small>
       </label>
     </>
   );
