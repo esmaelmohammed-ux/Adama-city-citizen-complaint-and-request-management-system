@@ -1,5 +1,5 @@
-import './Toast.css';
-// comment added by me
+import "./Toast.css";
+// comment added by m
 export default function ToastStack({ toasts, onDismiss }) {
   if (!toasts.length) return null;
 
@@ -12,7 +12,7 @@ export default function ToastStack({ toasts, onDismiss }) {
           role="status"
         >
           <span className="toast-icon" aria-hidden="true">
-            {toast.type === 'error' ? '!' : '✓'}
+            {toast.type === "error" ? "!" : "✓"}
           </span>
           <p className="toast-message">{toast.message}</p>
           <button
