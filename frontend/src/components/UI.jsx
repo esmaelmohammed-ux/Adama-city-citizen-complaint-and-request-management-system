@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import { useLanguage } from '../context/LanguageContext';
-import './StatusBadge.css';
-// comment added by m
+import { Link } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
+import "./StatusBadge.css";
+// comment added by me
 export default function StatusBadge({ status }) {
   const { t } = useLanguage();
   return (
@@ -11,7 +11,7 @@ export default function StatusBadge({ status }) {
   );
 }
 
-export function StatCard({ label, value, icon, tone = 'default' }) {
+export function StatCard({ label, value, icon, tone = "default" }) {
   return (
     <div className={`stat-card stat-${tone}`}>
       <div className="stat-icon">{icon}</div>
