@@ -1,8 +1,8 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { ROLES } from '../constants';
-import { useApp } from '../context/AppContext';
-import Layout from './Layout';
-// comment added by m
+import { Navigate, Outlet } from "react-router-dom";
+import { ROLES } from "../constants";
+import { useApp } from "../context/AppContext";
+import Layout from "./Layout";
+// comment added by me
 export function ProtectedRoute({ allowedRoles }) {
   const { currentUser, initializing } = useApp();
 
@@ -16,11 +16,11 @@ export function ProtectedRoute({ allowedRoles }) {
 
   if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
     const redirect = {
-      [ROLES.CITIZEN]: '/citizen',
-      [ROLES.ADMIN]: '/admin',
-      [ROLES.OFFICER]: '/officer',
+      [ROLES.CITIZEN]: "/citizen",
+      [ROLES.ADMIN]: "/admin",
+      [ROLES.OFFICER]: "/officer",
     }[currentUser.role];
-    return <Navigate to={redirect || '/'} replace />;
+    return <Navigate to={redirect || "/"} replace />;
   }
 
   return (
@@ -37,11 +37,11 @@ export function PublicOnlyRoute() {
   }
   if (currentUser) {
     const redirect = {
-      [ROLES.CITIZEN]: '/citizen',
-      [ROLES.ADMIN]: '/admin',
-      [ROLES.OFFICER]: '/officer',
+      [ROLES.CITIZEN]: "/citizen",
+      [ROLES.ADMIN]: "/admin",
+      [ROLES.OFFICER]: "/officer",
     }[currentUser.role];
-    return <Navigate to={redirect || '/'} replace />;
+    return <Navigate to={redirect || "/"} replace />;
   }
   return <Outlet />;
 }
