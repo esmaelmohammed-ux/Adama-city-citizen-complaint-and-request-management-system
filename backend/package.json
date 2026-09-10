@@ -10,6 +10,7 @@
     "test:channels": "node src/scripts/testNotifyChannels.js"
   },
   "dependencies": {
+    "adama-citizen-portal": "file:..",
     "africastalking": "^0.7.9",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",

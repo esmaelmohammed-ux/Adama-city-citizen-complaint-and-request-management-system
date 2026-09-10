@@ -4,3 +4,5 @@ node_modules/
 *.log
 uploads/
 .DS_Store
+.vercel
+.env*
