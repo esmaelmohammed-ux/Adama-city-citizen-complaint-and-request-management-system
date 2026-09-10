@@ -1,0 +1,4 @@
+frontend/**
+scripts/assets/**
+*.docx
+*.pdf

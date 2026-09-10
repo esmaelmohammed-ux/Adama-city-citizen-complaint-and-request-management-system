@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "express",
+  "installCommand": "npm install && npm install --prefix backend && npm install --prefix ai-service",
+  "buildCommand": "echo Adama API"
+}

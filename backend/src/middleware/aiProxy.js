@@ -18,6 +18,13 @@ function allow(ip) {
   return true;
 }
 
+export function aiRateLimit(req, res, next) {
+  if (!allow(clientIp(req))) {
+    return res.status(429).json({ error: 'Too many AI requests. Please try again later.' });
+  }
+  next();
+}
+
 export async function aiProxy(req, res) {
   if (!allow(clientIp(req))) {
     return res.status(429).json({ error: 'Too many AI requests. Please try again later.' });

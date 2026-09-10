@@ -201,19 +201,51 @@ Screenshots captured from the running complaint portal (18 August 2026; Guest la
 | Reports | ![Reports](scripts/assets/results/admin-reports.png) |
 | Activity Log | ![Activity log](scripts/assets/results/admin-activity.png) |
 
-## Deploy on Render
+## Deploy on Vercel
 
-The repo includes `render.yaml`. One free web service builds the React app and runs the API + AI sidecar behind a single HTTPS URL.
+Vercel hosts this as **two projects** from the same GitHub repo (the React app is static; Express + MongoDB cannot run as a static site).
 
-1. In MongoDB Atlas → **Network Access**, allow `0.0.0.0/0` (Render uses changing IPs).
-2. Open [Deploy to Render](https://render.com/deploy?repo=https://github.com/esmaelmohammed-ux/Adama-city-citizen-complaint-and-request-management-system) and sign in.
-3. When prompted, paste:
-   - **MONGODB_URI** — Atlas connection string (same cluster as local is fine)
-   - **GEMINI_API_KEY** — optional; chatbot falls back to heuristic if empty
-   - **SMTP_USER / SMTP_PASS / EMAIL_FROM** — optional; needed for password-reset email
-4. Apply the blueprint. The live URL is `https://adama-citizen-portal.onrender.com` (Render may add a suffix).
+### 1. MongoDB Atlas
 
-Free instances sleep after 15 minutes idle; the first request can take about a minute. Uploaded files on disk are lost when the instance restarts — use the same Atlas database for complaint data.
+Network Access → allow `0.0.0.0/0` (Vercel IPs change).
+
+### 2. API project
+
+[New Vercel project](https://vercel.com/new) → import `Adama-city-citizen-complaint-and-request-management-system`.
+
+- **Root Directory:** leave as the repository root (do not set `frontend`)
+- Framework: Express / Other (detected from `server.js`)
+
+Environment variables:
+
+| Name | Required | Notes |
+|------|----------|--------|
+| `JWT_SECRET` | Yes | Long random string (Generate on Vercel) |
+| `MONGODB_URI` | Yes | Atlas connection string |
+| `CLIENT_ORIGIN` | Yes | Frontend URL, e.g. `https://adama-web.vercel.app` (add after step 3, then redeploy API) |
+| `GEMINI_API_KEY` | No | Chatbot falls back to heuristic if empty |
+| `SMTP_USER` / `SMTP_PASS` / `EMAIL_FROM` | No | Password-reset email |
+
+Deploy. Copy the API URL, e.g. `https://adama-citizen-portal.vercel.app`. Health check: `https://<api>/api/health`.
+
+### 3. Frontend project
+
+New Vercel project → **same repo**.
+
+- **Root Directory:** `frontend`
+- Framework: Vite
+
+Environment variables (Production):
+
+| Name | Value |
+|------|--------|
+| `VITE_API_URL` | `https://<your-api-project>.vercel.app/api` |
+
+Deploy. Copy the frontend URL into the API project's `CLIENT_ORIGIN` and redeploy the API.
+
+Hobby functions time out around 10 seconds; Gemini is usually faster than that. Disk uploads use `/tmp` and do not persist — complaint photos stored as data URLs in MongoDB still work.
+
+`render.yaml` remains if you prefer a single Render web service instead.
 
 ## Remaining work
 
