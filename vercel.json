@@ -1,19 +1,19 @@
 {
   "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "frontend/dist",
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
       "source": "/(.*)",
-      "destination": {
-        "type": "service",
-        "service": "adama-citizen-portal"
-      }
+      "destination": "/index.html"
     }
-  ],
-  "services": {
-    "adama-citizen-portal": {
-      "root": ".",
-      "entrypoint": "api/index.js",
-      "buildCommand": "npm run build"
-    }
-  }
+  ]
 }
