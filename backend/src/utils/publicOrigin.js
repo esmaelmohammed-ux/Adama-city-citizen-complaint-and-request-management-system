@@ -7,28 +7,14 @@ export function publicOrigin() {
   return raw.replace(/\/$/, '');
 }
 
-function extraOrigins() {
-  const list = new Set([publicOrigin()]);
-  const extra = process.env.CLIENT_ORIGINS || '';
-  for (const item of extra.split(',')) {
-    const trimmed = item.trim().replace(/\/$/, '');
-    if (trimmed) list.add(trimmed);
-  }
-  if (process.env.VERCEL_URL) list.add(`https://${process.env.VERCEL_URL}`);
-  return list;
-}
-
 export function isAllowedOrigin(origin) {
   if (!origin) return true;
-  if (extraOrigins().has(origin)) return true;
+  if (origin === publicOrigin()) return true;
+  if (process.env.NODE_ENV === 'production') return false;
   try {
     const { hostname } = new URL(origin);
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return process.env.NODE_ENV !== 'production';
-    }
-    if (hostname.endsWith('.vercel.app')) return true;
+    return hostname === 'localhost' || hostname === '127.0.0.1';
   } catch {
     return false;
   }
-  return false;
 }

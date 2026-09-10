@@ -7,9 +7,20 @@
   },
   "scripts": {
     "start": "node scripts/start-production.js",
-    "build": "npm install --prefix frontend && npm run build --prefix frontend && npm install --prefix backend && npm install --prefix ai-service"
+    "build": "npm --prefix frontend install && npm --prefix frontend run build"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "africastalking": "^0.7.9",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.0",
+    "multer": "^2.0.1",
+    "nodemailer": "^9.0.5",
+    "resend": "^6.19.0"
   }
 }

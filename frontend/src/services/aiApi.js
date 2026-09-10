@@ -1,14 +1,7 @@
-function productionAiOrigin() {
-  if (import.meta.env.VITE_AI_URL) return import.meta.env.VITE_AI_URL;
-  const api = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
-  if (!api) return '';
-  return api.endsWith('/api') ? api.slice(0, -4) : api;
-}
-
 const AI_URL = (
   import.meta.env.DEV
     ? import.meta.env.VITE_AI_URL || 'http://localhost:5100'
-    : productionAiOrigin()
+    : import.meta.env.VITE_AI_URL || ''
 ).replace(/\/$/, '');
 
 export class AiApiError extends Error {
