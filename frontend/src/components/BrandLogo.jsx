@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/adama-logo.png";
-// comment added by me
+// comment added by mgit add . 
+
+
 export default function BrandLogo({
   className = "",
   showText = true,
