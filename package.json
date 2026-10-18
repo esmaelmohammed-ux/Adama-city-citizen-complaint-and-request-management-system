@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "node scripts/start-production.js",
-    "build": "npm --prefix frontend install --include=dev && npm --prefix frontend run build"
+    "build": "npm --prefix backend install --omit=dev && npm --prefix ai-service install --omit=dev && npm --prefix frontend install --include=dev && npm --prefix frontend run build"
   },
   "dependencies": {
     "africastalking": "^0.7.9",
