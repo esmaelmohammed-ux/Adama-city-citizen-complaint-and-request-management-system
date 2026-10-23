@@ -171,6 +171,12 @@ export async function sendEmail({ to, subject, html, text }) {
     return { ok: false, channel: 'smtp', error: err.message };
   }
 
+  if (process.env.NODE_ENV === 'production') {
+    const error = 'No email provider is configured. Set RESEND_API_KEY or SMTP credentials.';
+    console.error(`[email] ${error}`);
+    return { ok: false, channel: 'none', error };
+  }
+
   console.log('[email:console]', {
     to: payload.to,
     subject: payload.subject,

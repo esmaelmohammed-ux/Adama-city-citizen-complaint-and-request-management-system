@@ -120,7 +120,7 @@ Copy `backend/.env.example` → `backend/.env`:
 | `MONGODB_URI` | Optional full URI (local or Atlas); used if user/password not set |
 | `JWT_SECRET` | Required signing secret |
 | `CLIENT_ORIGIN` | CORS origin (`http://localhost:5173`) |
-| `EMAIL_PROVIDER` | `smtp` (recommended), `auto`, or `resend` |
+| `EMAIL_PROVIDER` | `resend` (Resend first, SMTP fallback), `smtp`, or `auto` |
 | `SMTP_HOST` / `SMTP_USER` / `SMTP_PASS` | Outbound email via Gmail SMTP |
 | `EMAIL_FROM` / `RESEND_API_KEY` | Resend path if used |
 | `SMS_ENABLED` / `AT_*` | Africa’s Talking **live** SMS (off until live username + API key are set) |
@@ -210,8 +210,11 @@ The repo includes `render.yaml`. One free web service builds the React app and r
 3. When prompted, paste:
    - **MONGODB_URI** — Atlas connection string (same cluster as local is fine)
    - **GEMINI_API_KEY** — optional; chatbot falls back to heuristic if empty
-   - **SMTP_USER / SMTP_PASS / EMAIL_FROM** — optional; needed for password-reset email
+   - **RESEND_API_KEY** — Resend API key
+   - **EMAIL_FROM** — sender address on a domain verified in Resend (for example, `Adama Citizen Portal <no-reply@yourdomain.com>`)
 4. Apply the blueprint. The live URL is `https://adama-citizen-portal.onrender.com` (Render may add a suffix).
+
+For an existing Render service, set `EMAIL_PROVIDER=resend`, `RESEND_API_KEY`, and `EMAIL_FROM` in **Environment**, then redeploy. Verify the sender domain in Resend first; `onboarding@resend.dev` is restricted to sending to the Resend account owner's email address. Check the service logs for `[email] Resend failed` if delivery is rejected.
 
 Free instances sleep after 15 minutes idle; the first request can take about a minute. Uploaded files on disk are lost when the instance restarts — use the same Atlas database for complaint data.
 

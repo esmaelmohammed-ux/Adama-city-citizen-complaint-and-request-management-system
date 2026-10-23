@@ -96,7 +96,7 @@ def crowfoot(draw, start, end, one_side="left"):
 
 def draw_use_case():
     regular, small, tiny, bold, title, h = fonts()
-    img, draw = canvas(2000, 1320, "Figure 2.2  Use Case Diagram — Citizen Complaint System")
+    img, draw = canvas(2000, 1320, "Use Case Diagram — Citizen Complaint System")
     actor(draw, 120, 640, "Citizen", small, bold)
     actor(draw, 1000, 130, "Administrator", small, bold)
     actor(draw, 1880, 640, "Department Officer", small, bold)
@@ -182,7 +182,7 @@ def label_mid(draw, a, b, text, font):
 
 def draw_er():
     regular, small, tiny, bold, title, h = fonts()
-    img, draw = canvas(2000, 1280, "Figure 2.3  Entity-Relationship Diagram")
+    img, draw = canvas(2000, 1280, "Entity-Relationship Diagram")
     user = entity_box(draw, 80, 90, 300, "USER", [
         "PK  _id", "UK  email", "fullName", "passwordHash", "role (citizen/admin/officer)",
         "phoneNumber", "FK  departmentId", "isActive", "createdAt / updatedAt",
@@ -229,7 +229,7 @@ def draw_er():
 
 def draw_architecture():
     regular, small, tiny, bold, title, h = fonts()
-    img, draw = canvas(1600, 900, "Figure 2.1  System Architecture")
+    img, draw = canvas(1600, 900, "System Architecture")
     layers = [
         (80, 90, 1440, 230, "Client Layer", ["Web Browser — React SPA (Vite)", "EN / Amharic / Afaan Oromo", "Guest UI, Login, Role dashboards"]),
         (80, 320, 900, 560, "Application Layer", ["Express REST API", "JWT Auth + RBAC", "Complaints, Users, Departments, Notifications"]),
@@ -251,7 +251,7 @@ def draw_architecture():
 
 def draw_dfd():
     regular, small, tiny, bold, title, h = fonts()
-    img, draw = canvas(1600, 900, "Figure 2.4  Level-0 Data Flow Diagram")
+    img, draw = canvas(1600, 900, "Level-0 Data Flow Diagram")
     # external entities
     boxes = [
         (80, 360, 300, 500, "Citizen"),
@@ -296,7 +296,7 @@ def diamond(draw, cx, cy, text, font):
 
 def draw_workflow():
     regular, small, tiny, bold, title, h = fonts()
-    img, draw = canvas(1100, 1680, "Figure 2.5  Complaint Workflow")
+    img, draw = canvas(1100, 1680, "Complaint Workflow")
     boxes = [
         (300, 80, 800, 140, "Citizen registers and logs in"),
         (300, 180, 800, 240, "Submit complaint (Adama location)"),
@@ -350,7 +350,7 @@ def draw_workflow():
 
 def draw_gantt():
     regular, small, tiny, bold, title, h = fonts()
-    img, draw = canvas(1600, 740, "Figure 3.1  Project Timeline  (7 Jun – 16 Aug 2026)")
+    img, draw = canvas(1600, 740, "Proposed Project Timeline (7 June–16 August 2026)")
     week_labels = [
         "7–13 Jun",
         "14–20 Jun",
@@ -399,7 +399,7 @@ def draw_gantt():
 
 def draw_org_chart():
     regular, small, tiny, bold, title, h = fonts()
-    img, draw = canvas(1400, 720, "Figure 5.1  Organizational Chart (host office context)")
+    img, draw = canvas(1400, 720, "Indicative Organizational and Placement Chart")
     boxes = [
         (430, 80, 970, 150, "Adama City Administration"),
         (430, 210, 970, 280, "Science and Technology Administration Office"),
@@ -463,7 +463,7 @@ def draw_cover_banner():
 
 def draw_deployment():
     regular, small, tiny, bold, title, h = fonts()
-    img, draw = canvas(1600, 520, "Figure 3.2  Deployment Architecture")
+    img, draw = canvas(1600, 520, "Conceptual Deployment Architecture")
     nodes = [
         (60, 180, 280, 340, "Users"),
         (360, 180, 640, 340, "Nginx\nReverse Proxy"),

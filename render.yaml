@@ -41,7 +41,9 @@ services:
       - key: SMTP_SECURE
         value: "false"
       - key: EMAIL_PROVIDER
-        value: smtp
+        value: resend
+      - key: RESEND_API_KEY
+        sync: false
       - key: SMTP_USER
         sync: false
       - key: SMTP_PASS
