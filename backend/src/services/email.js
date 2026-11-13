@@ -1,39 +1,48 @@
-import nodemailer from 'nodemailer';
-import { Resend } from 'resend';
+import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const from = () => process.env.EMAIL_FROM || 'Adama Citizen Portal <onboarding@resend.dev>';
+const from = () =>
+  process.env.EMAIL_FROM || "Adama Citizen Portal <onboarding@resend.dev>";
 
 /** Demo/login addresses that cannot receive mail (no MX), e.g. officer@test.com. */
 const SKIP_EMAIL_HOSTS = new Set([
-  'test.com',
-  'example.com',
-  'example.org',
-  'example.net',
-  'localhost',
-  'invalid',
+  "test.com",
+  "example.com",
+  "example.org",
+  "example.net",
+  "localhost",
+  "invalid",
 ]);
 
 export function isDeliverableEmail(address) {
-  const email = String(address || '').trim().toLowerCase();
-  const at = email.lastIndexOf('@');
+  const email = String(address || "")
+    .trim()
+    .toLowerCase();
+  const at = email.lastIndexOf("@");
   if (at < 1) return false;
   const host = email.slice(at + 1);
-  if (!host.includes('.')) return false;
+  if (!host.includes(".")) return false;
   if (SKIP_EMAIL_HOSTS.has(host)) return false;
-  if (host.endsWith('.test') || host.endsWith('.local') || host.endsWith('.invalid')) {
+  if (
+    host.endsWith(".test") ||
+    host.endsWith(".local") ||
+    host.endsWith(".invalid")
+  ) {
     return false;
   }
   return true;
 }
 
 function recipientsOf(to) {
-  return (Array.isArray(to) ? to : [to]).map((item) => String(item || '').trim()).filter(Boolean);
+  return (Array.isArray(to) ? to : [to])
+    .map((item) => String(item || "").trim())
+    .filter(Boolean);
 }
 
 /** Prefer SMTP "from" when sending via Gmail/SMTP (must match authenticated mailbox). */
 function smtpFrom() {
   if (process.env.SMTP_FROM) return process.env.SMTP_FROM;
-  const user = (process.env.SMTP_USER || '').trim();
+  const user = (process.env.SMTP_USER || "").trim();
   if (user) return `Adama Citizen Portal <${user}>`;
   return from();
 }
@@ -46,12 +55,12 @@ function getResend() {
 }
 
 let smtpTransport;
-let smtpTransportKey = '';
+let smtpTransportKey = "";
 function getSmtp() {
-  const host = (process.env.SMTP_HOST || '').trim();
-  const user = (process.env.SMTP_USER || '').trim();
+  const host = (process.env.SMTP_HOST || "").trim();
+  const user = (process.env.SMTP_USER || "").trim();
   // Google App Passwords are often pasted with spaces — strip them
-  const pass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
+  const pass = (process.env.SMTP_PASS || "").replace(/\s+/g, "");
   if (!host || !user || !pass) return null;
 
   const key = `${host}|${user}|${pass}|${process.env.SMTP_PORT}|${process.env.SMTP_SECURE}`;
@@ -60,7 +69,7 @@ function getSmtp() {
     smtpTransport = nodemailer.createTransport({
       host,
       port: Number(process.env.SMTP_PORT) || 587,
-      secure: process.env.SMTP_SECURE === 'true',
+      secure: process.env.SMTP_SECURE === "true",
       auth: { user, pass },
     });
   }
@@ -72,12 +81,12 @@ async function sendViaSmtp(payload) {
   if (!smtp) return null;
   await smtp.sendMail({
     from: smtpFrom(),
-    to: payload.to.join(', '),
+    to: payload.to.join(", "),
     subject: payload.subject,
     html: payload.html,
     text: payload.text,
   });
-  return { ok: true, channel: 'smtp' };
+  return { ok: true, channel: "smtp" };
 }
 
 /**
@@ -86,24 +95,34 @@ async function sendViaSmtp(payload) {
  */
 export async function sendEmail({ to, subject, html, text }) {
   if (!to) {
-    return { ok: false, channel: 'none', error: 'Missing recipient' };
+    return { ok: false, channel: "none", error: "Missing recipient" };
   }
 
   const recipients = recipientsOf(to);
   if (recipients.length === 0) {
-    return { ok: false, channel: 'none', error: 'Missing recipient' };
+    return { ok: false, channel: "none", error: "Missing recipient" };
   }
 
-  const fallback = (process.env.TEST_EMAIL || '').trim();
-  const undeliverable = recipients.filter((address) => !isDeliverableEmail(address));
+  const fallback = (process.env.TEST_EMAIL || "").trim();
+  const undeliverable = recipients.filter(
+    (address) => !isDeliverableEmail(address),
+  );
   let deliverTo = recipients.filter((address) => isDeliverableEmail(address));
 
   if (undeliverable.length && isDeliverableEmail(fallback)) {
-    console.log('[email] redirecting', undeliverable.join(', '), '->', fallback);
+    console.log(
+      "[email] redirecting",
+      undeliverable.join(", "),
+      "->",
+      fallback,
+    );
     deliverTo = [...new Set([...deliverTo, fallback])];
   } else if (undeliverable.length && deliverTo.length === 0) {
-    console.log('[email] skipped undeliverable address', undeliverable.join(', '));
-    return { ok: true, channel: 'skipped', skipped: true };
+    console.log(
+      "[email] skipped undeliverable address",
+      undeliverable.join(", "),
+    );
+    return { ok: true, channel: "skipped", skipped: true };
   }
 
   const payload = {
@@ -115,23 +134,25 @@ export async function sendEmail({ to, subject, html, text }) {
   };
 
   // Prefer SMTP when EMAIL_PROVIDER=smtp (best for mailing all users without a Resend domain)
-  const preferSmtp = (process.env.EMAIL_PROVIDER || '').toLowerCase() === 'smtp';
+  const preferSmtp =
+    (process.env.EMAIL_PROVIDER || "").toLowerCase() === "smtp";
 
   if (preferSmtp) {
     try {
       const result = await sendViaSmtp(payload);
       if (result) return result;
       console.warn(
-        '[email] EMAIL_PROVIDER=smtp but SMTP is not configured. Set SMTP_USER and SMTP_PASS (Gmail App Password) in backend/.env'
+        "[email] EMAIL_PROVIDER=smtp but SMTP is not configured. Set SMTP_USER and SMTP_PASS (Gmail App Password) in backend/.env",
       );
       return {
         ok: false,
-        channel: 'smtp',
-        error: 'SMTP is not configured. Set SMTP_USER and SMTP_PASS in backend/.env',
+        channel: "smtp",
+        error:
+          "SMTP is not configured. Set SMTP_USER and SMTP_PASS in backend/.env",
       };
     } catch (err) {
-      console.warn('[email] SMTP failed:', err.message);
-      return { ok: false, channel: 'smtp', error: err.message };
+      console.warn("[email] SMTP failed:", err.message);
+      return { ok: false, channel: "smtp", error: err.message };
     }
   }
 
@@ -145,21 +166,21 @@ export async function sendEmail({ to, subject, html, text }) {
         html: payload.html,
         text: payload.text,
       });
-      if (error) throw new Error(error.message || 'Resend error');
-      return { ok: true, channel: 'resend' };
+      if (error) throw new Error(error.message || "Resend error");
+      return { ok: true, channel: "resend" };
     } catch (err) {
-      console.warn('[email] Resend failed:', err.message);
+      console.warn("[email] Resend failed:", err.message);
       try {
         const fallback = await sendViaSmtp(payload);
         if (fallback) {
-          console.log('[email] fell back to SMTP after Resend failure');
+          console.log("[email] fell back to SMTP after Resend failure");
           return fallback;
         }
       } catch (smtpErr) {
-        console.warn('[email] SMTP fallback failed:', smtpErr.message);
-        return { ok: false, channel: 'smtp', error: smtpErr.message };
+        console.warn("[email] SMTP fallback failed:", smtpErr.message);
+        return { ok: false, channel: "smtp", error: smtpErr.message };
       }
-      return { ok: false, channel: 'resend', error: err.message };
+      return { ok: false, channel: "resend", error: err.message };
     }
   }
 
@@ -167,20 +188,21 @@ export async function sendEmail({ to, subject, html, text }) {
     const result = await sendViaSmtp(payload);
     if (result) return result;
   } catch (err) {
-    console.warn('[email] SMTP failed:', err.message);
-    return { ok: false, channel: 'smtp', error: err.message };
+    console.warn("[email] SMTP failed:", err.message);
+    return { ok: false, channel: "smtp", error: err.message };
   }
 
-  if (process.env.NODE_ENV === 'production') {
-    const error = 'No email provider is configured. Set RESEND_API_KEY or SMTP credentials.';
+  if (process.env.NODE_ENV === "production") {
+    const error =
+      "No email provider is configured. Set RESEND_API_KEY or SMTP credentials.";
     console.error(`[email] ${error}`);
-    return { ok: false, channel: 'none', error };
+    return { ok: false, channel: "none", error };
   }
 
-  console.log('[email:console]', {
+  console.log("[email:console]", {
     to: payload.to,
     subject: payload.subject,
-    text: payload.text || '(html body)',
+    text: payload.text || "(html body)",
   });
-  return { ok: true, channel: 'console' };
+  return { ok: true, channel: "console" };
 }

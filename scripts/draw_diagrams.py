@@ -229,22 +229,68 @@ def draw_er():
 
 def draw_architecture():
     regular, small, tiny, bold, title, h = fonts()
-    img, draw = canvas(1600, 900, "System Architecture")
-    layers = [
-        (80, 90, 1440, 230, "Client Layer", ["Web Browser — React SPA (Vite)", "EN / Amharic / Afaan Oromo", "Guest UI, Login, Role dashboards"]),
-        (80, 320, 900, 560, "Application Layer", ["Express REST API", "JWT Auth + RBAC", "Complaints, Users, Departments, Notifications"]),
-        (980, 320, 1520, 560, "Optional AI sidecar", ["Writing assist / triage", "Resolution draft / chatbot", "Gemini / OpenAI / heuristic"]),
-        (80, 650, 1520, 840, "Data Layer", ["MongoDB (users, complaints, departments, status history, notifications, activity logs)", "File storage for complaint photos"]),
+    img, draw = canvas(1800, 1100, "System Architecture")
+
+    # Top row
+    client = (80, 100, 520, 250)
+    frontend = (620, 100, 1180, 250)
+    backend = (1280, 100, 1720, 250)
+
+    # Middle row
+    mongo = (80, 420, 520, 620)
+    ai = (620, 420, 1180, 620)
+    external = (1280, 420, 1720, 620)
+
+    # Bottom row
+    data = (80, 760, 1720, 980)
+
+    boxes = [
+        (client, "Client / Browser", ["User accesses the app", "Citizen, Admin, Officer roles", "Web browser (React SPA)"]),
+        (frontend, "Frontend Layer", ["React + Vite SPA", "Guest pages, auth, dashboards", "Localization, complaint forms, notifications"]),
+        (backend, "Backend API Layer", ["Express.js REST API", "JWT auth + RBAC", "Complaint workflows, users, reports, uploads"]),
+        (mongo, "Database Layer", ["MongoDB with Mongoose", "Users, complaints, departments", "Status history, notifications, activity logs"]),
+        (ai, "Optional AI Sidecar", ["AI writing assist", "Complaint triage + similarity", "FAQ chatbot / resolution draft"]),
+        (external, "External Services", ["SMTP / email delivery", "SMS via Africa's Talking", "Photo / upload storage integration"]),
+        (data, "System Data Store", ["Complaint records, attachments, user accounts, audit trail", "Supports both local dev and Atlas deployment"]),
     ]
-    for x1, y1, x2, y2, name, items in layers:
-        rounded(draw, (x1, y1, x2, y2), SOFT, NAVY, 2, 10)
+
+    for box, name, items in boxes:
+        rounded(draw, box, SOFT, NAVY, 2, 12)
+        x1, y1, x2, y2 = box
         draw.rectangle((x1, y1, x2, y1 + 36), fill=NAVY)
         draw.text((x1 + 16, y1 + 8), name, fill=WHITE, font=h)
         for i, item in enumerate(items):
-            draw.text((x1 + 20, y1 + 50 + i * 28), "•  " + item, fill=LINE, font=small)
-    arrow(draw, (800, 230), (800, 320), NAVY, 3)
-    arrow(draw, (1100, 230), (1220, 320), NAVY, 3)
-    arrow(draw, (800, 560), (800, 650), NAVY, 3)
+            draw.text((x1 + 22, y1 + 52 + i * 24), "•  " + item, fill=LINE, font=small)
+
+    # arrows: browser -> frontend -> backend
+    arrow(draw, (520, 175), (620, 175), NAVY, 3)
+    arrow(draw, (1180, 175), (1280, 175), NAVY, 3)
+
+    # frontend and backend interactions
+    arrow(draw, (900, 250), (900, 420), NAVY, 3)
+    arrow(draw, (1500, 250), (1500, 420), NAVY, 3)
+
+    # backend data access
+    arrow(draw, (300, 620), (300, 760), NAVY, 3)
+    arrow(draw, (900, 620), (900, 760), NAVY, 3)
+    arrow(draw, (1500, 620), (1500, 760), NAVY, 3)
+
+    # frontend to AI sidecar (optional)
+    arrow(draw, (900, 250), (900, 420), NAVY, 3)
+    arrow(draw, (1180, 520), (1280, 520), NAVY, 3)
+
+    # backend to mongo and external services
+    arrow(draw, (520, 520), (900, 520), NAVY, 3)
+    arrow(draw, (1280, 520), (1720, 520), NAVY, 3)
+
+    # note labels
+    draw.text((730, 275), "HTTPS / API calls", fill=NAVY, font=tiny)
+    draw.text((1320, 275), "REST endpoints", fill=NAVY, font=tiny)
+    draw.text((645, 670), "Optional AI assistance", fill=NAVY, font=tiny)
+    draw.text((150, 670), "MongoDB storage", fill=NAVY, font=tiny)
+    draw.text((1420, 670), "Email / SMS / upload services", fill=NAVY, font=tiny)
+    draw.text((760, 990), "The system uses a React SPA frontend, an Express API backend, MongoDB persistence, and an optional AI service for triage and chatbot features.", fill=LINE, font=tiny)
+
     img.save(OUT / "fig-2-1-architecture.png", optimize=True)
     return OUT / "fig-2-1-architecture.png"
 

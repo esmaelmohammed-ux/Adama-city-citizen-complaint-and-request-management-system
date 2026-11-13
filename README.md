@@ -13,6 +13,29 @@ The delivered product is **complaints only** (no separate service-request module
 | **Status flow** | Pending → In Progress → Resolved / Rejected / Closed *(role-restricted)* |
 | **Architecture** | React (Vite) frontend → Express API → MongoDB, plus optional AI sidecar |
 
+## Objectives and Scope
+
+### General Objective
+The main objective of this project is to develop a digital complaint management platform for Adama City Administration that improves the efficiency, transparency, and responsiveness of municipal service delivery by allowing citizens to submit complaints online, tracking complaint progress, and enabling administrators and department officers to manage complaints in a structured and accountable manner.
+
+### Scope of the Project
+This project focuses on designing and implementing a web-based complaint management system for municipal issues such as road maintenance, waste management, water supply, street lighting, drainage, public safety, and related community concerns. It includes complaint submission, assignment, review, processing, status updates, notifications, reporting, and multilingual access for users across different roles.
+
+### In Scope
+- Citizen registration and login
+- Complaint submission with title, category, description, location, landmark, and optional photo
+- Unique complaint reference IDs and complaint tracking
+- Role-based access for citizens, administrators, and department officers
+- Complaint assignment to departments and officers
+- Status updates such as pending, in progress, resolved, rejected, and closed
+- Notifications and activity logging for complaint updates
+- Administrative dashboards and summary reports
+- Multilingual support in English, Amharic, and Afaan Oromo
+- AI support for complaint improvement, triage, similar-case detection, and FAQ assistance
+
+### Out of Scope
+This system does not include a full e-government management suite, GIS-based spatial complaint mapping, payment or billing functions, procurement or inventory modules, ERP integration, mobile app development as a separate product, or a separate service-request platform. These features may be considered for future expansion, but they are not part of the current implementation.
+
 ## Documentation
 
 - [Project documentation / practical attachment report](./Project_Proposal_Web_Based_Citizen_Complaint_and_Service_Request.md) — one document (v2.18): system specification plus Haramaya CCI attachment chapters

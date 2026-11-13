@@ -229,6 +229,14 @@ def is_table_sep(line: str) -> bool:
     return bool(re.match(r"^\|?\s*:?-{3,}", line.strip()))
 
 
+def remove_empty_paragraphs(doc):
+    """Remove blank paragraphs that create empty pages or awkward spacing in the report."""
+    for para in list(doc.paragraphs):
+        if not para.text.strip():
+            p = para._p
+            p.getparent().remove(p)
+
+
 def add_page_field(run):
     """Insert a Word PAGE field so the footer number updates in Word."""
     begin = OxmlElement("w:fldChar")
@@ -473,6 +481,7 @@ def convert(
     if pending_caption:
         add_body(doc, pending_caption, italic=True, center=True, size=10)
 
+    remove_empty_paragraphs(doc)
     enable_update_fields_on_open(doc)
 
     written = []
