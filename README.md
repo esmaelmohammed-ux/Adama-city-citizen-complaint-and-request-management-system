@@ -16,7 +16,7 @@ The delivered product is **complaints only** (no separate service-request module
 ## Objectives and Scope
 
 ### General Objective
-The main objective of this project is to develop a digital complaint management platform for Adama City Administration that improves the efficiency, transparency, and responsiveness of municipal service delivery by allowing citizens to submit complaints online, tracking complaint progress, and enabling administrators and department officers to manage complaints in a structured and accountable manner.
+To design and implement a web-based complaint management system for Adama City that enables citizens to report municipal issues online and helps administrators and officers track, assign, and resolve complaints efficiently for improved service delivery and accountability.
 
 ### Scope of the Project
 This project focuses on designing and implementing a web-based complaint management system for municipal issues such as road maintenance, waste management, water supply, street lighting, drainage, public safety, and related community concerns. It includes complaint submission, assignment, review, processing, status updates, notifications, reporting, and multilingual access for users across different roles.
